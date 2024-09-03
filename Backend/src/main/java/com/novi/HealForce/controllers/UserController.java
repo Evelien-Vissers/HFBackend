@@ -7,18 +7,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping
 
+//UserController richt zich alleen op het beheren van gebruikersinformatie
 public class UserController {
 
     private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
-    }
-    // POST /users - Registreer een nieuwe gebruiker
-    @PostMapping
-    public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO userDTO) {
-        UserDTO createdUser = userService.registerUser(userDTO);
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
     // GET /users/{userId} - Haal informatie op van een specifieke gebruiker
@@ -42,3 +37,4 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
+
