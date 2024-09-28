@@ -1,10 +1,8 @@
-package com.novi.HealForce.controllers;
+package main.java.com.novi.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/admin")
@@ -16,6 +14,27 @@ public class AdminController {
 
     public AdminController(AdminService adminService) {
         this.adminService = adminService;
+    }
+
+    // POST - Admin Login. Er wordt gebruik gemaakt van een @RequestParam om de e-mail en het wachtwoord van de admin te ontvangen.
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestParam String email, @RequestParam String password) {
+        boolean isAuthenticated = adminService.authenticate(email, password);
+        if (isAuthenticated) {
+            return ResponseEntity.ok("Login successful");
+        } else {
+            return ResponseEntity.status(401).body("Invalid credentials");
+        }
+    }
+    // GET - Haal Admin-details op aan de hand van ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Admin> getAdminById(@PathVariable Long id) {
+        Admin admin = adminService.getAdminById(id);
+        if (admin != null) {
+            return ResponseEntity.ok(admin);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     // GET /admin/users - Haal een lijst op van alle gebruikers in de applicatie
@@ -38,4 +57,5 @@ public class AdminController {
         adminService.deleteUser(userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 }
