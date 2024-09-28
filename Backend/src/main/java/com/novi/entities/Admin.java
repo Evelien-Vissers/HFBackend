@@ -1,4 +1,4 @@
-package com.novi.HealForce.entities;
+package main.java.com.novi.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

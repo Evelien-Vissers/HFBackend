@@ -1,7 +1,10 @@
 package main.java.com.novi.services;
 
+import main.java.com.novi.entities.Admin;
 import main.java.com.novi.repositories.AdminRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class AdminService {

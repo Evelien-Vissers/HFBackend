@@ -1,14 +1,18 @@
 package main.java.com.novi.entities;
+// Niet nodig om controller, service, repository of dto van 'BaseEntity' te maken omdat het als superklasse dient
+
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import jakarta.persistence.GenerationType;
+
 
 // @MappedSuperclass geeft aan dat 'BaseEntity' geen directe database vertegenwoordigt, maar dat de velden ervan worden geerfd door andere entiteiten die deze class extenden.
 @MappedSuperclass
 public abstract class BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GeneratedType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "created_date", nullable = false, updatable = false)
