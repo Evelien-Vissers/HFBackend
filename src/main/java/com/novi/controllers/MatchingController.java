@@ -1,4 +1,4 @@
-package com.novi.HealForce.controllers;
+package com.novi.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
