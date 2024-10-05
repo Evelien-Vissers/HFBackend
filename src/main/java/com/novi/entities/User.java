@@ -42,7 +42,7 @@ public class User extends BaseEntity {
     private Boolean hasCompletedQuestionnaire = false; //Default value = false.
 
     @OneToOne(mappedBy = "User")
-    private Profile profile
+    private Profile profile;
 
     // Default constructors
     public User() {
@@ -59,6 +59,7 @@ public class User extends BaseEntity {
         this.role = "User"; // Default role
         this.verifiedEmail = false; //Default to false
         this.registrationDate = LocalDate.now(); // set to currentDate
+        this.lastLogin = LocalDateTime.now();
         this.hasCompletedQuestionnaire = false; // Default to false
     }
 

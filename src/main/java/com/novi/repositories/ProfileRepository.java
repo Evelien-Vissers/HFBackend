@@ -1,6 +1,5 @@
-package main.java.com.novi.repositories;
-
-import main.java.com.novi.entities.Profile;
+package com.novi.repositories;
+import com.novi.entities.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

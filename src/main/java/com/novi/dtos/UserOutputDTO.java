@@ -1,30 +1,37 @@
-// Dit object wordt gebruikt om de gegevens van de gebruiker naar de frontend te sturen, zonder gevoelige informatie zoals het wachtwoord. Deze DTO bevat alleen informatie die nodig is voor de presentatie van gebruikersinformatie aan de client. Velden zoals wachtwoord worden niet opgenomen.
-
-package main.java.com.novi.dto;
+package com.novi.dtos;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class UserDTO {
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-    private Long id;
+public class UserOutputDTO {
+
     private String firstName;
     private String lastName;
     private String email;
     private String role;
-    private Boolean verifiedEmail;
     private LocalDate registrationDate;
     private LocalDateTime lastLogin;
     private Boolean hasCompletedQuestionnaire;
+    private Boolean verifiedEmail;
+
+    // Constructors
+    public UserOutputDTO() {
+    }
+
+    public UserOutputDTO(String firstName, String lastName, String email, String role, LocalDate registrationDate, LocalDateTime lastLogin, Boolean hasCompletedQuestionnaire, Boolean verifiedEmail) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.role = role;
+        this.registrationDate = registrationDate;
+        this.lastLogin = lastLogin;
+        this.hasCompletedQuestionnaire = hasCompletedQuestionnaire;
+        this.verifiedEmail = verifiedEmail;
+    }
 
     // Getters and Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getFirstName() {
         return firstName;
     }
@@ -57,14 +64,6 @@ public class UserDTO {
         this.role = role;
     }
 
-    public Boolean getVerifiedEmail() {
-        return verifiedEmail;
-    }
-
-    public void setVerifiedEmail(Boolean verifiedEmail) {
-        this.verifiedEmail = verifiedEmail;
-    }
-
     public LocalDate getRegistrationDate() {
         return registrationDate;
     }
@@ -88,4 +87,14 @@ public class UserDTO {
     public void setHasCompletedQuestionnaire(Boolean hasCompletedQuestionnaire) {
         this.hasCompletedQuestionnaire = hasCompletedQuestionnaire;
     }
+
+    public Boolean getVerifiedEmail() {
+        return verifiedEmail;
+    }
+
+    public void setVerifiedEmail(Boolean verifiedEmail) {
+        this.verifiedEmail = verifiedEmail;
+    }
 }
+
+

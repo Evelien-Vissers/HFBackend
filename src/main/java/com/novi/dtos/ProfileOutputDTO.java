@@ -3,7 +3,7 @@ package com.novi.dtos;
 import java.time.LocalDate;
 import java.time.YearMonth;
 
-public class ProfileInputDTO {
+public class ProfileOutputDTO {
 
     private LocalDate dateOfBirth;
     private String location;
@@ -14,12 +14,13 @@ public class ProfileInputDTO {
     private String connectionPreference;
     private String profilePic;
     private String healforceName;
+    private Long profileID;
 
     // Constructors
-    public ProfileInputDTO() {
+    public ProfileOutputDTO() {
     }
 
-    public ProfileInputDTO(LocalDate dateOfBirth, String location, String gender, String healthChallenge, YearMonth diagnosisDate, String healingChoice, String connectionPreference, String profilePic, String healforceName) {
+    public ProfileOutputDTO(LocalDate dateOfBirth, String location, String gender, String healthChallenge, YearMonth diagnosisDate, String healingChoice, String connectionPreference, String profilePic, String healforceName, Long profileID) {
         this.dateOfBirth = dateOfBirth;
         this.location = location;
         this.gender = gender;
@@ -29,6 +30,7 @@ public class ProfileInputDTO {
         this.connectionPreference = connectionPreference;
         this.profilePic = profilePic;
         this.healforceName = healforceName;
+        this.profileID = profileID;
     }
 
     // Getters and Setters
@@ -103,6 +105,13 @@ public class ProfileInputDTO {
     public void setHealforceName(String healforceName) {
         this.healforceName = healforceName;
     }
-}
 
+    public Long getProfileID() {
+        return profileID;
+    }
+
+    public void setProfileID(Long profileID) {
+        this.profileID = profileID;
+    }
+}
 
