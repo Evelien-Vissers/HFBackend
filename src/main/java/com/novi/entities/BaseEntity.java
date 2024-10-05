@@ -1,7 +1,4 @@
-package main.java.com.novi.entities;
-// Niet nodig om controller, service, repository of dto van 'BaseEntity' te maken omdat het als superklasse dient
-
-
+package com.novi.entities;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import jakarta.persistence.GenerationType;

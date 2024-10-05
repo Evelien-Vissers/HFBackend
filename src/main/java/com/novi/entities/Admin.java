@@ -1,9 +1,8 @@
-package main.java.com.novi.entities;
+package com.novi.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import main.java.com.novi.entities.BaseEntity;
 
 import java.time.LocalDateTime;
 

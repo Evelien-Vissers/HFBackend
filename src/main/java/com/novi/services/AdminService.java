@@ -1,21 +1,24 @@
 package main.java.com.novi.services;
 
+import main.java.com.novi.dto.AdminDTO;
+import main.java.com.novi.dto.UserDTO;
 import main.java.com.novi.entities.Admin;
 import main.java.com.novi.repositories.AdminRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class AdminService {
 
     private final AdminRepository adminRepository;
-    private final UserRepository userRepository;
+    private final UserService userService; //
 
     // Constructor injection
-    public AdminService(AdminRepository adminRepository, UserRepository userRepository) {
+    public AdminService(AdminRepository adminRepository, UserService userService) {
         this.adminRepository = adminRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     // Authenticatie admin using email and password
@@ -35,24 +38,25 @@ public class AdminService {
 
     // Get all users in the application
     public List<UserDTO> getAllUsers() {
-        List<User> users = userRepository.findAll();
-        return users.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+        return userService.getAllUsers();
     }
 
     // Get details of a specific user by ID
-    public UserDTO getUserById(Long userId) {
-        return userRepository.findById(userId)
-                .map(this::convertToDTO)
-                .orElse(null);
+    public UserDTO getUserById(Long Id) {
+        return userService.getUserById(Id);
     }
 
     // Delete a specific user by ID
-    public void deleteUser(Long userId) {
-        if (userRepository.existsById(userId)) {
-            userRepository.deleteById(userId);
+    public void deleteUser(Long Id) {
+        userService.deleteUser(Id);
         }
-    }
 
+    //Helper method to convert Admin entity to AdminDTO
+    private AdminDTO convertToAdminDTO(Admin admin) {
+        AdminDTO adminDTO = new AdminDTO();
+        adminDTO.setId(admin.getId());
+        adminDTO.setEmail(admin.getEmail());
+        adminDTO.setLastLogin(admin.getLastLogin());
+        return adminDTO;
+    }
 }

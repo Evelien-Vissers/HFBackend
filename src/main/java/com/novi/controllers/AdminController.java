@@ -1,8 +1,12 @@
-package main.java.com.novi.controllers;
+package com.novi.controllers;
 
+import main.java.com.novi.dto.UserDTO;
+import main.java.com.novi.services.AdminService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
@@ -44,17 +48,17 @@ public class AdminController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    // GET /admin/users/{userId} - Haal gedetailleerde informatie op van een specifieke gebruiker
-    @GetMapping("/users/{userId}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable Long userId) {
-        UserDTO user = adminService.getUserById(userId);
+    // GET /admin/users/{Id} - Haal gedetailleerde informatie op van een specifieke gebruiker
+    @GetMapping("/users/{Id}")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Long Id) {
+        UserDTO user = adminService.getUserById(Id);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    // DELETE /admin/users/{userId} - Verwijder een specifieke gebruiker uit de applicatie
-    @DeleteMapping("/users/{userId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
-        adminService.deleteUser(userId);
+    // DELETE /admin/users/{Id} - Verwijder een specifieke gebruiker uit de applicatie
+    @DeleteMapping("/users/{Id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long Id) {
+        adminService.deleteUser(Id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

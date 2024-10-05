@@ -7,6 +7,7 @@ import main.java.com.novi.entities.User;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -17,23 +18,30 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    // Method to register a user
     public void registerUser(User user) {
-        // Logica voor gebruikersregistratie
         userRepository.save(user);
     }
 
+    // Logica voor authenticatie
     public boolean authenticate(String email, String password) {
-        // Logica voor authenticatie
         Optional<User> user = userRepository.findByEmail(email);
         return user.isPresent() && user.get().getPassword().equals(password);
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    // Get all users
+    public List<UserDTO> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
-    public Optional<User> getUserById(Long id) {
-        return userRepository.findById(id);
+    // Get a specific user by ID
+    public UserDTO getUserById(Long id) {
+        return userRepository.findById(id)
+                .map(this::convertToDTO)
+                .orElse(null);
     }
 
     public Optional<User> updateUser(Long id, User updatedUser) {

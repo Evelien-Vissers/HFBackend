@@ -1,15 +1,14 @@
-package main.java.com.novi.entities;
+package com.novi.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name="users")
-
 public class User extends BaseEntity {
 
     @Column(name = "first_name", nullable = false)
@@ -42,11 +41,16 @@ public class User extends BaseEntity {
     @Column(name = "has_completed_questionnaire", nullable = false)
     private Boolean hasCompletedQuestionnaire = false; //Default value = false.
 
-    // Constructors
+    @OneToOne(mappedBy = "User")
+    private Profile profile
+
+    // Default constructors
     public User() {
+        super(); //Aanroep van BaseEntity Constructor
     }
 
     public User(String firstName, String lastName, String email, String password, Boolean acceptedPrivacyStatementUserAgreement) {
+        super();
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

@@ -1,4 +1,4 @@
-package com.novi.HealForce;
+package com.novi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
