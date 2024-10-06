@@ -4,6 +4,8 @@ import com.novi.dtos.AdminInputDTO;
 import com.novi.dtos.AdminOutputDTO;
 import com.novi.dtos.UserOutputDTO;
 import com.novi.entities.Admin;
+import com.novi.exceptions.ResourceNotFoundException;
+import com.novi.exceptions.UnauthorizedException;
 import main.java.com.novi.services.AdminService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +32,7 @@ public class AdminController {
         if (isAuthenticated) {
             return ResponseEntity.ok("Login successful");
         } else {
-            return ResponseEntity.status(401).body("Invalid credentials");
+            throw new UnauthorizedException("Invalid email or password");
         }
     }
     // GET - Haal Admin-details op aan de hand van ID
@@ -41,7 +43,7 @@ public class AdminController {
             AdminOutputDTO adminOutputDTO = new AdminOutputDTO(admin.getEmail(), admin.getLastLogin());
             return ResponseEntity.ok(adminOutputDTO);
         } else {
-            return ResponseEntity.notFound().build();
+            throw new ResourceNotFoundException("Admin with ID " + id + " not found");
         }
     }
 
@@ -59,7 +61,7 @@ public class AdminController {
         if (user != null) {
             return new ResponseEntity<>(user, HttpStatus.OK);
         } else {
-            return ResponseEntity.notFound().build();
+            throw new ResourceNotFoundException("User with ID " + Id + " not found");
         }
     }
 
@@ -70,6 +72,6 @@ public class AdminController {
         if (isDeleted) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-        return ResponseEntity.notFound().build();
+        throw new ResourceNotFoundException("User with ID " + Id + " not found");
     }
 }}
