@@ -2,10 +2,10 @@ package com.novi.controllers;
 
 import com.novi.dtos.ProfileInputDTO;
 import com.novi.dtos.ProfileOutputDTO;
-import main.java.com.novi.entities.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping
@@ -19,32 +19,55 @@ public class ProfileController {
 
     // POST - Maak een nieuw profiel aan
     @PostMapping
-    public ResponseEntity<String> createProfile(@PathVariable Long ID, @RequestBody ProfileInputDTO profileInputDTO) {
-        profileService.saveProfile(Id, profileInputDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Profile created successfully!");
+    public ResponseEntity<String> createProfile(@RequestBody ProfileInputDTO profileInputDTO) {
+        // Sla profielgegevens op
+        profileService.saveProfile(profileInputDTO);
+        //Genereer en sla de profileID op
+        Long profileID = profileService.generateProfileID(profileInputDTO);
+        profileService.saveProfileID(profileID);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("Heal Force Profile Successfully Created!");
     }
 
     // GET /users/{Id}/profile - Haal profiel op van een specifieke gebruiker
     @GetMapping
-    public ResponseEntity<ProfileOutputDTO> getUserProfile(@PathVariable Long ID) {
-        ProfileOutputDTO profile = profileService.getUserProfile(ID);
+    public ResponseEntity<ProfileOutputDTO> getUserProfileByProfileID(@PathVariable Long profileID) {
+        ProfileOutputDTO profile = profileService.getUserProfileByProfileID(profileID);
+        if (profile == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile not found with ProfileID: " + profileID);
+        }
         return new ResponseEntity<>(profile, HttpStatus.OK);
     }
 
+    // GET - Haal MatchingProfile op van gebruiker ZELF via ProfileID op wanneer hij op 'Start Matching' drukt (als weergave van zijn eigen MatchingProfile op de MatchingPage)
+    @GetMapping("/{profileID}/matching-profile")
+    public ResponseEntity<ProfileOutputDTO> getMatchingProfile(@PathVariable Long profileID) {
+        ProfileOutputDTO matchingProfile = profileService.getMatchingProfile(profileID);
+        if (matchingProfile == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Matching profile not found with ProfileID: " + profileID);
+        }
+        return new ResponseEntity<>(matchingProfile, HttpStatus.OK);
+    }
+
+
     // PUT /users/{Id}/profile - Werk profiel van een specifieke gebruiker bij
-    @PutMapping("/{id}")
-    public ResponseEntity<ProfileOutputDTO> updateUserProfile(
-            @PathVariable Long Id,
-            @RequestBody ProfileInputDTO profileInputDTO) {
-        ProfileOutputDTO updatedProfile = profileService.updateUserProfile(ID, profileInputDTO);
+    @PutMapping("/{profileID}")
+    public ResponseEntity<ProfileOutputDTO> updateUserProfile(@PathVariable Long profileID, @RequestBody ProfileInputDTO profileInputDTO) {
+        ProfileOutputDTO updatedProfile = profileService.updateUserProfile(profileID, profileInputDTO);
+        if (updatedProfile == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile not found with ProfileID: " + profileID);
+        }
         return new ResponseEntity<>(updatedProfile, HttpStatus.OK);
     }
 
     // DELETE - Verwijder een profiel
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProfile(@PathVariable Long id) {
-        profileService.deleteProfile(id);
+    @DeleteMapping("/{profileID}")
+    public ResponseEntity<Void> deleteProfile(@PathVariable Long profileID) {
+        try {
+        profileService.deleteProfile(profileID);
         return ResponseEntity.status(HttpStatus.NO_CONTENT.build();
+    } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
     }
-
 }
