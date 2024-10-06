@@ -1,4 +1,4 @@
-package main.java.com.novi.services;
+package com.novi.services;
 //Dit is de service die de businesslogica afhandelt voor het ophalen en bijwerken van profielinformatie
 
 import main.java.com.novi.repositories.ProfileRepository;
