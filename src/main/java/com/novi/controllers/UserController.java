@@ -2,15 +2,15 @@ package com.novi.controllers;
 
 import com.novi.dtos.UserInputDTO;
 import com.novi.dtos.UserOutputDTO;
+import com.novi.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import main.java.com.novi.services.UserService;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @RestController
-@RequestMapping
+@RequestMapping("/users")
 
 //UserController richt zich alleen op het beheren van gebruikersinformatie
 public class UserController {
@@ -18,7 +18,6 @@ public class UserController {
     private final UserService userService;
 
     public UserController(UserService userService) {
-
         this.userService = userService;
     }
 
@@ -26,7 +25,7 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody UserInputDTO userInputDTO) {
         userService.registerUser(userInputDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
+        return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully!");
     }
 
     // POST - Gebruiker inloggen
@@ -43,19 +42,14 @@ public class UserController {
     // GET - Haal alle gebruikers op (in DTO-vorm)
     @GetMapping
     public ResponseEntity<List<UserOutputDTO>> getAllUsers() {
-        List<UserOutputDTO> users = userService.getAllUsers()
-                .stream()
-                .map(userService::convertToDTO)
-                .collect(Collectors.toList());
+        List<UserOutputDTO> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
     // GET /users/{Id} - Haal informatie op van een specifieke gebruiker
     @GetMapping("/{Id}")
     public ResponseEntity<UserOutputDTO> getUserById(@PathVariable Long Id) {
-        UserOutputDTO userDTO = userService.getUserById(Id)
-                .map(userService::convertToDTO)
-                .orElse(null);
+        UserOutputDTO userDTO = userService.getUserById(Id);
         if (userDTO != null) {
             return ResponseEntity.ok(userDTO);
         } else {
@@ -63,12 +57,10 @@ public class UserController {
         }
     }
 
-    // PUT /users/{userId} - Werk informatie van een specifieke gebruiker bij
+    // PUT /users/{Id} - Werk informatie van een specifieke gebruiker bij
     @PutMapping("/{Id}")
     public ResponseEntity<UserOutputDTO> updateUser(@PathVariable Long Id, @RequestBody UserInputDTO userDTO) {
-        UserOutputDTO updatedUserDTO = userService.updateUser(Id, userInputDTO)
-                .map(userService::convertToDTO)
-                .orElse(null);
+        UserOutputDTO updatedUserDTO = userService.updateUser(Id, userInputDTO);
         if (userDTO != null) {
             return ResponseEntity.ok(updatedUserDTO);
         } else {
@@ -76,14 +68,14 @@ public class UserController {
         }
     }
 
-    // DELETE /users/{userId} - Verwijder een specifieke gebruiker
+    // DELETE /users/{Id} - Verwijder een specifieke gebruiker
     @DeleteMapping("/{Id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long Id) {
         boolean isDeleted = userService.deleteUser(Id);
         if (isDeleted) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build;
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 }

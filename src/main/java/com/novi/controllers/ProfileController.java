@@ -1,7 +1,9 @@
 package com.novi.controllers;
 
 import com.novi.dtos.ProfileInputDTO;
+import com.novi.dtos.ProfileMatchingOutputDTO;
 import com.novi.dtos.ProfileOutputDTO;
+import com.novi.services.ProfileService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,8 +43,8 @@ public class ProfileController {
 
     // GET - Haal MatchingProfile op van gebruiker ZELF via ProfileID op wanneer hij op 'Start Matching' drukt (als weergave van zijn eigen MatchingProfile op de MatchingPage)
     @GetMapping("/{profileID}/matching-profile")
-    public ResponseEntity<ProfileOutputDTO> getMatchingProfile(@PathVariable Long profileID) {
-        ProfileOutputDTO matchingProfile = profileService.getMatchingProfile(profileID);
+    public ResponseEntity<ProfileMatchingOutputDTO> getMatchingProfile(@PathVariable Long profileID) {
+        ProfileMatchingOutputDTO matchingProfile = profileService.getMatchingProfile(profileID);
         if (matchingProfile == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Matching profile not found with ProfileID: " + profileID);
         }
@@ -52,8 +54,8 @@ public class ProfileController {
 
     // PUT /users/{Id}/profile - Werk profiel van een specifieke gebruiker bij
     @PutMapping("/{profileID}")
-    public ResponseEntity<ProfileOutputDTO> updateUserProfile(@PathVariable Long profileID, @RequestBody ProfileInputDTO profileInputDTO) {
-        ProfileOutputDTO updatedProfile = profileService.updateUserProfile(profileID, profileInputDTO);
+    public ResponseEntity<ProfileOutputDTO> updateProfile(@PathVariable Long profileID, @RequestBody ProfileInputDTO profileInputDTO) {
+        ProfileOutputDTO updatedProfile = profileService.updateProfile(profileID, profileInputDTO);
         if (updatedProfile == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile not found with ProfileID: " + profileID);
         }

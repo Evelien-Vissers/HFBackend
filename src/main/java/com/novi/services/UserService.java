@@ -1,10 +1,17 @@
-package main.java.com.novi.services;
+package com.novi.services;
 
-import main.java.com.novi.dto.UserDTO;
-import main.java.com.novi.repositories.UserRepository;
+import com.novi.dtos.UserInputDTO;
+import com.novi.dtos.UserOutputDTO;
+import com.novi.entities.User;
+import com.novi.entities.Profile;
+import com.novi.repositories.UserRepository;
+import com.novi.repositories.ProfileRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import main.java.com.novi.entities.User;
 
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -13,13 +20,30 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final ProfileRepository profileRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, ProfileRepository profileRepository) {
         this.userRepository = userRepository;
+        this.profileRepository = profileRepository;
     }
 
-    // Method to register a user
-    public void registerUser(User user) {
+    // Registreer een nieuwe gebruiker
+    @Transactional
+    public void registerUser(UserInputDTO userInputDTO) {
+        User user = new User();
+        user.setFirstName(userInputDTO.getFirstName());
+        user.setLastName(userInputDTO.getLastName());
+        user.setEmail(userInputDTO.getEmail());
+        user.setPassword(userInputDTO.getPassword());
+
+        //Standaardwaarden instellen
+        user.setRole("User"); //Standaardwaarde voor role
+        user.setAcceptedPrivacyStatementUserAgreement(userInputDTO.getAcceptedPrivacyPolicyUserAgreement());
+        user.setVerifiedEmail(false);
+        user.setRegistrationDate(LocalDate.now());
+        user.setHasCompletedQuestionnaire(false);
+
+        //Sla de gebruiker op
         userRepository.save(user);
     }
 
@@ -30,54 +54,44 @@ public class UserService {
     }
 
     // Get all users
-    public List<UserDTO> getAllUsers() {
-        List<User> users = userRepository.findAll();
-        return users.stream()
-                .map(this::convertToDTO)
+    public List<UserOutputDTO> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(user -> mapToUserOutputDTO(user))
                 .collect(Collectors.toList());
     }
 
     // Get a specific user by ID
-    public UserDTO getUserById(Long id) {
+    public UserOutputDTO getUserById(Long id) {
         return userRepository.findById(id)
-                .map(this::convertToDTO)
+                .map(this::mapToUserOutputDTO)
                 .orElse(null);
     }
 
-    public Optional<User> updateUser(Long id, User updatedUser) {
-        Optional<User> userOptional = userRepository.findById(id);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            // Update de gegevens van de gebruiker
-            user.setFirstName(updatedUser.getFirstName());
-            user.setLastName(updatedUser.getLastName());
-            user.setEmail(updatedUser.getEmail());
-            user.setPassword(updatedUser.getPassword());
-            user.setRole(updatedUser.getRole());
-            user.setVerifiedEmail(updatedUser.getVerifiedEmail());
-            user.setHasCompletedQuestionnaire(updatedUser.getHasCompletedQuestionnaire());
-            userRepository.save(user);
-            return Optional.of(user);
+    // Werk een specifieke gebruiker bij
+    @Transactional
+    public UserOutputDTO updateUser(Long id, UserInputDTO userInputDTO) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.setFirstName(userInputDTO.getFirstName());
+        user.setLastName(userInputDTO.getLastName());
+        user.setEmail(userInputDTO.getEmail());
+
+        if (userInputDTO.getPassword() != null && !userInputDTO.getPassword().isEmpty()) {
+            user.setPassword(userInputDTO.getPassword());
         }
-        return Optional.empty();
+
+        //Update laatste inlogtijd
+        user.setLastLogin(LocalDateTime.now());
+        userRepository.save(user);
+
+        return mapToUserOutputDTO(user); //Geef de gemapte DTO terug
     }
 
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
 
-    // Methode om User om te zetten naar UserDTO
-    public UserDTO convertToDTO(User user) {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(user.getId());
-        userDTO.setFirstName(user.getFirstName());
-        userDTO.setLastName(user.getLastName());
-        userDTO.setEmail(user.getEmail());
-        userDTO.setRole(user.getRole());
-        userDTO.setVerifiedEmail(user.getVerifiedEmail());
-        userDTO.setRegistrationDate(user.getRegistrationDate());
-        userDTO.setLastLogin(user.getLastLogin());
-        userDTO.setHasCompletedQuestionnaire(user.getHasCompletedQuestionnaire());
-        return userDTO;
+
     }
-}
+
