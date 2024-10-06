@@ -2,6 +2,8 @@ package com.novi.controllers;
 
 import com.novi.dtos.UserInputDTO;
 import com.novi.dtos.UserOutputDTO;
+import com.novi.exceptions.ResourceNotFoundException;
+import com.novi.exceptions.UnauthorizedException;
 import com.novi.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +37,7 @@ public class UserController {
         if (isAuthenticated) {
             return ResponseEntity.ok("Login successful");
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+            throw new UnauthorizedException("Invalid credentials");
         }
     }
 
@@ -53,7 +55,7 @@ public class UserController {
         if (userDTO != null) {
             return ResponseEntity.ok(userDTO);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            throw new ResourceNotFoundException("User with id " + Id + " not found");
         }
     }
 
@@ -64,7 +66,7 @@ public class UserController {
         if (userDTO != null) {
             return ResponseEntity.ok(updatedUserDTO);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            throw new ResourceNotFoundException("User with id " + Id + " not found");
         }
     }
 
@@ -75,7 +77,7 @@ public class UserController {
         if (isDeleted) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            throw new ResourceNotFoundException("User with id " + Id + " not found");
         }
     }
 }

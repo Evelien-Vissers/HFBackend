@@ -1,6 +1,9 @@
 package com.novi.controllers;
+
 import com.novi.dtos.MessageInputDTO;
 import com.novi.dtos.MessageOutputDTO;
+import com.novi.exceptions.ResourceNotFoundException;
+import com.novi.services.MessageService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +24,9 @@ public class MessageController {
     @PostMapping
     public ResponseEntity<MessageOutputDTO> sendMessage(@PathVariable Long matchId, @RequestBody MessageInputDTO messageInputDTO) {
         MessageOutputDTO sentMessage = messageService.sendMessage(matchId, messageInputDTO);
+        if (sentMessage == null) {
+            throw new ResourceNotFoundException("Match with ID " + matchId + " not found");
+        }
         return new ResponseEntity<>(sentMessage, HttpStatus.CREATED);
     }
 
@@ -28,13 +34,20 @@ public class MessageController {
     @GetMapping
     public ResponseEntity<List<MessageOutputDTO>> getMessages(@PathVariable Long matchId) {
         List<MessageOutputDTO> messages = messageService.getMessagesByMatchId(matchId);
+        if (messages.isEmpty()) {
+            throw new ResourceNotFoundException("Messages for match with ID " + matchId + " not found");
+        }
         return new ResponseEntity<>(messages, HttpStatus.OK);
     }
 
-    // DELETE /messages/{messageId} - Verwijder een specifiek bericht
+    // DELETE /matches/{matchId}/messages/{messageId} - Verwijder een specifiek bericht
     @DeleteMapping("/{messageId}")
     public ResponseEntity<Void> deleteMessage(@PathVariable Long messageId) {
-        messageService.deleteMessage(messageId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        boolean isDeleted = messageService.deleteMessage(messageId);
+        if (isDeleted) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            throw new ResourceNotFoundException("Message with ID " + messageId + " not found");
+        }
     }
 }

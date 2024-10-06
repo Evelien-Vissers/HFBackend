@@ -3,6 +3,7 @@ package com.novi.controllers;
 import com.novi.dtos.ProfileInputDTO;
 import com.novi.dtos.ProfileMatchingOutputDTO;
 import com.novi.dtos.ProfileOutputDTO;
+import com.novi.exceptions.ResourceNotFoundException;
 import com.novi.services.ProfileService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +37,7 @@ public class ProfileController {
     public ResponseEntity<ProfileOutputDTO> getUserProfileByProfileID(@PathVariable Long profileID) {
         ProfileOutputDTO profile = profileService.getUserProfileByProfileID(profileID);
         if (profile == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile not found with ProfileID: " + profileID);
+            throw new ResourceNotFoundException("Profile with ProfileID " + profileID + " not Found");
         }
         return new ResponseEntity<>(profile, HttpStatus.OK);
     }
@@ -46,7 +47,7 @@ public class ProfileController {
     public ResponseEntity<ProfileMatchingOutputDTO> getMatchingProfile(@PathVariable Long profileID) {
         ProfileMatchingOutputDTO matchingProfile = profileService.getMatchingProfile(profileID);
         if (matchingProfile == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Matching profile not found with ProfileID: " + profileID);
+            throw new ResourceNotFoundException("Matching profile with ProfileID " + profileID + " not found");
         }
         return new ResponseEntity<>(matchingProfile, HttpStatus.OK);
     }
@@ -57,7 +58,7 @@ public class ProfileController {
     public ResponseEntity<ProfileOutputDTO> updateProfile(@PathVariable Long profileID, @RequestBody ProfileInputDTO profileInputDTO) {
         ProfileOutputDTO updatedProfile = profileService.updateProfile(profileID, profileInputDTO);
         if (updatedProfile == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile not found with ProfileID: " + profileID);
+            throw new ResourceNotFoundException("Profile with ProfileID " + profileID + " not found");
         }
         return new ResponseEntity<>(updatedProfile, HttpStatus.OK);
     }
@@ -69,7 +70,7 @@ public class ProfileController {
         profileService.deleteProfile(profileID);
         return ResponseEntity.status(HttpStatus.NO_CONTENT.build();
     } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            throw new ResourceNotFoundException("Profile with ProfileID " + profileID + " not found");
         }
     }
 }

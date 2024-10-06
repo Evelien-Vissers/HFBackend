@@ -1,4 +1,5 @@
 package com.novi.exceptions;
+//Hiermee wordt gezzorgd voor een consistente foutafhandeling in de applicatie, waarbij de juiste HTTP-statuscodes worden meegegeven.
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
