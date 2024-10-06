@@ -1,4 +1,4 @@
-package com.novi.mapper;
+package com.novi.mappers;
 
 import com.novi.dtos.UserInputDTO;
 import com.novi.dtos.UserOutputDTO;

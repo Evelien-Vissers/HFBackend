@@ -40,14 +40,4 @@ public class MessageController {
         return new ResponseEntity<>(messages, HttpStatus.OK);
     }
 
-    // DELETE /matches/{matchId}/messages/{messageId} - Verwijder een specifiek bericht
-    @DeleteMapping("/{messageId}")
-    public ResponseEntity<Void> deleteMessage(@PathVariable Long messageId) {
-        boolean isDeleted = messageService.deleteMessage(messageId);
-        if (isDeleted) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } else {
-            throw new ResourceNotFoundException("Message with ID " + messageId + " not found");
-        }
-    }
 }
