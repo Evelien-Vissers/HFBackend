@@ -49,7 +49,7 @@ public class ProfileService {
     }
 
     //Genereer en sla een profileID op
-    public Long generateProfileID(Long ID) {
+    public Long generateProfileID(Long profileID) {
         User user = userRepository.findById(ID)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -82,18 +82,8 @@ public class ProfileService {
     //Haal een MatchingProfile op via profileID
     @Transactional(readOnly = true)
     public ProfileMatchingOutputDTO getMatchingProfile(Long profileID) {
-        //Zoek het profiel obv profileID
-        Profile profile = profileRepository.findById(profileID)
-                .orElseThrow(() -> new RuntimeException("Matching profile not found"));
-
-        //Maak een ProfileMatchingOutputDTO aan en zet alleen de benodigde velden hierin:
-        ProfileMatchingOutputDTO profileMatchingOutputDTO = new ProfileMatchingOutputDTO();
-        profileMatchingOutputDTO.setHealforceName(profile.getHealforceName());       // healforceName
-        profileMatchingOutputDTO.setHealthChallenge(profile.getHealthChallenge()); // healthChallenge
-        profileMatchingOutputDTO.setProfilePic(profile.getProfilePic());      // profilePic
-        profileMatchingOutputDTO.setLocation(profile.getLocation());
-
-        return profileMatchingOutputDTO;
+        //Gebruik van de @Query in de ProfileRepository om gegevens op te halen
+        return profileRepository.findMatchingProfileById(profileID);
     }
 
 

@@ -41,6 +41,7 @@ public class User extends BaseEntity {
     @Column(name = "has_completed_questionnaire", nullable = false)
     private Boolean hasCompletedQuestionnaire = false; //Default value = false.
 
+
     @OneToOne(mappedBy = "User")
     private Profile profile;
 

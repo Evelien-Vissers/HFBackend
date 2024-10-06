@@ -4,11 +4,12 @@ import com.novi.dtos.UserInputDTO;
 import com.novi.dtos.UserOutputDTO;
 import com.novi.entities.User;
 import com.novi.entities.Profile;
+import com.novi.exceptions.ResourceNotFoundException;
+import com.novi.mappers.UserMapper;
 import com.novi.repositories.UserRepository;
 import com.novi.repositories.ProfileRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -38,7 +39,7 @@ public class UserService {
 
         //Standaardwaarden instellen
         user.setRole("User"); //Standaardwaarde voor role
-        user.setAcceptedPrivacyStatementUserAgreement(userInputDTO.getAcceptedPrivacyPolicyUserAgreement());
+        user.setAcceptedPrivacyStatementUserAgreement(false);
         user.setVerifiedEmail(false);
         user.setRegistrationDate(LocalDate.now());
         user.setHasCompletedQuestionnaire(false);
@@ -67,6 +68,13 @@ public class UserService {
                 .orElse(null);
     }
 
+    //Methode om alleen de 'first name' van een gebruiker op te halen
+    public String getFirstNameByUserId(Long ID) {
+        return userRepository.findFirstNameById(ID)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        }
+    }
+
     // Werk een specifieke gebruiker bij
     @Transactional
     public UserOutputDTO updateUser(Long id, UserInputDTO userInputDTO) {
@@ -89,9 +97,13 @@ public class UserService {
     }
 
     public void deleteUser(Long id) {
+    // Verwijder het profiel dat aan de gebruiker is gekoppeld
+        Profile profile = ProfileRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found"))
+            .orElseThrow(() -> new ResourceNotFoundException("Profile for user not found"));
+        profileRepository.delete(profile);
+
+        //Verwijder de gebruiker
         userRepository.deleteById(id);
     }
 
-
-    }
 
