@@ -68,7 +68,7 @@ public class ProfileController {
     public ResponseEntity<Void> deleteProfile(@PathVariable Long profileID) {
         try {
         profileService.deleteProfile(profileID);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT.build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     } catch (Exception e) {
             throw new ResourceNotFoundException("Profile with ProfileID " + profileID + " not found");
         }

@@ -41,8 +41,8 @@ public class MessageService {
         Message message = MessageMapper.toMessage(messageInputDTO, matchId);
         message.setTimestamp(LocalDateTime.now()); // Stel de timestamp in op het huidige tijdstip
         message.setReadStatus(false); // Stel readStatus in op false (ongelezen bij verzending)
-        message.setSenderProfile(senderProfile); // Koppel de verzender aan het bericht
-        message.setReceiverProfile(receiverProfile); // Koppel de ontvanger aan het bericht
+        //message.setSenderProfile(senderProfile); // Koppel de verzender aan het bericht
+        //message.setReceiverProfile(receiverProfile); // Koppel de ontvanger aan het bericht
 
         // Sla het bericht op in de database
         Message savedMessage = messageRepository.save(message);

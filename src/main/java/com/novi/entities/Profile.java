@@ -132,5 +132,21 @@ public class Profile extends BaseEntity {
     public String getHealforceName() { return healforceName; }
 
     public void setHealforceName(String healforceName) {this.healforceName = healforceName; }
+
+    public String getProfileID() {
+        return profileID;
+    }
+
+    public void setProfileID(String profileID) {
+        this.profileID = profileID;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
 

@@ -1,9 +1,10 @@
-package main.java.com.novi.services;
+package com.novi.services;
 
-import main.java.com.novi.dto.AdminDTO;
-import main.java.com.novi.dto.UserDTO;
-import main.java.com.novi.entities.Admin;
-import main.java.com.novi.repositories.AdminRepository;
+import com.novi.dtos.AdminOutputDTO;
+import com.novi.dtos.UserOutputDTO;
+import com.novi.entities.Admin;
+import com.novi.mappers.AdminMapper;
+import com.novi.repositories.AdminRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,11 +15,13 @@ public class AdminService {
 
     private final AdminRepository adminRepository;
     private final UserService userService; //
+    private final AdminMapper adminMapper;
 
     // Constructor injection
     public AdminService(AdminRepository adminRepository, UserService userService) {
         this.adminRepository = adminRepository;
         this.userService = userService;
+        this.adminMapper = new AdminMapper();
     }
 
     // Authenticatie admin using email and password
@@ -32,31 +35,23 @@ public class AdminService {
     }
 
     // Get admin details by ID
-    public Admin getAdminById(Long id) {
-        return adminRepository.findById(id).orElse(null);
+    public AdminOutputDTO getAdminById(Long id) {
+        Optional<Admin> adminOptional = adminRepository.findById(id);
+        return adminOptional.map(adminMapper::toAdminOutputDTO).orElse(null);
     }
 
     // Get all users in the application
-    public List<UserDTO> getAllUsers() {
+    public List<UserOutputDTO> getAllUsers() {
         return userService.getAllUsers();
     }
 
     // Get details of a specific user by ID
-    public UserDTO getUserById(Long Id) {
-        return userService.getUserById(Id);
+    public UserOutputDTO getUserById(Long id) {
+        return userService.getUserById(id);
     }
 
     // Delete a specific user by ID
-    public void deleteUser(Long Id) {
-        userService.deleteUser(Id);
-        }
-
-    //Helper method to convert Admin entity to AdminDTO
-    private AdminDTO convertToAdminDTO(Admin admin) {
-        AdminDTO adminDTO = new AdminDTO();
-        adminDTO.setId(admin.getId());
-        adminDTO.setEmail(admin.getEmail());
-        adminDTO.setLastLogin(admin.getLastLogin());
-        return adminDTO;
+    public void deleteUser(Long id) {
+        userService.deleteUser(id);
     }
 }

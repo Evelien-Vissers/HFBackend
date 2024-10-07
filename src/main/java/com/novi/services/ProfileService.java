@@ -17,16 +17,18 @@ import java.util.Optional;
 public class ProfileService {
 
     private final ProfileRepository profileRepository;
+    private final UserRepository userRepository;
 
-    public ProfileService(ProfileRepository profileRepository) {
+    public ProfileService(ProfileRepository profileRepository, UserRepository userRepository) {
         this.profileRepository = profileRepository;
+        this.userRepository = userRepository;
     }
 
     // Sla een nieuw profiel op met de bijbehorende ID
     @Transactional
     public void saveProfile(Long ID, ProfileInputDTO profileInputDTO) {
         //Zoek de gebruiker obv ID
-        User user = UserRepository.findById(ID)
+        User user = userRepository.findById(ID)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         //Maak nieuw profiel aan en koppel het aan de gebruiker
@@ -49,12 +51,12 @@ public class ProfileService {
     }
 
     //Genereer en sla een profileID op
-    public Long generateProfileID(Long profileID) {
+    public Long generateProfileID(Long ID) {
         User user = userRepository.findById(ID)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         Profile profile = profileRepository.findByUser(user)
-                orElseThrow(() -> new RuntimeException("Profile not found for user"));
+                .orElseThrow(() -> new RuntimeException("Profile not found for user"));
 
         return profile.getId(); //De profileID is het ID van het profiel dat aan de gebruiker (ID) is gekoppeld.
     }

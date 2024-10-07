@@ -13,7 +13,7 @@ public class UserMapper {
         dto.setLastName(user.getLastName());
         dto.setEmail(user.getEmail());
         dto.setRole(user.getRole());
-        dto.setAcceptedPrivacyPolicyUserAgreement(user.AcceptedPrivacyStatementUserAgreement());
+       // dto.setAcceptedPrivacyPolicyUserAgreement(user.AcceptedPrivacyStatementUserAgreement());
         dto.setVerifiedEmail(user.getVerifiedEmail());
         dto.setRegistrationDate(user.getRegistrationDate());
         dto.setLastLogin(user.getLastLogin());
@@ -28,7 +28,7 @@ public class UserMapper {
         user.setLastName(userInputDTO.getLastName());
         user.setEmail(userInputDTO.getEmail());
         user.setPassword(userInputDTO.getPassword());  // Zorg voor wachtwoordversleuteling in een echte omgeving
-        user.setAcceptedPrivacyStatementUserAgreement(userInputDTO.isAcceptedPrivacyStatementUserAgreement());
+        //user.setAcceptedPrivacyStatementUserAgreement(userInputDTO.isAcceptedPrivacyStatementUserAgreement());
         return user;
     }
 }

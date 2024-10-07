@@ -72,8 +72,8 @@ public class UserService {
     public String getFirstNameByUserId(Long ID) {
         return userRepository.findFirstNameById(ID)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        }
     }
+
 
     // Werk een specifieke gebruiker bij
     @Transactional
@@ -96,14 +96,18 @@ public class UserService {
         return mapToUserOutputDTO(user); //Geef de gemapte DTO terug
     }
 
+    private UserOutputDTO mapToUserOutputDTO(User user) {
+        return null;
+    }
+
     public void deleteUser(Long id) {
-    // Verwijder het profiel dat aan de gebruiker is gekoppeld
-        Profile profile = ProfileRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found"))
-            .orElseThrow(() -> new ResourceNotFoundException("Profile for user not found"));
+        // Verwijder het profiel dat aan de gebruiker is gekoppeld
+        Profile profile = profileRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Profile for user not found"));
         profileRepository.delete(profile);
 
         //Verwijder de gebruiker
         userRepository.deleteById(id);
     }
-
+}
 

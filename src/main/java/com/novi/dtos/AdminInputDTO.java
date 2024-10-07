@@ -1,6 +1,8 @@
 package com.novi.dtos;
 
-//AdminInputDTO wordt gebruikt voor het verwerken van inloggegevens. Er is voor zowel een AdminInputDTO als een AdminOutputDTO gekozen, omdat een 'normale' DTO niet veilig zou zijn vanwege het gebruik van wachtwoorden.
+//AdminInputDTO wordt gebruikt voor het verwerken van inloggegevens.
+// Er is voor zowel een AdminInputDTO als een AdminOutputDTO gekozen, omdat een 'normale' DTO niet veilig zou zijn vanwege het gebruik van wachtwoorden.
+
 public class AdminInputDTO {
 
     private String email;
