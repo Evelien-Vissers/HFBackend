@@ -28,17 +28,13 @@ public class UserService {
         this.profileRepository = profileRepository;
     }
 
-    // Registreer een nieuwe gebruiker
+    // 1a. Registreer een nieuwe gebruiker
     @Transactional
     public void registerUser(UserInputDTO userInputDTO) {
-        User user = new User();
-        user.setFirstName(userInputDTO.getFirstName());
-        user.setLastName(userInputDTO.getLastName());
-        user.setEmail(userInputDTO.getEmail());
-        user.setPassword(userInputDTO.getPassword());
+        User user = UserMapper.toUser(userInputDTO);
 
         //Standaardwaarden instellen
-        user.setRole("User"); //Standaardwaarde voor role
+        user.setRole("User");
         user.setAcceptedPrivacyStatementUserAgreement(false);
         user.setVerifiedEmail(false);
         user.setRegistrationDate(LocalDate.now());
@@ -48,34 +44,20 @@ public class UserService {
         userRepository.save(user);
     }
 
-    // Logica voor authenticatie
+    // 1b. Logica voor authenticatie
     public boolean authenticate(String email, String password) {
         Optional<User> user = userRepository.findByEmail(email);
         return user.isPresent() && user.get().getPassword().equals(password);
     }
 
-    // Get all users
-    public List<UserOutputDTO> getAllUsers() {
-        return userRepository.findAll().stream()
-                .map(user -> mapToUserOutputDTO(user))
-                .collect(Collectors.toList());
-    }
-
-    // Get a specific user by ID
+    // 3. Get a specific user by ID
     public UserOutputDTO getUserById(Long id) {
         return userRepository.findById(id)
-                .map(this::mapToUserOutputDTO)
-                .orElse(null);
-    }
-
-    //Methode om alleen de 'first name' van een gebruiker op te halen
-    public String getFirstNameByUserId(Long ID) {
-        return userRepository.findFirstNameById(ID)
+                .map(UserMapper::toUserOutputDTO)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
-
-    // Werk een specifieke gebruiker bij
+    // 4. Werk een specifieke gebruiker bij
     @Transactional
     public UserOutputDTO updateUser(Long id, UserInputDTO userInputDTO) {
         User user = userRepository.findById(id)
@@ -93,21 +75,19 @@ public class UserService {
         user.setLastLogin(LocalDateTime.now());
         userRepository.save(user);
 
-        return mapToUserOutputDTO(user); //Geef de gemapte DTO terug
+        return UserMapper.toUserOutputDTO(user);
     }
 
-    private UserOutputDTO mapToUserOutputDTO(User user) {
-        return null;
-    }
-
-    public void deleteUser(Long id) {
+    //5. Delete profiel van gebruiker of de gebruiker
+    public boolean deleteUser(Long id) {
         // Verwijder het profiel dat aan de gebruiker is gekoppeld
         Profile profile = profileRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Profile for user not found"));
         profileRepository.delete(profile);
 
-        //Verwijder de gebruiker
+        // Verwijder de gebruiker
         userRepository.deleteById(id);
+        return false;
     }
 }
 

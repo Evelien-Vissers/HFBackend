@@ -6,7 +6,7 @@ import com.novi.dtos.UserOutputDTO;
 import com.novi.entities.Admin;
 import com.novi.exceptions.ResourceNotFoundException;
 import com.novi.exceptions.UnauthorizedException;
-import main.java.com.novi.services.AdminService;
+import com.novi.services.AdminService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,20 +25,28 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    // POST - Admin Login. Er wordt gebruik gemaakt van een @RequestParam om de e-mail en het wachtwoord van de admin te ontvangen.
+
+    // 1. POST - Admin Login. Er wordt gebruik gemaakt van een @RequestParam om de e-mail en het wachtwoord van de admin te ontvangen.
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody AdminInputDTO adminInputDTO) {
         boolean isAuthenticated = adminService.authenticate(adminInputDTO.getEmail(), adminInputDTO.getPassword());
         if (isAuthenticated) {
-            return ResponseEntity.ok("Login successful");
+            //Haal de admin op uit de database obv het emailadres
+            Admin admin = adminService.findByEmail(adminInputDTO.getEmail());
+
+            //Werk de lastLogin bij voor deze admin
+            adminService.updateLastLogin(admin);
+
+            return ResponseEntity.ok("Login successful. Last login updated.");
         } else {
             throw new UnauthorizedException("Invalid email or password");
         }
     }
-    // GET - Haal Admin-details op aan de hand van ID
+
+    // 2. GET - Haal Admin-details op aan de hand van ID
     @GetMapping("/{id}")
     public ResponseEntity<AdminOutputDTO> getAdminById(@PathVariable Long id) {
-        Admin admin = adminService.getAdminById(id);
+        AdminOutputDTO admin = adminService.getAdminById(id);
         if (admin != null) {
             AdminOutputDTO adminOutputDTO = new AdminOutputDTO(admin.getEmail(), admin.getLastLogin());
             return ResponseEntity.ok(adminOutputDTO);
@@ -47,14 +55,14 @@ public class AdminController {
         }
     }
 
-    // GET /admin/users - Haal een lijst op van alle gebruikers in de applicatie
+    // 3. GET /admin/users - Haal een lijst op van alle gebruikers in de applicatie
     @GetMapping("/users")
     public ResponseEntity<List<UserOutputDTO>> getAllUsers() {
         List<UserOutputDTO> users = adminService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    // GET /admin/users/{Id} - Haal gedetailleerde informatie op van een specifieke gebruiker
+    // 4. GET /admin/users/{Id} - Haal gedetailleerde informatie op van een specifieke gebruiker
     @GetMapping("/users/{Id}")
     public ResponseEntity<UserOutputDTO> getUserById(@PathVariable Long Id) {
         UserOutputDTO user = adminService.getUserById(Id);
@@ -65,7 +73,7 @@ public class AdminController {
         }
     }
 
-    // DELETE /admin/users/{Id} - Verwijder een specifieke gebruiker uit de applicatie
+    // 5. DELETE /admin/users/{Id} - Verwijder een specifieke gebruiker uit de applicatie
     @DeleteMapping("/users/{Id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long Id) {
         boolean isDeleted = adminService.deleteUser(Id);

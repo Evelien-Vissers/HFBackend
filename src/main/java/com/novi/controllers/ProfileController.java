@@ -15,18 +15,20 @@ import org.springframework.web.server.ResponseStatusException;
 public class ProfileController {
 
     private final ProfileService profileService;
+    private final ProfileInputDTO profileInputDTO;
 
     public ProfileController(ProfileService profileService) {
         this.profileService = profileService;
+        this.profileInputDTO = profileInputDTO;
     }
 
     // POST - Maak een nieuw profiel aan
     @PostMapping
     public ResponseEntity<String> createProfile(@RequestBody ProfileInputDTO profileInputDTO) {
         // Sla profielgegevens op
-        profileService.saveProfile(profileInputDTO);
+        profileService.saveProfile(ProfileInputDTO);
         //Genereer en sla de profileID op
-        Long profileID = profileService.generateProfileID(profileInputDTO);
+        Long profileID = profileService.generateProfileID(ProfileInputDTO);
         profileService.saveProfileID(profileID);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Heal Force Profile Successfully Created!");

@@ -1,5 +1,4 @@
 package com.novi.services;
-//Dit is de service die de businesslogica afhandelt voor het ophalen en bijwerken van profielinformatie
 
 import com.novi.dtos.ProfileInputDTO;
 import com.novi.dtos.ProfileMatchingOutputDTO;
@@ -126,5 +125,16 @@ public class ProfileService {
         Profile profile = profileRepository.findById(profileID)
                 .orElseThrow(() -> new RuntimeException("Profile not found"));
         profileRepository.delete(profile);
+    }
+
+    public void saveProfileID(Long profileID) {
+    }
+
+    public ProfileOutputDTO getUserProfileByProfileID(Long profileID) {
+        return null;
+    }
+
+    public ProfileOutputDTO updateProfile(Long profileID, ProfileInputDTO profileInputDTO) {
+        return null;
     }
 }

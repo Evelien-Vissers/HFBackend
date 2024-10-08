@@ -23,14 +23,14 @@ public class UserController {
         this.userService = userService;
     }
 
-    // POST - Registreer een nieuwe gebruiker
+    // 1. POST - Registreer een nieuwe gebruiker
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody UserInputDTO userInputDTO) {
         userService.registerUser(userInputDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully!");
     }
 
-    // POST - Gebruiker inloggen
+    // 2. POST - Gebruiker inloggen
     @PostMapping("/login")
     public ResponseEntity<String> loginUser(@RequestBody UserInputDTO userInputDTO) {
         boolean isAuthenticated = userService.authenticate(userInputDTO.getEmail(), userInputDTO.getPassword());
@@ -41,14 +41,7 @@ public class UserController {
         }
     }
 
-    // GET - Haal alle gebruikers op (in DTO-vorm)
-    @GetMapping
-    public ResponseEntity<List<UserOutputDTO>> getAllUsers() {
-        List<UserOutputDTO> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
-    }
-
-    // GET /users/{Id} - Haal informatie op van een specifieke gebruiker
+    // 3. GET /users/{Id} - Haal informatie op van een specifieke gebruiker
     @GetMapping("/{Id}")
     public ResponseEntity<UserOutputDTO> getUserById(@PathVariable Long Id) {
         UserOutputDTO userDTO = userService.getUserById(Id);
@@ -59,10 +52,10 @@ public class UserController {
         }
     }
 
-    // PUT /users/{Id} - Werk informatie van een specifieke gebruiker bij
+    // 4. PUT /users/{Id} - Werk informatie van een specifieke gebruiker bij
     @PutMapping("/{Id}")
     public ResponseEntity<UserOutputDTO> updateUser(@PathVariable Long Id, @RequestBody UserInputDTO userDTO) {
-        UserOutputDTO updatedUserDTO = userService.updateUser(Id, userInputDTO);
+        UserOutputDTO updatedUserDTO = userService.updateUser(Id, new UserInputDTO());
         if (userDTO != null) {
             return ResponseEntity.ok(updatedUserDTO);
         } else {
@@ -70,7 +63,7 @@ public class UserController {
         }
     }
 
-    // DELETE /users/{Id} - Verwijder een specifieke gebruiker
+    // 5. DELETE /users/{Id} - Verwijder een specifieke gebruiker
     @DeleteMapping("/{Id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long Id) {
         boolean isDeleted = userService.deleteUser(Id);
