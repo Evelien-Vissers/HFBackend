@@ -6,6 +6,7 @@ import com.novi.entities.MiniProfile;
 import com.novi.entities.Profile;
 import com.novi.entities.User;
 import com.novi.exceptions.ResourceNotFoundException;
+import com.novi.mappers.ProfileMapper;
 import com.novi.repositories.ProfileRepository;
 import com.novi.repositories.UserRepository;
 import org.springframework.stereotype.Service;
@@ -18,10 +19,12 @@ public class ProfileService {
 
     private final ProfileRepository profileRepository;
     private final UserRepository userRepository;
+    private final ProfileMapper profileMapper;
 
     public ProfileService(ProfileRepository profileRepository, UserRepository userRepository) {
         this.profileRepository = profileRepository;
         this.userRepository = userRepository;
+        this.profileMapper = new ProfileMapper();
     }
 
     // 1a. Sla een nieuw profiel op met de bijbehorende ID
@@ -31,21 +34,8 @@ public class ProfileService {
         User user = userRepository.findById(profileInputDTO.getID())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        Profile profile = new Profile();
-        profile.setDateOfBirth(profileInputDTO.getDateOfBirth());  // i. LocalDate dateOfBirth
-        profile.setLocation(profileInputDTO.getLocation());        // ii. String location
-        profile.setGender(profileInputDTO.getGender());            // iii. String gender
-        profile.setHealthChallenge(profileInputDTO.getHealthChallenge()); // iv. String healthChallenge
-        profile.setDiagnosisDate(profileInputDTO.getDiagnosisDate());     // v. YearMonth diagnosisDate
-        profile.setHealingChoice(profileInputDTO.getHealingChoice()); // vi. String healingPreference
-        profile.setConnectionPreference(profileInputDTO.getConnectionPreference()); // vii. String connectionPreference
-        profile.setProfilePic(profileInputDTO.getProfilePic());    // viii. String profilePic
-        profile.setHealforceName(profileInputDTO.getHealforceName());
-
-        //Koppel het profiel aan de gebruiker (1-op-1 relatie User en Profile)
+        Profile profile = profileMapper.toEntity(profileInputDTO);
         profile.setUser(user);
-
-        //Het profiel wordt opgeslagen zonder profileID (deze wordt gegenereerd na de eerste opslag)
         profileRepository.save(profile);
     }
 
@@ -60,33 +50,20 @@ public class ProfileService {
 
         return profile.getId(); //De profileID is het ID van het profiel dat aan de gebruiker (ID) is gekoppeld.
     }
-
-    //2. Haal een profiel op van een specifieke gebruiker adhv profileID
-    public ProfileOutputDTO getProfileByProfileID(Long profileID) {
+    // 2. Haal een profiel op van een specifieke gebruiker adhv profileID
+    public ProfileOutputDTO getProfileByProfileID(Long ProfileID) {
         Profile profile = profileRepository.findById(profileID)
                 .orElseThrow(() -> new ResourceNotFoundException("Profile not found"));
 
-        ProfileOutputDTO profileOutputDTO = new ProfileOutputDTO();
-        profileOutputDTO.setDateOfBirth(profile.getDateOfBirth());  // i. LocalDate dateOfBirth
-        profileOutputDTO.setLocation(profile.getLocation());        // ii. String location
-        profileOutputDTO.setGender(profile.getGender());            // iii. String gender
-        profileOutputDTO.setHealthChallenge(profile.getHealthChallenge()); // iv. String healthChallenge
-        profileOutputDTO.setDiagnosisDate(profile.getDiagnosisDate());     // v. YearMonth diagnosisDate
-        profileOutputDTO.setHealingChoice(profile.getHealingChoice()); // vi. String healingPreference
-        profileOutputDTO.setConnectionPreference(profile.getConnectionPreference()); // vii. String connectionPreference
-        profileOutputDTO.setProfilePic(profile.getProfilePic());    // viii. String profilePic
-        profileOutputDTO.setHealforceName(profile.getHealforceName());
-
-        return profileOutputDTO;
+        return profileMapper.toOutputDTO(profile);
     }
 
-    //4. Haal een Mini Profile op via profileID (van gebruiker zelf)
+    //3. Haal een Mini Profile op via profileID (van gebruiker zelf)
     @Transactional(readOnly = true)
     public MiniProfile getMiniProfile(Long profileID) {
         //Gebruik van de @Query in de ProfileRepository om gegevens op te halen
         return profileRepository.findMiniProfileById(profileID);
     }
-
 
     //5. Werk een profiel bij
     @Transactional
@@ -94,31 +71,12 @@ public class ProfileService {
         Profile profile = profileRepository.findById(profileID)
                 .orElseThrow(() -> new RuntimeException("Profile not found"));
 
-        profile.setDateOfBirth(profileInputDTO.getDateOfBirth());  // i. LocalDate dateOfBirth
-        profile.setLocation(profileInputDTO.getLocation());        // ii. String location
-        profile.setGender(profileInputDTO.getGender());            // iii. String gender
-        profile.setHealthChallenge(profileInputDTO.getHealthChallenge()); // iv. String healthChallenge
-        profile.setDiagnosisDate(profileInputDTO.getDiagnosisDate());     // v. YearMonth diagnosisDate
-        profile.setHealingChoice(profileInputDTO.getHealingChoice()); // vi. String healingPreference
-        profile.setConnectionPreference(profileInputDTO.getConnectionPreference()); // vii. String connectionPreference
-        profile.setProfilePic(profileInputDTO.getProfilePic());    // viii. String profilePic
-        profile.setHealforceName(profileInputDTO.getHealforceName());     // ix. String healforceName
-
+        profileMapper.toEntity(profileInputDTO);
         profileRepository.save(profile);
 
-        ProfileOutputDTO updatedProfile = new ProfileOutputDTO();
-        updatedProfile.setDateOfBirth(profile.getDateOfBirth());
-        updatedProfile.setLocation(profile.getLocation());
-        updatedProfile.setGender(profile.getGender());
-        updatedProfile.setHealthChallenge(profile.getHealthChallenge());
-        updatedProfile.setDiagnosisDate(profile.getDiagnosisDate());
-        updatedProfile.setHealingChoice(profile.getHealingChoice());
-        updatedProfile.setConnectionPreference(profile.getConnectionPreference());
-        updatedProfile.setProfilePic(profile.getProfilePic());
-        updatedProfile.setHealforceName(profile.getHealforceName());
-
-        return updatedProfile;
+        return profileMapper.toOutputDTO(profile);
     }
+
 
     //6. Verwijder een profiel
     public void deleteProfile(Long profileID) {

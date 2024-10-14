@@ -29,12 +29,12 @@ public class MatchingService {
     // 1. Methode die de lijst met potentiële matches ophaalt voor profileID1
     public List<PotentialMatches> getPotentialMatches(Long profileID) {
         //Haal het profiel van de gebruiker op
-        Profile profile = profileService.getProfileByProfileID(Long profileID) {
+        Profile profile = profileService.getProfileByProfileID(profileID); {
 
         // Haal de potentiële matches op uit de repository
         List<PotentialMatches> potentialMatches = matchingRepository.potentialMatchList(connectionPreference, profileID);
 
-        // Converteer de lijst van PotentialMatchList naar een lijst van PotentialMatchOutputhDTO's
+        // Converteer de lijst van PotentialMatchList naar een lijst van PotentialMatchOutputDTO's
         return MatchingMapper.toDTOList(PotentialMatchOutputDTO);
     }}
 

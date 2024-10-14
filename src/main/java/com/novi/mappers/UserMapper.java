@@ -3,10 +3,12 @@ package com.novi.mappers;
 import com.novi.dtos.UserInputDTO;
 import com.novi.dtos.UserOutputDTO;
 import com.novi.entities.User;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class UserMapper {
 
     // Map een User naar een UserOutputDTO

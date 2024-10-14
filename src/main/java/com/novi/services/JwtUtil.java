@@ -1,4 +1,4 @@
-package com.novi.services;
+/*package com.novi.services;
 
 import org.springframework.stereotype.Service;
 
@@ -55,6 +55,5 @@ public class JwtUtil {
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
-}
+}*/
 
-}

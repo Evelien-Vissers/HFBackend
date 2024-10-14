@@ -1,7 +1,9 @@
 package com.novi.mappers;
 
 import com.novi.entities.PotentialMatches;
+import org.springframework.stereotype.Component;
 
+@Component
 public class MatchingMapper {
 
     // Map een PotentialMatchList naar PotentialMatchOutputDTO

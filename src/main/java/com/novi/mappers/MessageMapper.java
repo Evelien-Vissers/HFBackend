@@ -5,9 +5,11 @@ import com.novi.dtos.MessageOutputDTO;
 import com.novi.entities.Matching;
 import com.novi.entities.Message;
 import com.novi.entities.Profile;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
+@Component
 public class MessageMapper {
 
     // Map MessageInputDTO naar Message entiteit

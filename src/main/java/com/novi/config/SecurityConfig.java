@@ -1,3 +1,4 @@
+/*
 package com.novi.config;
 
 import com.novi.services.JwtRequestFilter;
@@ -37,8 +38,7 @@ public class SecurityConfig {
                 .anyRequest().denyAll()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-                http.addFilterBefore(jwtRequestFilter),
-        UsernamePasswordAuthenticationFilter.class);
+                http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
             return http.build();
     }
 
@@ -50,7 +50,7 @@ public class SecurityConfig {
 
         authenticationManagerBuilder.jdbcAuthentication().dataSource(dataSource)
                 .usersByUsernameQuery(
-                        "SELECT username, password, enabled"
+                        "SELECT username, password, enabled" +
                         " FROM users" +
                         " WHERE username=?")
                 .authoritiesByUserNameQuery(
@@ -60,3 +60,4 @@ public class SecurityConfig {
         return authenticationManagerBuilder.build();
     }
 }
+*/
