@@ -28,7 +28,7 @@ public class ProfileService {
     @Transactional
     public void saveProfile(Long ID, ProfileInputDTO profileInputDTO) {
         //Zoek de gebruiker obv ID
-        User user = userRepository.findById(profileInputDTO.getUserID())
+        User user = userRepository.findById(profileInputDTO.getID())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         Profile profile = new Profile();
@@ -51,7 +51,7 @@ public class ProfileService {
 
     //1b. Genereer een profileID en sla het op
     public Long generateProfileID(ProfileInputDTO profileInputDTO) {
-        User user = userRepository.findByEmail(profileInputDTO.getEmail())
+        User user = userRepository.findByEmail(profileInputDTO.findByEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         //Zoek het profiel dat aan de gebruiker is gekoppeld
@@ -131,21 +131,33 @@ public class ProfileService {
     public void saveProfileID(Long profileID) {
     }
 
-    //8. Methode om het profiel van de huidige ingelogde gebruiker op te halen
-    public Profile getCurrentUserProfile() {
+    //8. Methode om het profiel-ID van de gebruiker op te halen via e-mail
+    public Long getProfileIdByEmail(String email) {
+        //Zoek het profiel obv het emailadres van de gebruiker
+        Profile profile = profileRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Profile not found"));
+
+        //Retourneer het profiel-ID
+        return profile.getId();
+    }
+
+    //9. Methode om het profiel van de huidige ingelogde gebruiker op te halen
+    public Long getCurrentUserProfileId() {
         //Haal gebruikersnaam of email op van de ingelogde gebruiker via Spring Security
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username;
+        String email;
 
-        if (principal instanceof User) {
-            username = ((User) principal).getFirstName();
+        if (principal instanceof UserDetails) {
+            email = ((UserDetails) principal).getUserName();
         } else {
-            username = principal.toString();
+            email = principal.toString();
         }
+        //Haal de User entity op uit de database obv de email
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        // Zoek het profiel van de gebruiker obv username of email
-        return profileRepository.findByEmail(username)
-                .orElseThrow(() -> new ResourceNotFoundException("Profile not found for current user"));
+        // Haal het profiel-ID van de ingelogde gebruiker op
+        Profile profile = profileRepository.findByUser(user).orElseThrow(() -> new IllegalArgumentException("Profile not found"));
+        return profile.getId(); // Retourneer het profiel-ID van de huidige ingelogde gebruiker
     }
 
 }

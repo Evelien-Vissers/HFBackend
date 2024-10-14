@@ -49,6 +49,14 @@ public class UserService {
         Optional<User> user = userRepository.findByEmail(email);
         return user.isPresent() && user.get().getPassword().equals(password);
     }
+    //2. Haal alle gebruikers op uit de database
+    public List<UserOutputDTO> getAllUsers() {
+        //Haal alle gebruiker op uit de repository
+        List<User> users = userRepository.findAll();
+
+        //Converteer de lijst van gebruikers naar een lijst van UserOutputDTO's
+        return UserMapper.toUserOutputDTOList(users);
+    }
 
     // 3. Get a specific user by ID
     public UserOutputDTO getUserById(Long id) {
@@ -89,5 +97,6 @@ public class UserService {
         userRepository.deleteById(id);
         return false;
     }
+
 }
 

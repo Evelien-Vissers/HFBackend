@@ -4,6 +4,9 @@ import com.novi.dtos.UserInputDTO;
 import com.novi.dtos.UserOutputDTO;
 import com.novi.entities.User;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class UserMapper {
 
     // Map een User naar een UserOutputDTO
@@ -13,7 +16,7 @@ public class UserMapper {
         dto.setLastName(user.getLastName());
         dto.setEmail(user.getEmail());
         dto.setRole(user.getRole());
-       // dto.setAcceptedPrivacyPolicyUserAgreement(user.AcceptedPrivacyStatementUserAgreement());
+        //dto.setAcceptedPrivacyPolicyUserAgreement(user.AcceptedPrivacyStatementUserAgreement());
         dto.setVerifiedEmail(user.getVerifiedEmail());
         dto.setRegistrationDate(user.getRegistrationDate());
         dto.setLastLogin(user.getLastLogin());
@@ -30,5 +33,12 @@ public class UserMapper {
         user.setPassword(userInputDTO.getPassword());  // Zorg voor wachtwoordversleuteling in een echte omgeving
         //user.setAcceptedPrivacyStatementUserAgreement(userInputDTO.isAcceptedPrivacyStatementUserAgreement());
         return user;
+    }
+
+    // Map een lijst van User entities naar UserOutputDTO's
+    public static List<UserOutputDTO> toUserOutputDTOList(List<User> users) {
+        return users.stream()
+                .map(UserMapper::toUserOutputDTO)
+                .collect(Collectors.toList());
     }
 }

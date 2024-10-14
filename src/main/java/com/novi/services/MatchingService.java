@@ -1,41 +1,48 @@
 package com.novi.services;
 
+import com.novi.dtos.PotentialMatchesOutputDTO;
+import com.novi.entities.Matching;
 import com.novi.entities.PotentialMatches;
+import com.novi.entities.Profile;
+import com.novi.mappers.MatchingMapper;
 import com.novi.repositories.MatchingRepository;
+import com.novi.repositories.ProfileRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MatchingService {
 
     private final MatchingRepository matchingRepository;
-    private final ProfileService profileService;  // Eventueel nodig als extra profielinformatie moet worden opgehaald
+    private final ProfileService profileService;
+    private final ProfileRepository profileRepository;
 
     public MatchingService(MatchingRepository matchingRepository, ProfileService profileService) {
         this.matchingRepository = matchingRepository;
         this.profileService = profileService;
+        this.profileRepository = profileRepository;
     }
 
-    // Methode die de lijst met potentiële matches ophaalt voor profileID1
-    public List<PotentialMatches> getPotentialMatches(Long profileID1) {
-        // Haal de connectionPreference van profileID1 op (dit kan uit een profiel of andere bron komen)
-        String connectionPreference = getConnectionPreferenceForUser(profileID1);
+    // 1. Methode die de lijst met potentiële matches ophaalt voor profileID1
+    public List<PotentialMatches> getPotentialMatches(Long profileID) {
+        //Haal het profiel van de gebruiker op
+        Profile profile = profileService.getProfileByProfileID(Long profileID) {
 
         // Haal de potentiële matches op uit de repository
-        List<PotentialMatches> potentialMatches = matchingRepository.potentialMatchList(connectionPreference, profileID1);
+        List<PotentialMatches> potentialMatches = matchingRepository.potentialMatchList(connectionPreference, profileID);
 
-        // Converteer de lijst van PotentialMatchList naar een lijst van PotentialMatcOutputhDTO's
-        return MatchingMapper.toDTOList(potentialMatches);
-    }
+        // Converteer de lijst van PotentialMatchList naar een lijst van PotentialMatchOutputhDTO's
+        return MatchingMapper.toDTOList(PotentialMatchOutputDTO);
+    }}
 
-    // Hulpmethode om de connectionPreference voor de gebruiker (profileID1) op te halen
-    private String getConnectionPreferenceForUser(Long profileID1) {
-        // Haal het profiel van de gebruiker op via ProfileService of ProfileRepository
-        Profile profile = profileService.getProfileById(profileID1);
+    // 2. Methode om de "Yes" van een gebruiker op te slaan
+    public boolean handleYesPress (Long profileID, Long ProfileID2) {
+        Optional<Matching> optionalMatch = matchingRepository.findByProfiles(profileID1, profileID2);
 
-        // Return de connectionPreference van het profiel
-        return profile.getConnectionPreference();
+
     }
 }
 

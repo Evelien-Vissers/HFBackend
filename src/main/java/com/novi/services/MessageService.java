@@ -37,7 +37,7 @@ public class MessageService {
 
         //Controleer of de match bestaat
         Matching matching = matchingRepository.findById(matchID)
-                .orElseThrow(() -> new ResourceNotFoundException("Match with ID " + matchID" not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Match with ID " + matchID " not found"));
 
         //Haal de verzender en ontvanger profielen op uit de database
         Profile senderProfile = getCurrentUserProfile();
