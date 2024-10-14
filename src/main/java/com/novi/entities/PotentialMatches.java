@@ -1,6 +1,6 @@
 package com.novi.entities;
 
-public class PotentialMatchList {
+public class PotentialMatches {
 
     private String healforceName;
     private String healthChallenge;
@@ -8,7 +8,7 @@ public class PotentialMatchList {
     private String location;
 
     // Constructor
-    public PotentialMatchList(String healforceName, String healthChallenge, String profilePic, String location) {
+    public PotentialMatches(String healforceName, String healthChallenge, String profilePic, String location) {
         this.healforceName = healforceName;
         this.healthChallenge = healthChallenge;
         this.profilePic = profilePic;

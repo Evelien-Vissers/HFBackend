@@ -1,10 +1,11 @@
 package com.novi.services;
 
 import com.novi.dtos.ProfileInputDTO;
-import com.novi.dtos.ProfileMatchingOutputDTO;
 import com.novi.dtos.ProfileOutputDTO;
+import com.novi.entities.MiniProfile;
 import com.novi.entities.Profile;
 import com.novi.entities.User;
+import com.novi.exceptions.ResourceNotFoundException;
 import com.novi.repositories.ProfileRepository;
 import com.novi.repositories.UserRepository;
 import org.springframework.stereotype.Service;
@@ -23,14 +24,13 @@ public class ProfileService {
         this.userRepository = userRepository;
     }
 
-    // Sla een nieuw profiel op met de bijbehorende ID
+    // 1a. Sla een nieuw profiel op met de bijbehorende ID
     @Transactional
     public void saveProfile(Long ID, ProfileInputDTO profileInputDTO) {
         //Zoek de gebruiker obv ID
-        User user = userRepository.findById(ID)
+        User user = userRepository.findById(profileInputDTO.getUserID())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        //Maak nieuw profiel aan en koppel het aan de gebruiker
         Profile profile = new Profile();
         profile.setDateOfBirth(profileInputDTO.getDateOfBirth());  // i. LocalDate dateOfBirth
         profile.setLocation(profileInputDTO.getLocation());        // ii. String location
@@ -49,48 +49,48 @@ public class ProfileService {
         profileRepository.save(profile);
     }
 
-    //Genereer en sla een profileID op
-    public Long generateProfileID(Long ID) {
-        User user = userRepository.findById(ID)
+    //1b. Genereer een profileID en sla het op
+    public Long generateProfileID(ProfileInputDTO profileInputDTO) {
+        User user = userRepository.findByEmail(profileInputDTO.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+        //Zoek het profiel dat aan de gebruiker is gekoppeld
         Profile profile = profileRepository.findByUser(user)
                 .orElseThrow(() -> new RuntimeException("Profile not found for user"));
 
         return profile.getId(); //De profileID is het ID van het profiel dat aan de gebruiker (ID) is gekoppeld.
     }
 
-    //Haal een profiel op adhv profileID
+    //2. Haal een profiel op van een specifieke gebruiker adhv profileID
     public ProfileOutputDTO getProfileByProfileID(Long profileID) {
-        Optional<Profile> profile = profileRepository.findById(profileID);
-        if (profile.isEmpty()) {
-            throw new RuntimeException("Profile not found");
-        }
+        Profile profile = profileRepository.findById(profileID)
+                .orElseThrow(() -> new ResourceNotFoundException("Profile not found"));
+
         ProfileOutputDTO profileOutputDTO = new ProfileOutputDTO();
-        profileOutputDTO.setDateOfBirth(profile.get().getDateOfBirth());  // i. LocalDate dateOfBirth
-        profileOutputDTO.setLocation(profile.get().getLocation());        // ii. String location
-        profileOutputDTO.setGender(profile.get().getGender());            // iii. String gender
-        profileOutputDTO.setHealthChallenge(profile.get().getHealthChallenge()); // iv. String healthChallenge
-        profileOutputDTO.setDiagnosisDate(profile.get().getDiagnosisDate());     // v. YearMonth diagnosisDate
-        profileOutputDTO.setHealingChoice(profile.get().getHealingChoice()); // vi. String healingPreference
-        profileOutputDTO.setConnectionPreference(profile.get().getConnectionPreference()); // vii. String connectionPreference
-        profileOutputDTO.setProfilePic(profile.get().getProfilePic());    // viii. String profilePic
-        profileOutputDTO.setHealforceName(profile.get().getHealforceName());
+        profileOutputDTO.setDateOfBirth(profile.getDateOfBirth());  // i. LocalDate dateOfBirth
+        profileOutputDTO.setLocation(profile.getLocation());        // ii. String location
+        profileOutputDTO.setGender(profile.getGender());            // iii. String gender
+        profileOutputDTO.setHealthChallenge(profile.getHealthChallenge()); // iv. String healthChallenge
+        profileOutputDTO.setDiagnosisDate(profile.getDiagnosisDate());     // v. YearMonth diagnosisDate
+        profileOutputDTO.setHealingChoice(profile.getHealingChoice()); // vi. String healingPreference
+        profileOutputDTO.setConnectionPreference(profile.getConnectionPreference()); // vii. String connectionPreference
+        profileOutputDTO.setProfilePic(profile.getProfilePic());    // viii. String profilePic
+        profileOutputDTO.setHealforceName(profile.getHealforceName());
 
         return profileOutputDTO;
     }
 
-    //Haal een MatchingProfile op via profileID
+    //4. Haal een Mini Profile op via profileID (van gebruiker zelf)
     @Transactional(readOnly = true)
-    public ProfileMatchingOutputDTO getMatchingProfile(Long profileID) {
+    public MiniProfile getMiniProfile(Long profileID) {
         //Gebruik van de @Query in de ProfileRepository om gegevens op te halen
-        return profileRepository.findMatchingProfileById(profileID);
+        return profileRepository.findMiniProfileById(profileID);
     }
 
 
-    //Werk een profiel bij
+    //5. Werk een profiel bij
     @Transactional
-    public ProfileOutputDTO updateUserProfile(Long profileID, ProfileInputDTO profileInputDTO) {
+    public ProfileOutputDTO updateProfile(Long profileID, ProfileInputDTO profileInputDTO) {
         Profile profile = profileRepository.findById(profileID)
                 .orElseThrow(() -> new RuntimeException("Profile not found"));
 
@@ -120,21 +120,15 @@ public class ProfileService {
         return updatedProfile;
     }
 
-    //Verwijder een profiel
+    //6. Verwijder een profiel
     public void deleteProfile(Long profileID) {
         Profile profile = profileRepository.findById(profileID)
                 .orElseThrow(() -> new RuntimeException("Profile not found"));
         profileRepository.delete(profile);
     }
 
+    //7. Sla de gegenereerde profileID op (placeholder functie)
     public void saveProfileID(Long profileID) {
     }
 
-    public ProfileOutputDTO getUserProfileByProfileID(Long profileID) {
-        return null;
-    }
-
-    public ProfileOutputDTO updateProfile(Long profileID, ProfileInputDTO profileInputDTO) {
-        return null;
-    }
 }

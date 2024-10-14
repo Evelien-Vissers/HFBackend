@@ -78,7 +78,7 @@ public class UserService {
         return UserMapper.toUserOutputDTO(user);
     }
 
-    //5. Delete profiel van gebruiker of de gebruiker
+    //5. Delete de gebruiker en het profiel dat daaraan is gekoppeld:
     public boolean deleteUser(Long id) {
         // Verwijder het profiel dat aan de gebruiker is gekoppeld
         Profile profile = profileRepository.findById(id)

@@ -1,8 +1,8 @@
 package com.novi.controllers;
 
 import com.novi.dtos.ProfileInputDTO;
-import com.novi.dtos.ProfileMatchingOutputDTO;
 import com.novi.dtos.ProfileOutputDTO;
+import com.novi.entities.MiniProfile;
 import com.novi.exceptions.ResourceNotFoundException;
 import com.novi.services.ProfileService;
 import org.springframework.http.HttpStatus;
@@ -11,30 +11,28 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-@RequestMapping
+@RequestMapping("/profiles")
 public class ProfileController {
 
     private final ProfileService profileService;
-    private final ProfileInputDTO profileInputDTO;
 
     public ProfileController(ProfileService profileService) {
         this.profileService = profileService;
-        this.profileInputDTO = profileInputDTO;
     }
 
-    // POST - Maak een nieuw profiel aan
-    @PostMapping
+    // 1. POST - /profiles/new - Maak een nieuw profiel aan
+    @PostMapping("/new")
     public ResponseEntity<String> createProfile(@RequestBody ProfileInputDTO profileInputDTO) {
         // Sla profielgegevens op
-        profileService.saveProfile(ProfileInputDTO);
+        profileService.saveProfile(profileInputDTO);
         //Genereer en sla de profileID op
-        Long profileID = profileService.generateProfileID(ProfileInputDTO);
+        Long profileID = profileService.generateProfileID(profileInputDTO);
         profileService.saveProfileID(profileID);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Heal Force Profile Successfully Created!");
     }
 
-    // GET /users/{Id}/profile - Haal profiel op van een specifieke gebruiker
+    // 2. GET /profiles/{profileID} - Haal profiel op van een specifieke gebruiker
     @GetMapping
     public ResponseEntity<ProfileOutputDTO> getUserProfileByProfileID(@PathVariable Long profileID) {
         ProfileOutputDTO profile = profileService.getUserProfileByProfileID(profileID);
@@ -44,19 +42,19 @@ public class ProfileController {
         return new ResponseEntity<>(profile, HttpStatus.OK);
     }
 
-    // GET - Haal MatchingProfile op van gebruiker ZELF via ProfileID op wanneer hij op 'Start Matching' drukt (als weergave van zijn eigen MatchingProfile op de MatchingPage)
-    @GetMapping("/{profileID}/matching-profile")
-    public ResponseEntity<ProfileMatchingOutputDTO> getMatchingProfile(@PathVariable Long profileID) {
-        ProfileMatchingOutputDTO matchingProfile = profileService.getMatchingProfile(profileID);
-        if (matchingProfile == null) {
+    // 3. GET - Haal MiniProfile op van gebruiker ZELF via ProfileID op wanneer hij op 'Start Matching' drukt (als weergave van zijn eigen MatchingProfile op de MatchingPage)
+    @GetMapping("/{profileID}/mini-profile")
+    public ResponseEntity<MiniProfile> getMiniProfile(@PathVariable Long profileID) {
+        MiniProfile miniProfile = profileService.getMiniProfile(profileID);
+        if (miniProfile == null) {
             throw new ResourceNotFoundException("Matching profile with ProfileID " + profileID + " not found");
         }
-        return new ResponseEntity<>(matchingProfile, HttpStatus.OK);
+        return new ResponseEntity<>(miniProfile, HttpStatus.OK);
     }
 
 
-    // PUT /users/{Id}/profile - Werk profiel van een specifieke gebruiker bij
-    @PutMapping("/{profileID}")
+    // 5. PUT /profiles/{profileId}/update - Werk profiel van een specifieke gebruiker bij
+    @PutMapping("/{profileID}/update")
     public ResponseEntity<ProfileOutputDTO> updateProfile(@PathVariable Long profileID, @RequestBody ProfileInputDTO profileInputDTO) {
         ProfileOutputDTO updatedProfile = profileService.updateProfile(profileID, profileInputDTO);
         if (updatedProfile == null) {
@@ -65,8 +63,8 @@ public class ProfileController {
         return new ResponseEntity<>(updatedProfile, HttpStatus.OK);
     }
 
-    // DELETE - Verwijder een profiel
-    @DeleteMapping("/{profileID}")
+    // 6. DELETE - Verwijder een profiel (zonder dat 'User' wordt verwijderd)
+    @DeleteMapping("/{profileID}/delete")
     public ResponseEntity<Void> deleteProfile(@PathVariable Long profileID) {
         try {
         profileService.deleteProfile(profileID);

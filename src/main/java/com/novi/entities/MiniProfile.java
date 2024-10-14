@@ -1,23 +1,22 @@
-package com.novi.dtos;
+package com.novi.entities;
 
-public class ProfileMatchingOutputDTO {
+public class MiniProfile {
 
         private String healforceName;
         private String healthChallenge;
         private String profilePic;
         private String location;
 
-        // Constructor
-        public ProfileMatchingOutputDTO() {}
+        //Constructors
+        public MiniProfile() {
+        }
 
-        public ProfileMatchingOutputDTO(String healforceName, String healthChallenge, String profilePic, String location) {
+        public MiniProfile(String healforceName, String healthChallenge, String profilePic, String location) {
             this.healforceName = healforceName;
             this.healthChallenge = healthChallenge;
             this.profilePic = profilePic;
             this.location = location;
         }
-
-        // Getters and Setters
         public String getHealforceName() {
             return healforceName;
         }
