@@ -131,4 +131,21 @@ public class ProfileService {
     public void saveProfileID(Long profileID) {
     }
 
+    //8. Methode om het profiel van de huidige ingelogde gebruiker op te halen
+    public Profile getCurrentUserProfile() {
+        //Haal gebruikersnaam of email op van de ingelogde gebruiker via Spring Security
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username;
+
+        if (principal instanceof User) {
+            username = ((User) principal).getFirstName();
+        } else {
+            username = principal.toString();
+        }
+
+        // Zoek het profiel van de gebruiker obv username of email
+        return profileRepository.findByEmail(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Profile not found for current user"));
+    }
+
 }

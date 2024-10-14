@@ -19,9 +19,13 @@ public class Matching extends BaseEntity {
     private LocalDateTime matchDate;
 
     //Relaties
+    //Relatie Met 'Profiles'
     @ManyToMany(mappedBy = "matching")
-    private List<Profile> profiles;
+    private Set<Profile> profiles;
 
+    //Relatie met 'Message'
+    @OneToMany(mappedBy = "matching", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Message> messages;
 
 
     // Constructors
@@ -60,11 +64,18 @@ public class Matching extends BaseEntity {
         this.matchDate = matchDate;
     }
 
-    public List<Profile> getProfiles() {
+    public Set<Profile> getProfiles() {
         return profiles;
     }
-    public void setProfiles(List<Profile> profiles) {
+    public void setProfiles(Set<Profile> profiles) {
         this.profiles = profiles;
+    }
+
+    public Set<Message> getMessages() {
+        return messages;
+    }
+    public void setMessages(Set<Message> messages) {
+        this.messages = messages;
     }
 
 }

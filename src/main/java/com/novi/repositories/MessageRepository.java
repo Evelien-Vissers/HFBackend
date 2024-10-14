@@ -7,7 +7,7 @@ import java.util.List;
 
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
-    default List<Message> findByMatchId(Long matchId) {
+    default List<Message> findByMatching_MatchingId(Long matchId) {
         return null;
     }
 }

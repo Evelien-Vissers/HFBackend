@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "profiles")
@@ -51,10 +52,14 @@ public class Profile extends BaseEntity {
             joinColumns = @JoinColumn(name = "profileID"),
             inverseJoinColumns = @JoinColumn(name = "matchingID")
     )
-    private List<Matching> matching;
+    private Set<Matching> matching;
 
-    //One-To-Many met 'Message'
+    //2x One-To-Many met 'Message'
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
+    private Set<Message> sentMessages;
 
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
+    private Set<Message> receivedMessages;
 
 
     // Default constructor
@@ -163,12 +168,25 @@ public class Profile extends BaseEntity {
         this.user = user;
     }
 
-    public List<Matching> getMatching() {
+    public Set<Matching> getMatching() {
         return matching;
     }
 
-    public void setMatching(List<Matching> matching) {
+    public void setMatching(Set<Matching> matching) {
         this.matching = matching;
+    }
+
+    public Set<Message> getSentMessages() {
+        return sentMessages;
+    }
+    public void setSentMessages(Set<Message> sentMessages) {
+        this.sentMessages = sentMessages;
+    }
+    public Set<Message> getReceivedMessages() {
+        return receivedMessages;
+    }
+    public void setReceivedMessages(Set<Message> receivedMessages) {
+        this.receivedMessages = receivedMessages;
     }
 }
 

@@ -12,25 +12,33 @@ public class Message extends BaseEntity {
 
     private String content;
     private LocalDateTime timestamp;
-    private Long senderId;
-    private Long receiverId;
     private Boolean readStatus;
 
+    //Relaties met Profile
     @ManyToOne
-    @JoinColumn(name = "profileID")
-    private Profile profile;
+    @JoinColumn(name = "senderID")
+    private Profile sender;
+
+    @ManyToOne
+    @JoinColumn(name = "receiverID")
+    private Profile receiver;
+
+    //Relatie met Matching
+    @ManyToOne
+    @JoinColumn(name = "matchingID")
+    private Matching matching;
 
     // Constructors
     public Message() {
     }
 
-    public Message(String content, LocalDateTime timestamp, Long senderId, Long receiverId, Boolean readStatus, Profile profile) {
+    public Message(String content, LocalDateTime timestamp, Boolean readStatus, Profile sender, Profile receiver) {
         this.content = content;
         this.timestamp = timestamp;
-        this.senderId = senderId;
-        this.receiverId = receiverId;
         this.readStatus = readStatus;
-        this.profile = profile;
+        this.sender = sender;
+        this.receiver = receiver;
+
     }
 
     // Getters and Setters
@@ -58,22 +66,6 @@ public class Message extends BaseEntity {
         this.timestamp = timestamp;
     }
 
-    public Long getSenderId() {
-        return senderId;
-    }
-
-    public void setSenderId(Long senderId) {
-        this.senderId = senderId;
-    }
-
-    public Long getReceiverId() {
-        return receiverId;
-    }
-
-    public void setReceiverId(Long receiverId) {
-        this.receiverId = receiverId;
-    }
-
     public Boolean getReadStatus() {
         return readStatus;
     }
@@ -82,12 +74,23 @@ public class Message extends BaseEntity {
         this.readStatus = readStatus;
     }
 
-    public Profile getProfile() {
-        return profile;
+    public Profile getSender() {
+        return sender;
     }
-
-    public void setProfile(Profile profile) {
-        this.profile = profile;
+    public void setSender(Profile sender) {
+        this.sender = sender;
+    }
+    public Profile getReceiver() {
+        return receiver;
+    }
+    public void setReceiver(Profile receiver) {
+        this.receiver = receiver;
+    }
+    public Matching getMatching() {
+        return matching;
+    }
+    public void setMatching(Matching matching) {
+        this.matching = matching;
     }
 }
 

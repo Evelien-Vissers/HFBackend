@@ -25,7 +25,7 @@ public class MessageController {
     public ResponseEntity<MessageOutputDTO> sendMessage(@PathVariable Long matchId, @RequestBody MessageInputDTO messageInputDTO) {
         MessageOutputDTO sentMessage = messageService.sendMessage(matchId, messageInputDTO);
         if (sentMessage == null) {
-            throw new ResourceNotFoundException("Match with ID " + matchId + " not found");
+            throw new ResourceNotFoundException("Match with ID " + matchId + " not found or message could not be sent");
         }
         return new ResponseEntity<>(sentMessage, HttpStatus.CREATED);
     }

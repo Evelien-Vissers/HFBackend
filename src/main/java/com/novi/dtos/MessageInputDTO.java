@@ -6,14 +6,16 @@ public class MessageInputDTO {
 
     private String content;
     private Long receiverId;
+    private LocalDateTime timestamp;
 
     // Constructors
     public MessageInputDTO() {
     }
 
-    public MessageInputDTO(String content, Long receiverId) {
+    public MessageInputDTO(String content, Long receiverId, LocalDateTime timestamp) {
         this.content = content;
         this.receiverId = receiverId;
+        this.timestamp = LocalDateTime.now();
     }
 
     // Getters and Setters
@@ -31,6 +33,12 @@ public class MessageInputDTO {
 
     public void setReceiverId(Long receiverId) {
         this.receiverId = receiverId;
+    }
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
     }
 }
 
