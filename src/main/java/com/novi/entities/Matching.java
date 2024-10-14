@@ -1,26 +1,28 @@
 package com.novi.entities;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Entity
+@Table(name="matching")
+
 public class Matching extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long matchingId;
-
+    @Column(name = "status_Profile1")
     private Boolean statusProfile1;
+
+    @Column(name = "status_Profile2")
     private Boolean statusProfile2;
+
+    @Column(name = "match_date", nullable = false)
     private LocalDateTime matchDate;
 
-    @ManyToMany
-    @JoinTable(
-            name = "profile_matching",
-            joinColumns = @JoinColumn(name = "matching_id"),
-            inverseJoinColumns = @JoinColumn(name = "profile_id")
-    )
-    private Set<Profile> profiles;
+    //Relaties
+    @ManyToMany(mappedBy = "matching")
+    private List<Profile> profiles;
+
+
 
     // Constructors
     public Matching() {
@@ -30,17 +32,9 @@ public class Matching extends BaseEntity {
         this.statusProfile1 = statusProfile1;
         this.statusProfile2 = statusProfile2;
         this.matchDate = matchDate;
-        this.profiles = profiles;
     }
 
     // Getters and Setters
-    public Long getMatchingId() {
-        return matchingId;
-    }
-
-    public void setMatchingId(Long matchingId) {
-        this.matchingId = matchingId;
-    }
 
     public Boolean getStatusProfile1() {
         return statusProfile1;
@@ -66,11 +60,11 @@ public class Matching extends BaseEntity {
         this.matchDate = matchDate;
     }
 
-    public Set<Profile> getProfiles() {
+    public List<Profile> getProfiles() {
         return profiles;
     }
-
-    public void setProfiles(Set<Profile> profiles) {
+    public void setProfiles(List<Profile> profiles) {
         this.profiles = profiles;
     }
+
 }

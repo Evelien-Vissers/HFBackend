@@ -1,9 +1,7 @@
 package com.novi.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -42,7 +40,9 @@ public class User extends BaseEntity {
     private Boolean hasCompletedQuestionnaire = false; //Default value = false.
 
 
+    // Dit is de owner van de relatie. De "mappedBy" geeft aan dat de Profile-entiteit niet de eigenaar van de relatie is en dat de kolom die de relaite beheert (de foreign key) in de User-entiteit zit
     @OneToOne(mappedBy = "User")
+    @JoinColumn(name="profileID", referencedColumnName = "ID")
     private Profile profile;
 
     // Default constructors
@@ -144,5 +144,13 @@ public class User extends BaseEntity {
 
     public void setHasCompletedQuestionnaire(Boolean hasCompletedQuestionnaire) {
         this.hasCompletedQuestionnaire = hasCompletedQuestionnaire;
+    }
+
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
     }
 }

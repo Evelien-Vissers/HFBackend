@@ -3,6 +3,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.List;
 
 @Entity
 @Table(name = "profiles")
@@ -35,12 +36,25 @@ public class Profile extends BaseEntity {
     @Column(name = "healforce_Name")
     private String healforceName;
 
-    @Column(name = "profileID")
-    private String profileID;
+    @Column(name = "profileID", unique = true)
+    private Long profileID;
 
-    @OneToOne
-    @JoinColumn(name= "User")
+    //Relaties
+    //One-To-One met 'User'
+    @OneToOne(mappedBy = "profile")
     private User user;
+
+    //Many-To-Many met 'Matching'
+    @ManyToMany
+    @JoinTable(
+            name = "profile_matches",
+            joinColumns = @JoinColumn(name = "profileID"),
+            inverseJoinColumns = @JoinColumn(name = "matchingID")
+    )
+    private List<Matching> matching;
+
+    //One-To-Many met 'Message'
+
 
 
     // Default constructor
@@ -50,7 +64,7 @@ public class Profile extends BaseEntity {
 
     // Constructor with all fields
     public Profile(LocalDate dateOfBirth, String location, String gender, String healthChallenge,
-                   YearMonth diagnosisDate, String healingChoice, String connectionPreference, String profilePic) {
+                   YearMonth diagnosisDate, String healingChoice, String connectionPreference, String profilePic, String healforceName, Long profileID) {
         super();
         this.dateOfBirth = dateOfBirth;
         this.location = location;
@@ -133,11 +147,11 @@ public class Profile extends BaseEntity {
 
     public void setHealforceName(String healforceName) {this.healforceName = healforceName; }
 
-    public String getProfileID() {
+    public Long getProfileID() {
         return profileID;
     }
 
-    public void setProfileID(String profileID) {
+    public void setProfileID(Long profileID) {
         this.profileID = profileID;
     }
 
@@ -147,6 +161,14 @@ public class Profile extends BaseEntity {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<Matching> getMatching() {
+        return matching;
+    }
+
+    public void setMatching(List<Matching> matching) {
+        this.matching = matching;
     }
 }
 
