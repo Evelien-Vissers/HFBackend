@@ -14,12 +14,13 @@ public class ProfileInputDTO {
     private String connectionPreference;
     private String profilePic;
     private String healforceName;
+    private Long profileID;
 
     // Constructors
     public ProfileInputDTO() {
     }
 
-    public ProfileInputDTO(LocalDate dateOfBirth, String location, String gender, String healthChallenge, YearMonth diagnosisDate, String healingChoice, String connectionPreference, String profilePic, String healforceName) {
+    public ProfileInputDTO(LocalDate dateOfBirth, String location, String gender, String healthChallenge, YearMonth diagnosisDate, String healingChoice, String connectionPreference, String profilePic, String healforceName, Long ProfileID) {
         this.dateOfBirth = dateOfBirth;
         this.location = location;
         this.gender = gender;
@@ -29,6 +30,7 @@ public class ProfileInputDTO {
         this.connectionPreference = connectionPreference;
         this.profilePic = profilePic;
         this.healforceName = healforceName;
+        this.profileID = profileID;
     }
 
     // Getters and Setters
@@ -102,6 +104,14 @@ public class ProfileInputDTO {
 
     public void setHealforceName(String healforceName) {
         this.healforceName = healforceName;
+    }
+
+    public Long getProfileID() {
+        return profileID;
+    }
+
+    public void setProfileID(Long profileID) {
+        this.profileID = profileID;
     }
 }
 

@@ -20,11 +20,12 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
     @Query("SELECT p FROM Profile p WHERE p.user.email = :email")
     Optional<Profile> findByEmail(@Param("email") String email);
 
+
     // Gerichte query om alleen de benodigde velden op te halen voor een matching profile van gebruiker zelf
     @Query("SELECT new com.novi.entities.MiniProfile(p.healforceName, p.healthChallenge, p.profilePic, p.location) " + "" +
             "FROM Profile p " +
             "WHERE p.id = :profileID")
-    MiniProfile findMatchingProfileById(@Param("profileID") Long profileID);
+    Optional<MiniProfile> findMiniProfileById(@Param("profileID") Long profileID);
 
 }
 

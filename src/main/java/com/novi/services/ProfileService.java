@@ -12,8 +12,6 @@ import com.novi.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 public class ProfileService {
 
@@ -29,9 +27,9 @@ public class ProfileService {
 
     // 1a. Sla een nieuw profiel op met de bijbehorende ID
     @Transactional
-    public void saveProfile(Long ID, ProfileInputDTO profileInputDTO) {
+    public void saveProfile(ProfileInputDTO profileInputDTO) {
         //Zoek de gebruiker obv ID
-        User user = userRepository.findById(profileInputDTO.getID())
+        User user = userRepository.findById(profileInputDTO.getProfileID())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         Profile profile = profileMapper.toEntity(profileInputDTO);
@@ -39,7 +37,17 @@ public class ProfileService {
         profileRepository.save(profile);
     }
 
-    //1b. Genereer een profileID en sla het op
+    //1b. Methode om ProfileID te genereren door 2 nullen voor de Long ID te zetten
+    public String generateProfileID(Long id) {
+        //Gebruik de geerfde Id van 'BaseEntity' en voeg twee nullen toe
+        return String.format("00%d", id);
+    }
+
+    //1c. Methode om profiel op te halen en het geformatteerde ProfileID te retourneren
+    public String getFormattedProfileID
+
+
+
     public Long generateProfileID(ProfileInputDTO profileInputDTO) {
         User user = userRepository.findByEmail(profileInputDTO.findByEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -51,11 +59,10 @@ public class ProfileService {
         return profile.getId(); //De profileID is het ID van het profiel dat aan de gebruiker (ID) is gekoppeld.
     }
     // 2. Haal een profiel op van een specifieke gebruiker adhv profileID
-    public ProfileOutputDTO getProfileByProfileID(Long ProfileID) {
-        Profile profile = profileRepository.findById(profileID)
-                .orElseThrow(() -> new ResourceNotFoundException("Profile not found"));
-
-        return profileMapper.toOutputDTO(profile);
+    public ProfileOutputDTO getUserProfileByProfileID(Long ProfileID) {
+        return profileRepository.findById(profileID)
+                .map(profileMapper::toProfileOutputDTO)
+                .orElse(null);
     }
 
     //3. Haal een Mini Profile op via profileID (van gebruiker zelf)

@@ -33,7 +33,7 @@ public class ProfileController {
     }
 
     // 2. GET /profiles/{profileID} - Haal profiel op van een specifieke gebruiker
-    @GetMapping
+    @GetMapping("{profileID}")
     public ResponseEntity<ProfileOutputDTO> getUserProfileByProfileID(@PathVariable Long profileID) {
         ProfileOutputDTO profile = profileService.getUserProfileByProfileID(profileID);
         if (profile == null) {
