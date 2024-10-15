@@ -2,13 +2,16 @@ package com.novi.controllers;
 
 import com.novi.dtos.ProfileInputDTO;
 import com.novi.dtos.ProfileOutputDTO;
+import com.novi.entities.MiniProfile;
+import com.novi.exceptions.ResourceNotFoundException;
+import com.novi.services.ProfileService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-@RequestMapping
+@RequestMapping("/profiles")
 public class ProfileController {
 
     private final ProfileService profileService;
@@ -17,8 +20,8 @@ public class ProfileController {
         this.profileService = profileService;
     }
 
-    // POST - Maak een nieuw profiel aan
-    @PostMapping
+    // 1. POST - /profiles/new - Maak een nieuw profiel aan
+    @PostMapping("/new")
     public ResponseEntity<String> createProfile(@RequestBody ProfileInputDTO profileInputDTO) {
         // Sla profielgegevens op
         profileService.saveProfile(profileInputDTO);
@@ -29,45 +32,44 @@ public class ProfileController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Heal Force Profile Successfully Created!");
     }
 
-    // GET /users/{Id}/profile - Haal profiel op van een specifieke gebruiker
-    @GetMapping
+    // 2. GET /profiles/{profileID} - Haal profiel op van een specifieke gebruiker
+    @GetMapping("{profileID}")
     public ResponseEntity<ProfileOutputDTO> getUserProfileByProfileID(@PathVariable Long profileID) {
         ProfileOutputDTO profile = profileService.getUserProfileByProfileID(profileID);
         if (profile == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile not found with ProfileID: " + profileID);
+            throw new ResourceNotFoundException("Profile with ProfileID " + profileID + " not Found");
         }
         return new ResponseEntity<>(profile, HttpStatus.OK);
     }
 
-    // GET - Haal MatchingProfile op van gebruiker ZELF via ProfileID op wanneer hij op 'Start Matching' drukt (als weergave van zijn eigen MatchingProfile op de MatchingPage)
-    @GetMapping("/{profileID}/matching-profile")
-    public ResponseEntity<ProfileOutputDTO> getMatchingProfile(@PathVariable Long profileID) {
-        ProfileOutputDTO matchingProfile = profileService.getMatchingProfile(profileID);
-        if (matchingProfile == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Matching profile not found with ProfileID: " + profileID);
-        }
-        return new ResponseEntity<>(matchingProfile, HttpStatus.OK);
+    // 3. GET - Haal MiniProfile op van gebruiker ZELF via ProfileID op wanneer hij op 'Start Matching' drukt (als weergave van zijn eigen MatchingProfile op de MatchingPage)
+    @GetMapping("/{profileID}/mini-profile")
+    public ResponseEntity<MiniProfile> getMiniProfile(@PathVariable Long profileID) {
+        MiniProfile miniProfile = profileService.getMiniProfile(profileID)
+                .orElseThrow(() -> new ResourceNotFoundException("Mini profile with ProfileID " + profileID + " not found"));
+
+        return ResponseEntity.ok(miniProfile);
     }
 
 
-    // PUT /users/{Id}/profile - Werk profiel van een specifieke gebruiker bij
-    @PutMapping("/{profileID}")
-    public ResponseEntity<ProfileOutputDTO> updateUserProfile(@PathVariable Long profileID, @RequestBody ProfileInputDTO profileInputDTO) {
-        ProfileOutputDTO updatedProfile = profileService.updateUserProfile(profileID, profileInputDTO);
+    // 5. PUT /profiles/{profileId}/update - Werk profiel van een specifieke gebruiker bij
+    @PutMapping("/{profileID}/update")
+    public ResponseEntity<ProfileOutputDTO> updateProfile(@PathVariable Long profileID, @RequestBody ProfileInputDTO profileInputDTO) {
+        ProfileOutputDTO updatedProfile = profileService.updateProfile(profileID, profileInputDTO);
         if (updatedProfile == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile not found with ProfileID: " + profileID);
+            throw new ResourceNotFoundException("Profile with ProfileID " + profileID + " not found");
         }
         return new ResponseEntity<>(updatedProfile, HttpStatus.OK);
     }
 
-    // DELETE - Verwijder een profiel
-    @DeleteMapping("/{profileID}")
+    // 6. DELETE - Verwijder een profiel (zonder dat 'User' wordt verwijderd)
+    @DeleteMapping("/{profileID}/delete")
     public ResponseEntity<Void> deleteProfile(@PathVariable Long profileID) {
         try {
         profileService.deleteProfile(profileID);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT.build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            throw new ResourceNotFoundException("Profile with ProfileID " + profileID + " not found");
         }
     }
 }

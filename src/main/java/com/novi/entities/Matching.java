@@ -1,46 +1,44 @@
 package com.novi.entities;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Entity
+@Table(name="matching")
+
 public class Matching extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long matchingId;
-
+    @Column(name = "status_Profile1")
     private Boolean statusProfile1;
+
+    @Column(name = "status_Profile2")
     private Boolean statusProfile2;
+
+    @Column(name = "match_status")
+    private Boolean matchStatus;
+
+    @Column(name = "match_date", nullable = false)
     private LocalDateTime matchDate;
 
-    @ManyToMany
-    @JoinTable(
-            name = "profile_matching",
-            joinColumns = @JoinColumn(name = "matching_id"),
-            inverseJoinColumns = @JoinColumn(name = "profile_id")
-    )
+    //Relaties
+    //Relatie Met 'Profiles'
+    @ManyToMany(mappedBy = "matching")
     private Set<Profile> profiles;
+
 
     // Constructors
     public Matching() {
     }
 
-    public Matching(Boolean statusProfile1, Boolean statusProfile2, LocalDateTime matchDate, Set<Profile> profiles) {
+    public Matching(Boolean statusProfile1, Boolean statusProfile2, LocalDateTime matchDate, Boolean matchStatus, Set<Profile> profiles) {
         this.statusProfile1 = statusProfile1;
         this.statusProfile2 = statusProfile2;
+        this.matchStatus = matchStatus;
         this.matchDate = matchDate;
-        this.profiles = profiles;
     }
 
     // Getters and Setters
-    public Long getMatchingId() {
-        return matchingId;
-    }
-
-    public void setMatchingId(Long matchingId) {
-        this.matchingId = matchingId;
-    }
 
     public Boolean getStatusProfile1() {
         return statusProfile1;
@@ -69,8 +67,14 @@ public class Matching extends BaseEntity {
     public Set<Profile> getProfiles() {
         return profiles;
     }
-
     public void setProfiles(Set<Profile> profiles) {
         this.profiles = profiles;
     }
+    public Boolean getMatchStatus() {
+        return matchStatus;
+    }
+    public void setMatchStatus(Boolean matchStatus) {
+        this.matchStatus = matchStatus;
+    }
+
 }

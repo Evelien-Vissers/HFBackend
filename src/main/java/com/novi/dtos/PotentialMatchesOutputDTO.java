@@ -2,7 +2,7 @@ package com.novi.dtos;
 
 import java.time.LocalDateTime;
 
-public class MatchingOutputDTO {
+public class PotentialMatchesOutputDTO {
 
     private Long matchingId;
     private Boolean statusProfile1;
@@ -10,10 +10,10 @@ public class MatchingOutputDTO {
     private LocalDateTime matchDate;
 
     // Constructors
-    public MatchingOutputDTO() {
+    public PotentialMatchesOutputDTO(String healforceName, String healthChallenge, String profilePic, String location) {
     }
 
-    public MatchingOutputDTO(Long matchingId, Boolean statusProfile1, Boolean statusProfile2, LocalDateTime matchDate) {
+    public PotentialMatchesOutputDTO(Long matchingId, Boolean statusProfile1, Boolean statusProfile2, LocalDateTime matchDate) {
         this.matchingId = matchingId;
         this.statusProfile1 = statusProfile1;
         this.statusProfile2 = statusProfile2;
