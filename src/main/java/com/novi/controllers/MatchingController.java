@@ -68,7 +68,7 @@ public class MatchingController {
                         // Er is een match gemaakt tussen beide gebruikers
                         Map<String, Object> response = new HashMap<>();
                         response.put("message", "A match is created created!");
-                        response.put("matchID", matchingService.getMatchId(profileID1, profileID2)); // Optioneel: Haal het matchID op
+                       // response.put("matchID", matchingService.getMatchId(profileID1, profileID2));
 
                         return ResponseEntity.status(HttpStatus.CREATED).body(response);
                     } else {
@@ -79,7 +79,7 @@ public class MatchingController {
                     }
                 } else if ("no".equalsIgnoreCase(action)) {
                     // Behandel de "No" keuze
-                    matchingService.handleNoPress(profileID1, profileID2);
+                   // matchingService.handleNoPress(profileID1, profileID2);
 
                     // Geef een reactie terug dat de "No" is geregistreerd
                     Map<String, Object> response = new HashMap<>();

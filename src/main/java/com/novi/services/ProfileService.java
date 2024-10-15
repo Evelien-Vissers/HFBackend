@@ -2,15 +2,17 @@ package com.novi.services;
 
 import com.novi.dtos.ProfileInputDTO;
 import com.novi.dtos.ProfileOutputDTO;
+import com.novi.dtos.UserInputDTO;
 import com.novi.entities.MiniProfile;
 import com.novi.entities.Profile;
 import com.novi.entities.User;
-import com.novi.exceptions.ResourceNotFoundException;
 import com.novi.mappers.ProfileMapper;
 import com.novi.repositories.ProfileRepository;
 import com.novi.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 public class ProfileService {
@@ -37,19 +39,9 @@ public class ProfileService {
         profileRepository.save(profile);
     }
 
-    //1b. Methode om ProfileID te genereren door 2 nullen voor de Long ID te zetten
-    public String generateProfileID(Long id) {
-        //Gebruik de geerfde Id van 'BaseEntity' en voeg twee nullen toe
-        return String.format("00%d", id);
-    }
-
-    //1c. Methode om profiel op te halen en het geformatteerde ProfileID te retourneren
-    public String getFormattedProfileID
-
-
-
+    //1b. Methode om ProfileID te genereren
     public Long generateProfileID(ProfileInputDTO profileInputDTO) {
-        User user = userRepository.findByEmail(profileInputDTO.findByEmail())
+        User user = userRepository.findById(profileInputDTO.getProfileID())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         //Zoek het profiel dat aan de gebruiker is gekoppeld
@@ -59,7 +51,7 @@ public class ProfileService {
         return profile.getId(); //De profileID is het ID van het profiel dat aan de gebruiker (ID) is gekoppeld.
     }
     // 2. Haal een profiel op van een specifieke gebruiker adhv profileID
-    public ProfileOutputDTO getUserProfileByProfileID(Long ProfileID) {
+    public ProfileOutputDTO getUserProfileByProfileID(Long profileID) {
         return profileRepository.findById(profileID)
                 .map(profileMapper::toProfileOutputDTO)
                 .orElse(null);
@@ -67,7 +59,7 @@ public class ProfileService {
 
     //3. Haal een Mini Profile op via profileID (van gebruiker zelf)
     @Transactional(readOnly = true)
-    public MiniProfile getMiniProfile(Long profileID) {
+    public Optional<MiniProfile> getMiniProfile(Long profileID) {
         //Gebruik van de @Query in de ProfileRepository om gegevens op te halen
         return profileRepository.findMiniProfileById(profileID);
     }
@@ -81,7 +73,7 @@ public class ProfileService {
         profileMapper.toEntity(profileInputDTO);
         profileRepository.save(profile);
 
-        return profileMapper.toOutputDTO(profile);
+        return profileMapper.toProfileOutputDTO(profile);
     }
 
 
@@ -107,8 +99,8 @@ public class ProfileService {
     }
 
     //9. Methode om het profiel van de huidige ingelogde gebruiker op te halen
-    public Long getCurrentUserProfileId() {
-        //Haal gebruikersnaam of email op van de ingelogde gebruiker via Spring Security
+    //public Long getCurrentUserProfileId() {
+ /*       //Haal gebruikersnaam of email op van de ingelogde gebruiker via Spring Security
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String email;
 
@@ -123,6 +115,6 @@ public class ProfileService {
         // Haal het profiel-ID van de ingelogde gebruiker op
         Profile profile = profileRepository.findByUser(user).orElseThrow(() -> new IllegalArgumentException("Profile not found"));
         return profile.getId(); // Retourneer het profiel-ID van de huidige ingelogde gebruiker
-    }
+    }*/
 
 }

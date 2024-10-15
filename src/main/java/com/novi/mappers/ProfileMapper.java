@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ProfileMapper {
-    public ProfileOutputDTO toOutputDTO(Profile profile) {
+    public ProfileOutputDTO toProfileOutputDTO(Profile profile) {
         ProfileOutputDTO dto = new ProfileOutputDTO();
         dto.setDateOfBirth(profile.getDateOfBirth());
         dto.setLocation(profile.getLocation());

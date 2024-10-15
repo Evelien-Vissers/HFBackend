@@ -45,11 +45,10 @@ public class ProfileController {
     // 3. GET - Haal MiniProfile op van gebruiker ZELF via ProfileID op wanneer hij op 'Start Matching' drukt (als weergave van zijn eigen MatchingProfile op de MatchingPage)
     @GetMapping("/{profileID}/mini-profile")
     public ResponseEntity<MiniProfile> getMiniProfile(@PathVariable Long profileID) {
-        MiniProfile miniProfile = profileService.getMiniProfile(profileID);
-        if (miniProfile == null) {
-            throw new ResourceNotFoundException("Matching profile with ProfileID " + profileID + " not found");
-        }
-        return new ResponseEntity<>(miniProfile, HttpStatus.OK);
+        MiniProfile miniProfile = profileService.getMiniProfile(profileID)
+                .orElseThrow(() -> new ResourceNotFoundException("Mini profile with ProfileID " + profileID + " not found"));
+
+        return ResponseEntity.ok(miniProfile);
     }
 
 

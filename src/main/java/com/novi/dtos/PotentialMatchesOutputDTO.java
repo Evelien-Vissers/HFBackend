@@ -10,7 +10,7 @@ public class PotentialMatchesOutputDTO {
     private LocalDateTime matchDate;
 
     // Constructors
-    public PotentialMatchesOutputDTO() {
+    public PotentialMatchesOutputDTO(String healforceName, String healthChallenge, String profilePic, String location) {
     }
 
     public PotentialMatchesOutputDTO(Long matchingId, Boolean statusProfile1, Boolean statusProfile2, LocalDateTime matchDate) {
