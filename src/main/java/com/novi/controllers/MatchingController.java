@@ -48,14 +48,14 @@ public class MatchingController {
             // Foutafhandeling voor ongeldige profileID's
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("message", "You are not authorized to view potential matches at this time.");
-            errorResponse.put("error", e.getMessage());  // Optioneel: Voeg de foutboodschap toe voor debuggen (optioneel)
+            errorResponse.put("error", e.getMessage());
 
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);  // Stuur 401 Unauthorized terug
         }
     }
 
     // 2. POST - Endpoint om een "Yes" of "No" van een gebruiker vast te leggen voor een ander profiel
-    @PostMapping
+    @PostMapping("/match-action")
         public ResponseEntity<?> handleMatchAction(@PathVariable Long profileID1, @PathVariable Long profileID2, @PathVariable String action) {
             try {
                 boolean isMatchCreated = false;

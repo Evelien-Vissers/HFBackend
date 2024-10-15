@@ -15,6 +15,9 @@ public class Matching extends BaseEntity {
     @Column(name = "status_Profile2")
     private Boolean statusProfile2;
 
+    @Column(name = "match_status")
+    private Boolean matchStatus;
+
     @Column(name = "match_date", nullable = false)
     private LocalDateTime matchDate;
 
@@ -28,9 +31,10 @@ public class Matching extends BaseEntity {
     public Matching() {
     }
 
-    public Matching(Boolean statusProfile1, Boolean statusProfile2, LocalDateTime matchDate, Set<Profile> profiles) {
+    public Matching(Boolean statusProfile1, Boolean statusProfile2, LocalDateTime matchDate, Boolean matchStatus, Set<Profile> profiles) {
         this.statusProfile1 = statusProfile1;
         this.statusProfile2 = statusProfile2;
+        this.matchStatus = matchStatus;
         this.matchDate = matchDate;
     }
 
@@ -65,6 +69,12 @@ public class Matching extends BaseEntity {
     }
     public void setProfiles(Set<Profile> profiles) {
         this.profiles = profiles;
+    }
+    public Boolean getMatchStatus() {
+        return matchStatus;
+    }
+    public void setMatchStatus(Boolean matchStatus) {
+        this.matchStatus = matchStatus;
     }
 
 }

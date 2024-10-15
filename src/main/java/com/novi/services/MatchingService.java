@@ -8,6 +8,9 @@ import com.novi.exceptions.ResourceNotFoundException;
 import com.novi.mappers.MatchingMapper;
 import com.novi.repositories.MatchingRepository;
 import com.novi.repositories.ProfileRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -28,7 +31,7 @@ public class MatchingService {
         this.profileRepository = profileRepository;
     }
 
-    // 1. Methode die de lijst met potentiële matches ophaalt voor profileID1
+    // 1. Methode die de lijst met potentiële matches ophaalt voor profileID
     public List<PotentialMatchesOutputDTO> getPotentialMatches(Long profileID) {
         //Haal het profiel van de gebruiker op
         Profile profile = profileRepository.findById(profileID)
@@ -44,9 +47,11 @@ public class MatchingService {
         return MatchingMapper.toDTOList(potentialMatches);
     }
 
-    // 2. Methode om de "Yes" of "No" van een gebruiker op te slaan
+    // 2.
 
-    // 2A. Verwerk "Yes" actie voor een match
+    // 3. Methode om de "Yes" of "No" van een gebruiker op te slaan
+
+    // 3A. Verwerk "Yes" actie voor een match
     public boolean handleYesPress(Long profileID1, Long profileID2) {
     // Controleer of er al een match bestaat tussen de profielen
     Optional<Matching> existingMatch = matchingRepository.findMatchBetweenProfiles(profileID1, profileID2);
@@ -74,8 +79,8 @@ public class MatchingService {
     } else {
         // Geen bestaande match, maak een nieuwe
         Matching newMatch = new Matching();
-        newMatch.setProfile1(profileID1);
-        newMatch.setProfile2(profileID2);
+        //newMatch.setProfile1(profileID1);
+        //newMatch.setProfile2(profileID2);
         newMatch.setStatusProfile1(true); // Profile1 drukt "Yes"
         newMatch.setStatusProfile2(false); // Wacht op Profile2
         matchingRepository.save(newMatch);
@@ -83,7 +88,7 @@ public class MatchingService {
     }
 }
 
-// 2B. Verwerk "No" actie voor een match
+// 3B. Verwerk "No" actie voor een match
 public void handleNoPress(Long profileID1, Long profileID2) {
     // Controleer of er een match bestaat
     Optional<Matching> existingMatch = matchingRepository.findMatchBetweenProfiles(profileID1, profileID2);
@@ -96,8 +101,8 @@ public void handleNoPress(Long profileID1, Long profileID2) {
     } else {
         // Als er nog geen match is, maak een nieuwe met "No"
         Matching newMatch = new Matching();
-        newMatch.setProfile1(profileID1);
-        newMatch.setProfile2(profileID2);
+       // newMatch.setProfile1(profileID1);
+       // newMatch.setProfile2(profileID2);
         newMatch.setStatusProfile1(false); // Profile1 drukt "No"
         newMatch.setStatusProfile2(false); // Wacht niet op Profile2
         newMatch.setMatchStatus(false); // Geen match mogelijk
