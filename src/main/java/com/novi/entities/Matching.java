@@ -23,10 +23,6 @@ public class Matching extends BaseEntity {
     @ManyToMany(mappedBy = "matching")
     private Set<Profile> profiles;
 
-    //Relatie met 'Message'
-    @OneToMany(mappedBy = "matching", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Message> messages;
-
 
     // Constructors
     public Matching() {
@@ -69,13 +65,6 @@ public class Matching extends BaseEntity {
     }
     public void setProfiles(Set<Profile> profiles) {
         this.profiles = profiles;
-    }
-
-    public Set<Message> getMessages() {
-        return messages;
-    }
-    public void setMessages(Set<Message> messages) {
-        this.messages = messages;
     }
 
 }

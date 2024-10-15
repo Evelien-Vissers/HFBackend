@@ -54,13 +54,6 @@ public class Profile extends BaseEntity {
     )
     private Set<Matching> matching;
 
-    //2x One-To-Many met 'Message'
-    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
-    private Set<Message> sentMessages;
-
-    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
-    private Set<Message> receivedMessages;
-
 
     // Default constructor
     public Profile() {
@@ -176,17 +169,5 @@ public class Profile extends BaseEntity {
         this.matching = matching;
     }
 
-    public Set<Message> getSentMessages() {
-        return sentMessages;
-    }
-    public void setSentMessages(Set<Message> sentMessages) {
-        this.sentMessages = sentMessages;
-    }
-    public Set<Message> getReceivedMessages() {
-        return receivedMessages;
-    }
-    public void setReceivedMessages(Set<Message> receivedMessages) {
-        this.receivedMessages = receivedMessages;
-    }
 }
 

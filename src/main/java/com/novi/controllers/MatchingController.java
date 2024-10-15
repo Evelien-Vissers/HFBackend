@@ -1,5 +1,6 @@
 package com.novi.controllers;
 
+import com.novi.dtos.PotentialMatchesOutputDTO;
 import com.novi.entities.PotentialMatches;
 import com.novi.services.MatchingService;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,7 @@ public class MatchingController {
     public ResponseEntity<?> getPotentialMatches(@PathVariable Long profileID) { // Het vraagteken betekent dat de response niet per se een vaste lijst hoeft te zijn, maar een combinatie van een bericht in de Matchlijst.
         try {
             //Verzoek om lijst van potential matches via de matchingService
-            List<PotentialMatches> potentialMatches = matchingService.getPotentialMatches(profileID);
+            List<PotentialMatchesOutputDTO> potentialMatches = matchingService.getPotentialMatches(profileID);
 
             //Controleer of er potential matches zijn gevonden
             if (potentialMatches.isEmpty()) {
@@ -79,7 +80,7 @@ public class MatchingController {
                     }
                 } else if ("no".equalsIgnoreCase(action)) {
                     // Behandel de "No" keuze
-                   // matchingService.handleNoPress(profileID1, profileID2);
+                   matchingService.handleNoPress(profileID1, profileID2);
 
                     // Geef een reactie terug dat de "No" is geregistreerd
                     Map<String, Object> response = new HashMap<>();
