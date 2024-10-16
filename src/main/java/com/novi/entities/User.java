@@ -1,7 +1,6 @@
 package com.novi.entities;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -41,7 +40,7 @@ public class User extends BaseEntity {
 
 
     // Dit is de owner van de relatie. De "mappedBy" geeft aan dat de Profile-entiteit niet de eigenaar van de relatie is en dat de kolom die de relaite beheert (de foreign key) in de User-entiteit zit
-    @OneToOne(mappedBy = "User")
+    @OneToOne
     @JoinColumn(name="profileID", referencedColumnName = "ID")
     private Profile profile;
 
