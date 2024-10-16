@@ -1,5 +1,6 @@
 package com.novi.security;
 
+import com.novi.entities.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,20 +11,17 @@ import java.util.List;
 
 public class ApiUserDetails implements UserDetails {
 
-    private final UserModel user;
-    private  String organisation = "";
+    private final User user;
 
-    public ApiUserDetails(UserModel user) {
+    public ApiUserDetails(User user) {
         this.user = user;
     }
 
-    public ApiUserDetails(String username, List<String> roles, String organisation) {
-        this.organisation = organisation;
-        user = new UserModel();
+    public ApiUserDetails(String username, List<String> roles) {
+        user = new User();
         user.setUserName(username);
 
-        for (String role : roles) {
-            user.getRoles().add(new RoleModel(role));
+
         }
     }
 
