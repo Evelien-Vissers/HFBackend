@@ -73,5 +73,9 @@ public class UserController {
             throw new ResourceNotFoundException("User with id " + Id + " not found");
         }
     }
+
+    // SECURITY USERCONTROLLERS
+
+
 }
 
