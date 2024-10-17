@@ -3,6 +3,8 @@ package com.novi.entities;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="users")
@@ -46,6 +48,14 @@ public class User extends BaseEntity {
     @OneToOne
     @JoinColumn(name="profileID", referencedColumnName = "ID")
     private Profile profile;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name="id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
 
     //Constructors
     //No-arg constructor (verplicht voor JPA)
@@ -163,5 +173,12 @@ public class User extends BaseEntity {
     }
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

@@ -93,7 +93,7 @@ public class UserController {
     public ResponseEntity<?> CreateUser(@RequestBody @Valid UserRequestDTO userDTO) {
         User user = userDTOMapper.mapToModel(userDTO);
         user.setEnabled(true);
-        if(!apiUserDetailService.createUser(user, userRequestDTO.getRoles())) {
+        if(!apiUserDetailService.createUser(user, defaultRoles)) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.created(UrlHelper.getCurrentUrlWithId(request, user.getId())).build();
