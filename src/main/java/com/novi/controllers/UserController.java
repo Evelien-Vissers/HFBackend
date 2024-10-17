@@ -16,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/users")
@@ -27,6 +29,7 @@ public class UserController {
     private final UserDTOMapper userDTOMapper;
     private final ApiUserDetailService apiUserDetailService;
     private final HttpServletRequest request;
+    private final List<String> defaultRoles = List.of("ROLE_USER");
 
     public UserController(UserService userService, UserDTOMapper userDTOMapper, ApiUserDetailService apiUserDetailService, HttpServletRequest request) {
         this.userService = userService;
@@ -93,7 +96,8 @@ public class UserController {
     public ResponseEntity<?> CreateUser(@RequestBody @Valid UserRequestDTO userDTO) {
         User user = userDTOMapper.mapToModel(userDTO);
         user.setEnabled(true);
-        if(!apiUserDetailService.createUser(user, defaultRoles)) {
+        //Creeer gebruiker met standaardrollen
+        if(!apiUserDetailService.createUserWithRoles(user, defaultRoles)) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.created(UrlHelper.getCurrentUrlWithId(request, user.getId())).build();

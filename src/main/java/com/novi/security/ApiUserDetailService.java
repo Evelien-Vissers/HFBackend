@@ -55,9 +55,10 @@ public class ApiUserDetailService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByEmail(String username) throws UsernameNotFoundException {
-        User user = UserRepository.findByEmail(username)
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Gebruiker niet gevonden"));
         return new ApiUserDetails(user);
     }
+
 }
