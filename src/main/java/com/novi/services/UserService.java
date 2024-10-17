@@ -1,5 +1,6 @@
 package com.novi.services;
 
+import com.novi.dtos.ContactFormDTO;
 import com.novi.dtos.UserInputDTO;
 import com.novi.dtos.UserOutputDTO;
 import com.novi.entities.User;
@@ -9,6 +10,7 @@ import com.novi.mappers.UserMapper;
 import com.novi.repositories.UserRepository;
 import com.novi.repositories.ProfileRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -23,6 +25,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final ProfileRepository profileRepository;
 
+    @Autowired
     public UserService(UserRepository userRepository, ProfileRepository profileRepository) {
         this.userRepository = userRepository;
         this.profileRepository = profileRepository;
@@ -49,6 +52,7 @@ public class UserService {
         Optional<User> user = userRepository.findByEmail(email);
         return user.isPresent() && user.get().getPassword().equals(password);
     }
+
     //2. Haal alle gebruikers op uit de database
     public List<UserOutputDTO> getAllUsers() {
         //Haal alle gebruiker op uit de repository
@@ -96,6 +100,27 @@ public class UserService {
         // Verwijder de gebruiker
         userRepository.deleteById(id);
         return false;
+    }
+
+    // 6. Verstuur contactformulier
+    public void processContactForm(ContactFormDTO contactFormDTO) {
+        //Check of gebruiker al bestaat obv het emailadres
+        Optional<User> optionalUser = userRepository.findByEmail(contactFormDTO.getEmail());
+
+            //Als gebruiker niet bestaat, maak dan een nieuwe User aan
+        User user = optionalUser.orElseGet(() -> {
+            User newUser = new User();
+            newUser.setEmail(contactFormDTO.getEmail());
+            newUser.setFirstName(contactFormDTO.getFirstName());
+            newUser.setLastName(contactFormDTO.getLastName());
+            return newUser;
+        });
+
+        //Zet vraag van het contactformulier in de User entity
+        user.setQuestion(contactFormDTO.getQuestion());
+
+        //Sla gebruiker op in de database
+        userRepository.save(user);
     }
 
 }

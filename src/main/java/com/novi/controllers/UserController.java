@@ -1,5 +1,6 @@
 package com.novi.controllers;
 
+import com.novi.dtos.ContactFormDTO;
 import com.novi.helpers.UrlHelper;
 import com.novi.mappers.UserDTOMapper;
 import com.novi.dtos.UserInputDTO;
@@ -87,6 +88,13 @@ public class UserController {
         } else {
             throw new ResourceNotFoundException("User with id " + Id + " not found");
         }
+    }
+
+    // 6. CONTACT /users - gebruiker verstuurt bericht via contactformulier
+    @PostMapping("/contact")
+    public ResponseEntity<String> submitContactForm(@RequestBody ContactFormDTO contactFormDTO) {
+        userService.processContactForm(contactFormDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Contact form submitted");
     }
 
     // SECURITY USERCONTROLLERS

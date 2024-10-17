@@ -43,6 +43,9 @@ public class User extends BaseEntity {
     @Column(name = "enabled", nullable = false)
     private Boolean enabled = true; // Standaardwaarde voor nieuwe gebruikers
 
+    @Column(nullable = true, length = 600)
+    private String question;
+
 
     // Dit is de owner van de relatie. De "mappedBy" geeft aan dat de Profile-entiteit niet de eigenaar van de relatie is en dat de kolom die de relaite beheert (de foreign key) in de User-entiteit zit
     @OneToOne
@@ -76,6 +79,7 @@ public class User extends BaseEntity {
         this.lastLogin = null;
         this.hasCompletedQuestionnaire = false; // Default to false
         this.enabled = true;
+        this.question = null;
     }
 
     // Getters and Setters
@@ -180,5 +184,12 @@ public class User extends BaseEntity {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getQuestion() {
+        return question;
+    }
+    public void setQuestion(String question) {
+        this.question = question;
     }
 }
