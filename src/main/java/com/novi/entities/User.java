@@ -1,9 +1,10 @@
 package com.novi.entities;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="users")
@@ -39,19 +40,31 @@ public class User extends BaseEntity {
     @Column(name = "has_completed_questionnaire", nullable = false)
     private Boolean hasCompletedQuestionnaire = false; //Default value = false.
 
+    @Column(name = "enabled", nullable = false)
+    private Boolean enabled = true; // Standaardwaarde voor nieuwe gebruikers
+
 
     // Dit is de owner van de relatie. De "mappedBy" geeft aan dat de Profile-entiteit niet de eigenaar van de relatie is en dat de kolom die de relaite beheert (de foreign key) in de User-entiteit zit
-    @OneToOne(mappedBy = "User")
+    @OneToOne
     @JoinColumn(name="profileID", referencedColumnName = "ID")
     private Profile profile;
 
-    // Default constructors
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name="id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
+
+    //Constructors
+    //No-arg constructor (verplicht voor JPA)
     public User() {
-        super(); //Aanroep van BaseEntity Constructor
+        super();
     }
 
     public User(String firstName, String lastName, String email, String password, Boolean acceptedPrivacyStatementUserAgreement) {
-        super();
+        super(); // Roept de BaseEntity constructor
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -60,8 +73,9 @@ public class User extends BaseEntity {
         this.role = "User"; // Default role
         this.verifiedEmail = false; //Default to false
         this.registrationDate = LocalDate.now(); // set to currentDate
-        this.lastLogin = LocalDateTime.now();
+        this.lastLogin = null;
         this.hasCompletedQuestionnaire = false; // Default to false
+        this.enabled = true;
     }
 
     // Getters and Setters
@@ -152,5 +166,19 @@ public class User extends BaseEntity {
 
     public void setProfile(Profile profile) {
         this.profile = profile;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

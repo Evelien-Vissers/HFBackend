@@ -55,7 +55,7 @@ public class MatchingController {
     }
 
     // 2. POST - Endpoint om een "Yes" of "No" van een gebruiker vast te leggen voor een ander profiel
-    @PostMapping("/match-action")
+    @PostMapping("/choose")
         public ResponseEntity<?> handleMatchAction(@PathVariable Long profileID1, @PathVariable Long profileID2, @PathVariable String action) {
             try {
                 boolean isMatchCreated = false;

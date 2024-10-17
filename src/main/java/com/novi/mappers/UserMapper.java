@@ -28,7 +28,7 @@ public class UserMapper {
 
     // Map een UserInputDTO naar een User
     public static User toUser(UserInputDTO userInputDTO) {
-        User user = new User();
+        User user = new User(-1L);
         user.setFirstName(userInputDTO.getFirstName());
         user.setLastName(userInputDTO.getLastName());
         user.setEmail(userInputDTO.getEmail());

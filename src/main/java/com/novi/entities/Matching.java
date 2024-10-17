@@ -21,7 +21,7 @@ public class Matching extends BaseEntity {
     @Column(name = "match_date", nullable = false)
     private LocalDateTime matchDate;
 
-    //Relaties
+
     //Relatie Met 'Profiles'
     @ManyToMany(mappedBy = "matching")
     private Set<Profile> profiles;

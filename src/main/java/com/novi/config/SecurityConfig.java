@@ -1,63 +1,56 @@
-/*
 package com.novi.config;
 
-import com.novi.services.JwtRequestFilter;
+import com.novi.security.JwtRequestFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-
-import javax.sql.DataSource;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
-    private final DataSource dataSource;
-    public SecurityConfig(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
-    //Deze methode regelt de password encryption
     @Bean
-    public PasswordEncoder passwordEncoder () {
+    public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
-    //Deze methode regelt de authorisatie (dat de juiste rol of authority toegang krijgt tot een endpoint)
     @Bean
-    protected SecurityFilterChain filter (HttpSecurity http) throws Exception
-    {
+    public SecurityFilterChain filterChain(HttpSecurity http, JwtRequestFilter jwtRequestFilter) throws Exception {
         http
-                .csrf().disable()
-                .httpBasic().disable()
-                .cors().and()
-                .authorizeHttpRequests()
-                .requestMatchers(HttpMethod.GET, "/info").hasRole("USER")
-                .requestMatchers("/users/**").hasAnyRole("ADMIN", "USER")
-                .requestMatchers("/admins").hasAuthority("ROLE_ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/users/{id}").hasRole("ADMIN")
-                .requestMatchers("/authenticate").permitAll()
-
-                .anyRequest().denyAll()
-                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-                http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-            return http.build();
+                .httpBasic(hp -> hp.disable())
+                .authorizeHttpRequests(auth -> auth
+                        //Openbare routes
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/public/**").permitAll()
+                        //Alleen ingelogde gebruikers kunnen hun profiel zien
+                        .requestMatchers("/profile/**").hasRole("USER")
+                        //Alleen ingelogde gebruikers met aangemaakt profiel kunnen matchen
+                        .requestMatchers("/matching/**").hasRole("USER")
+                        .requestMatchers("matching/**").hasAuthority("PROFILE_CREATED")
+                        //Alleen admins kunnen admin pagina's zien
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .anyRequest().denyAll()
+                )
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> {})
+                .sessionManagement( session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        ;
+        return  http.build();
     }
 
-    //Deze methode regelt de authenticatie (je zegt wie je zegt dat je bent)
     @Bean
-    public AuthenticationManager authManager (HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder =
-                http.getSharedObject(AuthenticationManagerBuilder.class);
-
-        authenticationManagerBuilder.jdbcAuthentication().dataSource(dataSource)
-                .usersByUsernameQuery(
-                        "SELECT username, password, enabled" +
-                        " FROM users" +
-                        " WHERE username=?")
-                .authoritiesByUserNameQuery(
-                        "SELECT username, authority" +
-                        " FROM authorities " +
-                        " WHERE username=?");
-        return authenticationManagerBuilder.build();
+    public AuthenticationManager authManager(HttpSecurity http, PasswordEncoder encoder, UserDetailsService apiUserDetailsService) throws Exception {
+        var builder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        builder.userDetailsService(apiUserDetailsService).passwordEncoder(encoder);
+        return builder.build();
     }
 }
-*/
