@@ -92,14 +92,20 @@ public class UserService {
 
     //5. Delete de gebruiker en het profiel dat daaraan is gekoppeld:
     public boolean deleteUser(Long id) {
-        // Verwijder het profiel dat aan de gebruiker is gekoppeld
-        Profile profile = profileRepository.findById(id)
+        // Zoek de gebruiker obv het id (Long)
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Haal het profiel op dat aan gebruiker is gekoppeld
+        Profile profile = profileRepository.findByUser(user)
                 .orElseThrow(() -> new ResourceNotFoundException("Profile for user not found"));
+
+        //Verwijder het profiel dat aan de gebruiker is gekoppeld
         profileRepository.delete(profile);
 
         // Verwijder de gebruiker
         userRepository.deleteById(id);
-        return false;
+        return true;
     }
 
     // 6. Verstuur contactformulier

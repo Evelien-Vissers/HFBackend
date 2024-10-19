@@ -11,7 +11,6 @@ import java.util.Collection;
 import java.util.List;
 
 public class ApiUserDetails implements UserDetails {
-
     private final User user;
 
     public ApiUserDetails(User user) {
@@ -37,7 +36,7 @@ public String getPassword() {
 
 @Override
 public String getUsername() {
-    return  user.getId() + "::" + user.getEmail();
+    return user.getEmail();
 }
 
 @Override

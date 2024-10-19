@@ -9,11 +9,11 @@ import java.util.Set;
 
 public class Matching extends BaseEntity {
 
-    @Column(name = "status_Profile1")
-    private Boolean statusProfile1;
+    @Column(name = "status_currentProfile")
+    private Boolean statusCurrentProfile;
 
-    @Column(name = "status_Profile2")
-    private Boolean statusProfile2;
+    @Column(name = "status_otherProfile")
+    private Boolean statusOtherProfile;
 
     @Column(name = "match_status")
     private Boolean matchStatus;
@@ -25,35 +25,36 @@ public class Matching extends BaseEntity {
     //Relatie Met 'Profiles'
     @ManyToMany(mappedBy = "matching")
     private Set<Profile> profiles;
+    private Profile otherProfile;
 
 
     // Constructors
     public Matching() {
     }
 
-    public Matching(Boolean statusProfile1, Boolean statusProfile2, LocalDateTime matchDate, Boolean matchStatus, Set<Profile> profiles) {
-        this.statusProfile1 = statusProfile1;
-        this.statusProfile2 = statusProfile2;
+    public Matching(Boolean statusCurrentProfile, Boolean statusOtherProfile, LocalDateTime matchDate, Boolean matchStatus, Set<Profile> profiles) {
+        this.statusCurrentProfile = statusCurrentProfile;
+        this.statusOtherProfile = statusOtherProfile;
         this.matchStatus = matchStatus;
         this.matchDate = matchDate;
     }
 
     // Getters and Setters
 
-    public Boolean getStatusProfile1() {
-        return statusProfile1;
+    public Boolean getStatusCurrentProfile() {
+        return statusCurrentProfile;
     }
 
-    public void setStatusProfile1(Boolean statusProfile1) {
-        this.statusProfile1 = statusProfile1;
+    public void setStatusCurrentProfile(Boolean statusProfile1) {
+        this.statusCurrentProfile = statusCurrentProfile;
     }
 
-    public Boolean getStatusProfile2() {
-        return statusProfile2;
+    public Boolean getStatusOtherProfile() {
+        return statusOtherProfile;
     }
 
-    public void setStatusProfile2(Boolean statusProfile2) {
-        this.statusProfile2 = statusProfile2;
+    public void setStatusOtherProfile(Boolean statusProfile2) {
+        this.statusOtherProfile = statusOtherProfile;
     }
 
     public LocalDateTime getMatchDate() {

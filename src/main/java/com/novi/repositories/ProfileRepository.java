@@ -9,9 +9,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface ProfileRepository extends JpaRepository<Profile, Long> {
+public interface ProfileRepository extends JpaRepository<Profile, UUID> {
 
     // Methode om een profiel te vinden obv de gekoppelde user
     Optional<Profile> findByUser(User user);
@@ -25,7 +26,7 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
     @Query("SELECT new com.novi.entities.MiniProfile(p.healforceName, p.healthChallenge, p.profilePic, p.location) " + "" +
             "FROM Profile p " +
             "WHERE p.id = :profileID")
-    Optional<MiniProfile> findMiniProfileById(@Param("profileID") Long profileID);
+    Optional<MiniProfile> findMiniProfileById(@Param("profileID") UUID profileID);
 
 }
 

@@ -9,7 +9,7 @@ import com.novi.dtos.UserRequestDTO;
 import com.novi.entities.User;
 import com.novi.exceptions.ResourceNotFoundException;
 import com.novi.exceptions.UnauthorizedException;
-import com.novi.security.ApiUserDetailService;
+import com.novi.security.ApiUserDetailsService;
 import com.novi.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -28,11 +28,11 @@ public class UserController {
 
     private final UserService userService;
     private final UserDTOMapper userDTOMapper;
-    private final ApiUserDetailService apiUserDetailService;
+    private final ApiUserDetailsService apiUserDetailService;
     private final HttpServletRequest request;
     private final List<String> defaultRoles = List.of("ROLE_USER");
 
-    public UserController(UserService userService, UserDTOMapper userDTOMapper, ApiUserDetailService apiUserDetailService, HttpServletRequest request) {
+    public UserController(UserService userService, UserDTOMapper userDTOMapper, ApiUserDetailsService apiUserDetailService, HttpServletRequest request) {
         this.userService = userService;
         this.userDTOMapper = userDTOMapper;
         this.apiUserDetailService = apiUserDetailService;
@@ -99,8 +99,8 @@ public class UserController {
 
     // SECURITY USERCONTROLLERS
 
-    //6.
-    @PostMapping("/users")
+    //7.
+    @PostMapping("/create")
     public ResponseEntity<?> CreateUser(@RequestBody @Valid UserRequestDTO userDTO) {
         User user = userDTOMapper.mapToModel(userDTO);
         user.setEnabled(true);

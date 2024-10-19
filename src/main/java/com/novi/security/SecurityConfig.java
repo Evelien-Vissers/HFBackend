@@ -1,6 +1,5 @@
-package com.novi.config;
+package com.novi.security;
 
-import com.novi.security.JwtRequestFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

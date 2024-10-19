@@ -49,7 +49,7 @@ public class User extends BaseEntity {
 
     // Dit is de owner van de relatie. De "mappedBy" geeft aan dat de Profile-entiteit niet de eigenaar van de relatie is en dat de kolom die de relaite beheert (de foreign key) in de User-entiteit zit
     @OneToOne
-    @JoinColumn(name="profileID", referencedColumnName = "ID")
+    @JoinColumn(name="profileID", referencedColumnName = "profileID")
     private Profile profile;
 
     @ManyToMany(fetch = FetchType.EAGER)

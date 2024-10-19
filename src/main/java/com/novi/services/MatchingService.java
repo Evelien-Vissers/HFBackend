@@ -8,6 +8,7 @@ import com.novi.exceptions.ResourceNotFoundException;
 import com.novi.mappers.MatchingMapper;
 import com.novi.repositories.MatchingRepository;
 import com.novi.repositories.ProfileRepository;
+import com.novi.repositories.UserRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,37 +25,52 @@ public class MatchingService {
     private final MatchingRepository matchingRepository;
     private final ProfileService profileService;
     private final ProfileRepository profileRepository;
+    private final UserRepository userRepository;
 
-    public MatchingService(MatchingRepository matchingRepository, ProfileService profileService, ProfileRepository profileRepository) {
+    public MatchingService(MatchingRepository matchingRepository, ProfileService profileService, ProfileRepository profileRepository, UserRepository userRepository) {
         this.matchingRepository = matchingRepository;
         this.profileService = profileService;
         this.profileRepository = profileRepository;
+        this.userRepository = userRepository;
     }
 
-    // 1. Methode die de lijst met potentiële matches ophaalt voor profileID
-    public List<PotentialMatchesOutputDTO> getPotentialMatches(Long profileID) {
-        //Haal het profiel van de gebruiker op
-        Profile profile = profileRepository.findById(profileID)
-                .orElseThrow(() -> new ResourceNotFoundException("Profile not found for ID: " + profileID));
+    // 1. Methode om het huidige profiel (currentProfile) van de ingelogde gebruiker op te halen
+    public Profile getCurrentProfile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && authentication.getPrincipal() instanceof UserDetails) {
+            String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+            //Gebruik emailadres om het profiel op te halen
+            return profileRepository.findByEmail(username)
+                    .orElseThrow(() -> new ResourceNotFoundException("Current profile not found for email: " + username));
+        } else {
+            throw new IllegalArgumentException("You are not logged in");
+        }
+    }
+
+    // 2. Methode die de lijst met potentiële matches ophaalt voor currentProfile
+    public List<PotentialMatchesOutputDTO> findPotentialMatches() {
+        //Haal het profiel van de ingelogde gebruiker op
+        Profile currentProfile = getCurrentProfile();
 
         // Haal de connectionPreference van het profiel op
-        String connectionPreference = profile.getConnectionPreference();
+        String connectionPreference = currentProfile.getConnectionPreference();
 
         // Haal de potentiële matches op uit de repository
-        List<PotentialMatches> potentialMatches = matchingRepository.potentialMatches(connectionPreference, profileID);
+        List<PotentialMatches> potentialMatches = matchingRepository.findPotentialMatches(connectionPreference, currentProfile.getId());
 
         // Converteer de lijst van PotentialMatchList naar een lijst van PotentialMatchOutputDTO's
         return MatchingMapper.toDTOList(potentialMatches);
     }
 
-    // 2.
 
     // 3. Methode om de "Yes" of "No" van een gebruiker op te slaan
-
     // 3A. Verwerk "Yes" actie voor een match
-    public boolean handleYesPress(Long profileID1, Long profileID2) {
-    // Controleer of er al een match bestaat tussen de profielen
-    Optional<Matching> existingMatch = matchingRepository.findMatchBetweenProfiles(profileID1, profileID2);
+    public boolean handleYesPress(Long otherProfileID) {
+    // Haal profiel van de ingelogde gebruiker op
+    Profile currentProfile = getCurrentProfile();
+
+    //Controleer of er een match is tussen currentProfile en otherProfile
+    Optional<Matching> existingMatch = matchingRepository.findMatchBetweenProfiles(currentProfile.getId(), otherProfileId);
 
     if (existingMatch.isPresent()) {
         Matching match = existingMatch.get();
@@ -66,7 +82,7 @@ public class MatchingService {
         }
 
         // Controleer of beide profielen nu "Yes" hebben gedrukt
-        if (match.getStatusProfile1() && match.getStatusProfile2()) {
+        if (match.getStatusProfile1() && match.getStatusOtherProfile()) {
             match.setMatchStatus(true); // Volledige match
             match.setMatchDate(LocalDateTime.now());
             matchingRepository.save(match);

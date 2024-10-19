@@ -4,10 +4,14 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "profiles")
 public class Profile extends BaseEntity {
+
+    @Column(name = "profileID", updatable = false, nullable = false, unique = true)
+    private UUID profileID = UUID.randomUUID();
 
     @Column(name = "date_of_birth", nullable = false)
     private LocalDate dateOfBirth;
@@ -33,11 +37,9 @@ public class Profile extends BaseEntity {
     @Column(name = "profile_pic")
     private String profilePic;
 
-    @Column(name = "healforce_Name")
+    @Column(name = "healforce_name", nullable = false, unique = true)
     private String healforceName;
 
-    @Column(name = "profileID", unique = true)
-    private Long profileID;
 
     //Relaties
     //One-To-One met 'User'
@@ -63,6 +65,7 @@ public class Profile extends BaseEntity {
     public Profile(LocalDate dateOfBirth, String location, String gender, String healthChallenge,
                    YearMonth diagnosisDate, String healingChoice, String connectionPreference, String profilePic, String healforceName, Long profileID) {
         super();
+        this.profileID = UUID.randomUUID();
         this.dateOfBirth = dateOfBirth;
         this.location = location;
         this.gender = gender;
@@ -72,10 +75,16 @@ public class Profile extends BaseEntity {
         this.connectionPreference = connectionPreference;
         this.profilePic = profilePic;
         this.healforceName = healforceName;
-        this.profileID = profileID;
     }
 
     // Getters and Setters
+    public UUID getProfileID() {
+        return profileID;
+    }
+    public void setProfileID(UUID profileID) {
+        this.profileID = profileID;
+    }
+
     public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
@@ -143,14 +152,6 @@ public class Profile extends BaseEntity {
     public String getHealforceName() { return healforceName; }
 
     public void setHealforceName(String healforceName) {this.healforceName = healforceName; }
-
-    public Long getProfileID() {
-        return profileID;
-    }
-
-    public void setProfileID(Long profileID) {
-        this.profileID = profileID;
-    }
 
     public User getUser() {
         return user;

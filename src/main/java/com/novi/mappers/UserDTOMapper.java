@@ -1,6 +1,6 @@
 package com.novi.mappers;
 
-//Mapper voor User Security
+//Deze mapper dient voor User Security
 
 
 import com.novi.dtos.UserRequestDTO;
@@ -13,8 +13,8 @@ public class UserDTOMapper {
 
 
     public User mapToModel(UserRequestDTO userDTO) {
-        var result = new User(-1L);
-        result.setUserName(userDTO.getUserName());
+        var result = new User();
+        result.setEmail(userDTO.getUserName()); //Gebruik van email ipv username voor inloggen
         result.setPassword(userDTO.getPassword());
         return result;
     }
