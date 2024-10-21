@@ -20,10 +20,9 @@ public class AuthController {
     private final AuthenticationManager authManager;
     private final JwtService jwtService;
 
-    public AuthController(AuthenticationManager man, JwtService service, PasswordEncoder passwordEncoder) {
+    public AuthController(AuthenticationManager man, JwtService service) {
         this.authManager = man;
         this.jwtService = service;
-        var test = passwordEncoder.encode("password456");
     }
 
     @PostMapping("/login")
