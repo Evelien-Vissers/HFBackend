@@ -26,14 +26,13 @@ public class AdminController {
     }
 
 
-    // 1. POST - Admin Login. Er wordt gebruik gemaakt van een @RequestParam om de e-mail en het wachtwoord van de admin te ontvangen.
+    // 1. POST - Admin Login.
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody AdminInputDTO adminInputDTO) {
         boolean isAuthenticated = adminService.authenticate(adminInputDTO.getEmail(), adminInputDTO.getPassword());
         if (isAuthenticated) {
             //Haal de admin op uit de database obv het emailadres
             Admin admin = adminService.findByEmail(adminInputDTO.getEmail());
-
             //Werk de lastLogin bij voor deze admin
             adminService.updateLastLogin(admin);
 
@@ -43,7 +42,7 @@ public class AdminController {
         }
     }
 
-    // 2. GET - Haal Admin-details op aan de hand van ID
+    // 2. GET - /admin/{id} Haal Admin-details op aan de hand van ID
     @GetMapping("/{id}")
     public ResponseEntity<AdminOutputDTO> getAdminById(@PathVariable Long id) {
         AdminOutputDTO admin = adminService.getAdminById(id);

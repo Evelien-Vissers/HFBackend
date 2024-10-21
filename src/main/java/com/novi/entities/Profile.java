@@ -10,14 +10,14 @@ import java.util.UUID;
 @Table(name = "profiles")
 public class Profile extends BaseEntity {
 
-    @Column(name = "profileID", updatable = false, nullable = false, unique = true)
-    private UUID profileID = UUID.randomUUID();
-
     @Column(name = "date_of_birth", nullable = false)
     private LocalDate dateOfBirth;
 
     @Column(nullable = false)
-    private String location;
+    private String city;
+
+    @Column(nullable = false)
+    private String country;
 
     @Column(nullable = false)
     private String gender;
@@ -46,15 +46,6 @@ public class Profile extends BaseEntity {
     @OneToOne(mappedBy = "profile")
     private User user;
 
-    //Many-To-Many met 'Matching'
-    @ManyToMany
-    @JoinTable(
-            name = "profile_matches",
-            joinColumns = @JoinColumn(name = "profileID"),
-            inverseJoinColumns = @JoinColumn(name = "matchingID")
-    )
-    private Set<Matching> matching;
-
 
     // Default constructor
     public Profile() {
@@ -62,12 +53,12 @@ public class Profile extends BaseEntity {
     }
 
     // Constructor with all fields
-    public Profile(LocalDate dateOfBirth, String location, String gender, String healthChallenge,
-                   YearMonth diagnosisDate, String healingChoice, String connectionPreference, String profilePic, String healforceName, Long profileID) {
+    public Profile(LocalDate dateOfBirth, String city, String country, String gender, String healthChallenge,
+                   YearMonth diagnosisDate, String healingChoice, String connectionPreference, String profilePic, String healforceName) {
         super();
-        this.profileID = UUID.randomUUID();
         this.dateOfBirth = dateOfBirth;
-        this.location = location;
+        this.city = city;
+        this.country = country;
         this.gender = gender;
         this.healthChallenge = healthChallenge;
         this.diagnosisDate = diagnosisDate;
@@ -78,12 +69,6 @@ public class Profile extends BaseEntity {
     }
 
     // Getters and Setters
-    public UUID getProfileID() {
-        return profileID;
-    }
-    public void setProfileID(UUID profileID) {
-        this.profileID = profileID;
-    }
 
     public LocalDate getDateOfBirth() {
         return dateOfBirth;
@@ -93,12 +78,18 @@ public class Profile extends BaseEntity {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public String getLocation() {
-        return location;
+    public String getCity() {
+        return city;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setCity(String city) {
+        this.city = city;
+    }
+    public String getCountry() {
+        return country;
+    }
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getGender() {
@@ -159,14 +150,6 @@ public class Profile extends BaseEntity {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public Set<Matching> getMatching() {
-        return matching;
-    }
-
-    public void setMatching(Set<Matching> matching) {
-        this.matching = matching;
     }
 
 }

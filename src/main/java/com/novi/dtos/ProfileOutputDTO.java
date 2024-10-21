@@ -6,7 +6,8 @@ import java.time.YearMonth;
 public class ProfileOutputDTO {
 
     private LocalDate dateOfBirth;
-    private String location;
+    private String city;
+    private String country;
     private String gender;
     private String healthChallenge;
     private YearMonth diagnosisDate;
@@ -20,9 +21,10 @@ public class ProfileOutputDTO {
     public ProfileOutputDTO() {
     }
 
-    public ProfileOutputDTO(LocalDate dateOfBirth, String location, String gender, String healthChallenge, YearMonth diagnosisDate, String healingChoice, String connectionPreference, String profilePic, String healforceName, Long profileID) {
+    public ProfileOutputDTO(LocalDate dateOfBirth, String city, String country, String gender, String healthChallenge, YearMonth diagnosisDate, String healingChoice, String connectionPreference, String profilePic, String healforceName, Long profileID) {
         this.dateOfBirth = dateOfBirth;
-        this.location = location;
+        this.city = city;
+        this.country = country;
         this.gender = gender;
         this.healthChallenge = healthChallenge;
         this.diagnosisDate = diagnosisDate;
@@ -42,12 +44,18 @@ public class ProfileOutputDTO {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public String getLocation() {
-        return location;
+    public String getCity() {
+        return city;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setCity(String city) {
+        this.city = city;
+    }
+    public String getCountry() {
+        return country;
+    }
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getGender() {

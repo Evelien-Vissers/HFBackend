@@ -2,11 +2,13 @@ package com.novi.dtos;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.UUID;
 
 public class ProfileInputDTO {
 
     private LocalDate dateOfBirth;
-    private String location;
+    private String city;
+    private String country;
     private String gender;
     private String healthChallenge;
     private YearMonth diagnosisDate;
@@ -14,15 +16,16 @@ public class ProfileInputDTO {
     private String connectionPreference;
     private String profilePic;
     private String healforceName;
-    private Long profileID;
+    private UUID profileID;
 
     // Constructors
     public ProfileInputDTO() {
     }
 
-    public ProfileInputDTO(LocalDate dateOfBirth, String location, String gender, String healthChallenge, YearMonth diagnosisDate, String healingChoice, String connectionPreference, String profilePic, String healforceName, Long ProfileID) {
+    public ProfileInputDTO(LocalDate dateOfBirth, String city, String country, String gender, String healthChallenge, YearMonth diagnosisDate, String healingChoice, String connectionPreference, String profilePic, String healforceName, Long ProfileID) {
         this.dateOfBirth = dateOfBirth;
-        this.location = location;
+        this.city = city;
+        this.country = country;
         this.gender = gender;
         this.healthChallenge = healthChallenge;
         this.diagnosisDate = diagnosisDate;
@@ -42,12 +45,17 @@ public class ProfileInputDTO {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public String getLocation() {
-        return location;
+    public String getCity() {
+        return city;
     }
-
-    public void setLocation(String location) {
-        this.location = location;
+    public void setCity(String city) {
+        this.city = city;
+    }
+    public String getCountry() {
+        return country;
+    }
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getGender() {
@@ -106,11 +114,11 @@ public class ProfileInputDTO {
         this.healforceName = healforceName;
     }
 
-    public Long getProfileID() {
+    public UUID getProfileID() {
         return profileID;
     }
 
-    public void setProfileID(Long profileID) {
+    public void setProfileID(UUID profileID) {
         this.profileID = profileID;
     }
 }

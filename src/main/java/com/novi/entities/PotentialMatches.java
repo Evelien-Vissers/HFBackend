@@ -5,14 +5,16 @@ public class PotentialMatches {
     private String healforceName;
     private String healthChallenge;
     private String profilePic;
-    private String location;
+    private String city;
+    private String country;
 
     // Constructor
-    public PotentialMatches(String healforceName, String healthChallenge, String profilePic, String location) {
+    public PotentialMatches(String healforceName, String healthChallenge, String profilePic, String city, String country) {
         this.healforceName = healforceName;
         this.healthChallenge = healthChallenge;
         this.profilePic = profilePic;
-        this.location = location;
+        this.city = city;
+        this.country = country;
     }
 
     // Getters and Setters
@@ -40,12 +42,18 @@ public class PotentialMatches {
         this.profilePic = profilePic;
     }
 
-    public String getLocation() {
-        return location;
+    public String getCity() {
+        return city;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setCity(String city) {
+        this.city= city;
+    }
+    public String getCountry() {
+        return country;
+    }
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     // Optional: Override toString for better logging/debugging
@@ -55,7 +63,8 @@ public class PotentialMatches {
                 "healforceName='" + healforceName + '\'' +
                 ", healthChallenge='" + healthChallenge + '\'' +
                 ", profilePic='" + profilePic + '\'' +
-                ", location='" + location + '\'' +
+                ", city='" + city + '\'' +
+                ", country='" + country + '\'' +
                 '}';
     }
 }

@@ -1,6 +1,8 @@
 package com.novi.entities;
 
 import jakarta.persistence.*;
+import org.springframework.cglib.core.Local;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -8,6 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name="users")
+
 public class User extends BaseEntity {
 
     @Column(name = "first_name", nullable = false)
@@ -28,9 +31,6 @@ public class User extends BaseEntity {
     @Column(name ="accepted_policies", nullable = false)
     private Boolean acceptedPrivacyStatementUserAgreement;
 
-    @Column(name="verified_email", nullable = false)
-    private Boolean verifiedEmail = false; //Default value = false
-
     @Column(name = "registration_date", nullable = false)
     private LocalDate registrationDate = LocalDate.now();
 
@@ -47,7 +47,7 @@ public class User extends BaseEntity {
     private String question;
 
 
-    // Dit is de owner van de relatie. De "mappedBy" geeft aan dat de Profile-entiteit niet de eigenaar van de relatie is en dat de kolom die de relaite beheert (de foreign key) in de User-entiteit zit
+    // Dit is de owner van de relatie. De "mappedBy" geeft aan dat de Profile-entiteit niet de eigenaar van de relatie is en dat de kolom die de relatie beheert (de foreign key) in de User-entiteit zit
     @OneToOne
     @JoinColumn(name="profileID", referencedColumnName = "profileID")
     private Profile profile;
@@ -74,7 +74,6 @@ public class User extends BaseEntity {
         this.password = password;
         this.acceptedPrivacyStatementUserAgreement = acceptedPrivacyStatementUserAgreement;
         this.role = "User"; // Default role
-        this.verifiedEmail = false; //Default to false
         this.registrationDate = LocalDate.now(); // set to currentDate
         this.lastLogin = null;
         this.hasCompletedQuestionnaire = false; // Default to false
@@ -130,14 +129,6 @@ public class User extends BaseEntity {
 
     public void setAcceptedPrivacyStatementUserAgreement(Boolean acceptedPrivacyStatementUserAgreement) {
         this.acceptedPrivacyStatementUserAgreement = acceptedPrivacyStatementUserAgreement;
-    }
-
-    public Boolean getVerifiedEmail() {
-        return verifiedEmail;
-    }
-
-    public void setVerifiedEmail(Boolean verifiedEmail) {
-        this.verifiedEmail = verifiedEmail;
     }
 
     public LocalDate getRegistrationDate() {

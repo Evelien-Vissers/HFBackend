@@ -49,7 +49,7 @@ public abstract class BaseEntity {
         this.lastEdited = lastEdited;
     }
 
-    //PrePersist en PreUpdate hooks om timestamps automatisch te beheren
+    //PrePersist en PreUpdate hooks om timestamps automatisch te beheren. Deze velden worden automatisch ingesteld wanneer een nieuwe entiteit wordt aangemaakt en opgeslagen.
     @PrePersist
     protected void onCreate() {
         this.createdDate = LocalDateTime.now();

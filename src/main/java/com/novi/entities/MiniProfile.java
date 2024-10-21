@@ -5,18 +5,21 @@ public class MiniProfile {
         private String healforceName;
         private String healthChallenge;
         private String profilePic;
-        private String location;
+        private String city;
+        private String country;
 
         //Constructors
         public MiniProfile() {
         }
 
-        public MiniProfile(String healforceName, String healthChallenge, String profilePic, String location) {
+        public MiniProfile(String healforceName, String healthChallenge, String profilePic, String city, String country) {
             this.healforceName = healforceName;
             this.healthChallenge = healthChallenge;
             this.profilePic = profilePic;
-            this.location = location;
+            this.city = city;
+            this.country = country;
         }
+
         public String getHealforceName() {
             return healforceName;
         }
@@ -41,12 +44,18 @@ public class MiniProfile {
             this.profilePic = profilePic;
         }
 
-        public String getLocation() {
-            return location;
+        public String getCity() {
+            return city;
         }
 
-        public void setLocation(String location) {
-            this.location = location;
+        public void setCity(String city) {
+            this.city = city;
+        }
+        public String getCountry() {
+            return country;
+        }
+        public void setCountry(String country) {
+            this.country = country;
         }
     }
 

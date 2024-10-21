@@ -25,8 +25,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody UserLoginRequestDTO userLoginRequestDTO
-    ) {
+    public ResponseEntity<Object> login(@RequestBody UserLoginRequestDTO userLoginRequestDTO) {
         UsernamePasswordAuthenticationToken up =
                 new UsernamePasswordAuthenticationToken(userLoginRequestDTO.getUserName(), userLoginRequestDTO.getPassword());
 

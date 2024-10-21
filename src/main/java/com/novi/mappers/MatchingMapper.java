@@ -16,7 +16,9 @@ public class MatchingMapper {
                 potentialMatch.getHealforceName(),
                 potentialMatch.getHealthChallenge(),
                 potentialMatch.getProfilePic(),
-                potentialMatch.getLocation());
+                potentialMatch.getCity(),
+                potentialMatch.getCountry()
+        );
     }
 
     // Map een lijst van PotentialMatches naar een lijst DTO's

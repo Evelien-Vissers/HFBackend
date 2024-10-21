@@ -39,7 +39,6 @@ public class UserService {
         //Standaardwaarden instellen
         user.setRole("User");
         user.setAcceptedPrivacyStatementUserAgreement(false);
-        user.setVerifiedEmail(false);
         user.setRegistrationDate(LocalDate.now());
         user.setHasCompletedQuestionnaire(false);
 

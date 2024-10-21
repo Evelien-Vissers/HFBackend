@@ -39,14 +39,14 @@ public class UserController {
         this.request = request;
     }
 
-    // 1. POST - Registreer een nieuwe gebruiker
+    // 1. POST - /users/register | Registreer een nieuwe gebruiker
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody UserInputDTO userInputDTO) {
         userService.registerUser(userInputDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully!");
     }
 
-    // 2. POST - Gebruiker inloggen
+    // 2. POST - /users/login | Gebruiker inloggen
     @PostMapping("/login")
     public ResponseEntity<String> loginUser(@RequestBody UserInputDTO userInputDTO) {
         boolean isAuthenticated = userService.authenticate(userInputDTO.getEmail(), userInputDTO.getPassword());
@@ -57,7 +57,7 @@ public class UserController {
         }
     }
 
-    // 3. GET /users/{Id} - Haal informatie op van een specifieke gebruiker
+    // 3. GET /users/{Id} - Haal user-informatie op van een specifieke gebruiker
     @GetMapping("/{Id}")
     public ResponseEntity<UserOutputDTO> getUserById(@PathVariable Long Id) {
         UserOutputDTO userDTO = userService.getUserById(Id);
@@ -90,7 +90,7 @@ public class UserController {
         }
     }
 
-    // 6. CONTACT /users - gebruiker verstuurt bericht via contactformulier
+    // 6. CONTACT /users/contact | Gebruiker verstuurt bericht via contactformulier
     @PostMapping("/contact")
     public ResponseEntity<String> submitContactForm(@RequestBody ContactFormDTO contactFormDTO) {
         userService.processContactForm(contactFormDTO);
