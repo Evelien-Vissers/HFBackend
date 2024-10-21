@@ -36,7 +36,7 @@ public class SecurityConfig {
                         .requestMatchers("matching/**").hasAuthority("PROFILE_CREATED")
                         //Alleen admins kunnen admin pagina's zien
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().denyAll()
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .csrf(csrf -> csrf.disable())

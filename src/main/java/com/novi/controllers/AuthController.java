@@ -10,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,9 +20,10 @@ public class AuthController {
     private final AuthenticationManager authManager;
     private final JwtService jwtService;
 
-    public AuthController(AuthenticationManager man, JwtService service) {
+    public AuthController(AuthenticationManager man, JwtService service, PasswordEncoder passwordEncoder) {
         this.authManager = man;
         this.jwtService = service;
+        var test = passwordEncoder.encode("password456");
     }
 
     @PostMapping("/login")

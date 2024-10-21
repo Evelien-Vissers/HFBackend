@@ -3,8 +3,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.Set;
-import java.util.UUID;
+
 
 @Entity
 @Table(name = "profiles")
@@ -34,7 +33,7 @@ public class Profile extends BaseEntity {
     @Column(name = "connection_preference", nullable = false)
     private String connectionPreference;
 
-    @Column(name = "profile_pic")
+    @Column(name = "profile_pic", nullable = false)
     private String profilePic;
 
     @Column(name = "healforce_name", nullable = false, unique = true)

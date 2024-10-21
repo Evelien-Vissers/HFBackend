@@ -62,7 +62,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private void setAuthentication(String username, List<GrantedAuthority> roles,
                                    HttpServletRequest request, String jwt) {
-        //Haal het UserDetails-object op via de userDetailSerivce
+        //Haal het UserDetails-object op via de userDetailService
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
         UsernamePasswordAuthenticationToken authenticationToken =

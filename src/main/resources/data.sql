@@ -1,14 +1,14 @@
 -- Inserting test data for User
 INSERT INTO Users (first_name, last_name, email, password, accepted_policies, role, registration_date, last_login, has_completed_questionnaire, enabled, question)
 VALUES
-    ('John', 'Doe', 'john.doe@example.com', 'password123', true, user, '2023-01-01', '2024-10-05 10:15:30', true, true, 'What is your favorite color?'),
-    ('Jane', 'Smith', 'jane.smith@example.com', 'password456', true, user, '2023-02-15', '2024-10-06 12:30:45', false, true, NULL),
-    ('Emily', 'Johnson', 'emily.johnson@example.com', 'password789', true, user, '2023-03-20', '2024-10-07 09:10:20', true, true, 'What is the name of your first pet?'),
-    ('Michael', 'Williams', 'michael.williams@example.com', 'password012', true, user, '2023-04-12', '2024-10-08 11:40:55', false, true, NULL),
-    ('David', 'Brown', 'david.brown@example.com', 'password345', true, user, '2023-05-18', '2024-10-09 08:25:10', true, true, 'What is your mother’s maiden name?'),
-    ('Sarah', 'Davis', 'sarah.davis@example.com', 'password678', true, user, '2023-06-22', '2024-10-10 14:50:30', false, true, NULL),
-    ('James', 'Miller', 'james.miller@example.com', 'password901', true, user, '2023-07-14', '2024-10-11 13:05:15', true, true, 'What was your first car?'),
-    ('Sophia', 'Wilson', 'sophia.wilson@example.com', 'password234', true, user, '2023-08-01', '2024-10-12 15:20:45', true, true, 'What is your favorite movie?');
+    ('John', 'Doe', 'john.doe@example.com', '$2a$10$mS3PIxd001kO4Wh1BouV7e9TFA7tEUKWCwDLjZIyGOHpkqruJQe0a', true, user, '2023-01-01', '2024-10-05 10:15:30', true, true, 'What is your favorite color?'),
+    ('Jane', 'Smith', 'jane.smith@example.com', '$2a$10$8yKP03XhssehhWPkAnL7ceptPTy2awVq3MlgjotgPJomxD.PHrxlq', true, user, '2023-02-15', '2024-10-06 12:30:45', false, true, NULL),
+    ('Emily', 'Johnson', 'emily.johnson@example.com', '$2a$10$ubMMfu3IJQiXqIuI.UUZROxmCX1RVbsXuFTG9TsIIaJeCLyJDTxZG', true, user, '2023-03-20', '2024-10-07 09:10:20', true, true, 'What is the name of your first pet?'),
+    ('Michael', 'Williams', 'michael.williams@example.com', '$2a$10$pvo3sFza2baTRZnml8n7RO2L1Z3MX9KYQYbOov8lws5nw.jpX4gJ2', true, user, '2023-04-12', '2024-10-08 11:40:55', false, true, NULL),
+    ('David', 'Brown', 'david.brown@example.com', '$2a$10$/w1Mb/dyGTMu31Ycp5ibtOxrKRlpx.B0uk33t732Td594v7gzHeGS', true, user, '2023-05-18', '2024-10-09 08:25:10', true, true, 'What is your mother’s maiden name?'),
+    ('Sarah', 'Davis', 'sarah.davis@example.com', '$2a$10$EBeaSAjHew4Nj0GQo6ZUbOLH.avY3TbMhidjngYxvu0PLyE6jJCPu', true, user, '2023-06-22', '2024-10-10 14:50:30', false, true, NULL),
+    ('James', 'Miller', 'james.miller@example.com', '$2a$10$xXeOeTgctgW/mRQw/7OrLeY1PFPhMAR4PyRPSt9BelKkA5UZ2uvpS', true, user, '2023-07-14', '2024-10-11 13:05:15', true, true, 'What was your first car?'),
+    ('Sophia', 'Wilson', 'sophia.wilson@example.com', '$2a$10$dqLXz/EqxnF6yT3wx5jbi.JCUPPZ2z5Pu924w12K.NF7L2t1c9EVi', true, user, '2023-08-01', '2024-10-12 15:20:45', true, true, 'What is your favorite movie?');
 
 -- Inserting test data for Profile
 INSERT INTO Profiles (date_of_birth, city, country, gender, health_challenge, diagnosis_date, healing_choice, connection_preference, profile_pic, healforce_name)
