@@ -107,7 +107,7 @@ public class ProfileService {
         return MatchingMapper.toDTOList(potentialMatches);
     }
 
-    //5. Werk een profiel bij (UUID)
+    //5. Werk een profiel bij
     @Transactional
     public ProfileOutputDTO updateProfile(Long id, ProfileInputDTO profileInputDTO) {
         Profile profile = profileRepository.findById(id)

@@ -23,7 +23,7 @@ public class MatchingController {
 
     // 1. POST - Endpoint om een "Yes" of "Next" van een gebruiker vast te leggen voor een ander profiel
     @PostMapping("/choose")
-        public ResponseEntity<Map<String, Object>> handleMatchAction(@RequestParam UUID profile2Id,
+        public ResponseEntity<Map<String, Object>> handleMatchAction(@RequestParam Long profile2Id,
                                                                      @RequestParam String action) {
         Map<String, Object> response = new HashMap<>();
 

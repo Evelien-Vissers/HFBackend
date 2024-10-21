@@ -12,15 +12,27 @@ public abstract class BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "created_date", nullable = false, updatable = false)
+    @Column(name = "created_date", updatable = false)
     private LocalDateTime createdDate;
 
-    @Column(name = "last_edited", nullable = false)
+    @Column(name = "last_edited")
     private LocalDateTime lastEdited;
 
     // Constructors
     public BaseEntity() {
         this.createdDate = LocalDateTime.now();
+        this.lastEdited = LocalDateTime.now();
+    }
+
+    //PrePersist en PreUpdate hooks om timestamps automatisch te beheren. Deze velden worden automatisch ingesteld wanneer een nieuwe entiteit wordt aangemaakt en opgeslagen.
+    @PrePersist
+    protected void onCreate() {
+        this.createdDate = LocalDateTime.now();
+        this.lastEdited = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
         this.lastEdited = LocalDateTime.now();
     }
 
@@ -49,15 +61,4 @@ public abstract class BaseEntity {
         this.lastEdited = lastEdited;
     }
 
-    //PrePersist en PreUpdate hooks om timestamps automatisch te beheren. Deze velden worden automatisch ingesteld wanneer een nieuwe entiteit wordt aangemaakt en opgeslagen.
-    @PrePersist
-    protected void onCreate() {
-        this.createdDate = LocalDateTime.now();
-        this.lastEdited = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.lastEdited = LocalDateTime.now();
-    }
 }

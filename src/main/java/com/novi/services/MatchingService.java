@@ -13,9 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+
 
 @Service
 public class MatchingService {
@@ -43,7 +41,7 @@ public class MatchingService {
 
     // 2. Methode om de "Yes" van een gebruiker op te slaan
     @Transactional
-    public boolean handleYesPress(UUID profile2Id) {
+    public boolean handleYesPress(Long profile2Id) {
         // Haal profiel van de ingelogde gebruiker op
         Profile profile1 = getCurrentProfile(); //Ingelogde gebruiker is profile1
         Profile profile2 = getProfileById(profile2Id); // Haal profiel andere gebruiker op
@@ -69,7 +67,7 @@ public class MatchingService {
     }
 
     //3. Verwerk "Next" actie voor een match
-    public void handleNoPress(UUID profile2Id) {
+    public void handleNoPress(Long profile2Id) {
         Profile profile1 = getCurrentProfile();
         Profile profile2 = getProfileById(profile2Id);
 
@@ -80,14 +78,14 @@ public class MatchingService {
     }
 
     // 4. Helper-methode om ene profiel op te halen via ID
-    private Profile getProfileById(UUID profileId) {
-        return profileRepository.findById(profileId)
-                .orElseThrow(() -> new ResourceNotFoundException("Profile not found for ID: " + profileId));
+    private Profile getProfileById(Long id) {
+        Profile profile = profileRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Profile not found for ID: " + id)); return profile;
     }
 
     //5. Methode om te zoeken naar een bestaande match of een nieuwe aan te maken als deze niet bestaat
     private Matching findOrCreateMatching(Profile profile1, Profile profile2) {
-        return matchingRepository.findMatchBetweenProfiles(profile1.getProfileID(), profile2.getProfileID())
+        return matchingRepository.findMatchBetweenProfiles(profile1.getId(), profile2.getId())
                 .orElseGet(() -> createNewMatching(profile1, profile2));
     }
 
