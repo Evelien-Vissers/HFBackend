@@ -1,4 +1,4 @@
-package com.novi.HealForce.service;
+package com.novi.HealForce.integrationtests;
 
 import com.novi.dtos.ProfileInputDTO;
 import com.novi.entities.Profile;
@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
 
-public class ProfileControllerIntegrationTest {
+class ProfileControllerIntegrationTest {
 
     @Autowired
     private WebTestClient webTestClient;

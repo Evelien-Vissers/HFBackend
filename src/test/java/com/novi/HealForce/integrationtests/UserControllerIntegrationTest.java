@@ -1,4 +1,4 @@
-package com.novi.HealForce.service;
+package com.novi.HealForce.integrationtests;
 import com.novi.dtos.UserOutputDTO;
 import com.novi.entities.User;
 import com.novi.repositories.UserRepository;
@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
-public class UserControllerIntegrationTest {
+class UserControllerIntegrationTest {
 
     @Autowired
     private WebTestClient webTestClient;
