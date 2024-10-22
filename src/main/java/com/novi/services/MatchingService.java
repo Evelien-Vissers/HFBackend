@@ -1,114 +1,105 @@
 package com.novi.services;
 
-import com.novi.dtos.PotentialMatchesOutputDTO;
 import com.novi.entities.Matching;
-import com.novi.entities.PotentialMatches;
 import com.novi.entities.Profile;
 import com.novi.exceptions.ResourceNotFoundException;
-import com.novi.mappers.MatchingMapper;
 import com.novi.repositories.MatchingRepository;
 import com.novi.repositories.ProfileRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class MatchingService {
 
     private final MatchingRepository matchingRepository;
-    private final ProfileService profileService;
     private final ProfileRepository profileRepository;
 
-    public MatchingService(MatchingRepository matchingRepository, ProfileService profileService, ProfileRepository profileRepository) {
+    public MatchingService(MatchingRepository matchingRepository, ProfileRepository profileRepository) {
         this.matchingRepository = matchingRepository;
-        this.profileService = profileService;
         this.profileRepository = profileRepository;
     }
 
-    // 1. Methode die de lijst met potentiële matches ophaalt voor profileID
-    public List<PotentialMatchesOutputDTO> getPotentialMatches(Long profileID) {
-        //Haal het profiel van de gebruiker op
-        Profile profile = profileRepository.findById(profileID)
-                .orElseThrow(() -> new ResourceNotFoundException("Profile not found for ID: " + profileID));
-
-        // Haal de connectionPreference van het profiel op
-        String connectionPreference = profile.getConnectionPreference();
-
-        // Haal de potentiële matches op uit de repository
-        List<PotentialMatches> potentialMatches = matchingRepository.potentialMatches(connectionPreference, profileID);
-
-        // Converteer de lijst van PotentialMatchList naar een lijst van PotentialMatchOutputDTO's
-        return MatchingMapper.toDTOList(potentialMatches);
+    // 1. Methode om het huidige profiel (Profile1) van de ingelogde gebruiker op te halen
+    public Profile getCurrentProfile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && authentication.getPrincipal() instanceof UserDetails) {
+            String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+            //Gebruik emailadres om het profiel op te halen
+            return profileRepository.findByEmail(username)
+                    .orElseThrow(() -> new ResourceNotFoundException("Current profile not found for email: " + username));
+        } else {
+            throw new IllegalArgumentException("You are not logged in");
+        }
     }
 
-    // 2.
+    // 2. Methode om de "Yes" van een gebruiker op te slaan
+    @Transactional
+    public boolean handleYesPress(Long profile2Id) {
+        // Haal profiel van de ingelogde gebruiker op
+        Profile profile1 = getCurrentProfile(); //Ingelogde gebruiker is profile1
+        Profile profile2 = getProfileById(profile2Id); // Haal profiel andere gebruiker op
 
-    // 3. Methode om de "Yes" of "No" van een gebruiker op te slaan
+        //Controleer of een match is tussen profile1 en profile2
+        Matching match = findOrCreateMatching(profile1, profile2);
 
-    // 3A. Verwerk "Yes" actie voor een match
-    public boolean handleYesPress(Long profileID1, Long profileID2) {
-    // Controleer of er al een match bestaat tussen de profielen
-    Optional<Matching> existingMatch = matchingRepository.findMatchBetweenProfiles(profileID1, profileID2);
-
-    if (existingMatch.isPresent()) {
-        Matching match = existingMatch.get();
-
-        // Controleer of profileID1 al "Yes" heeft gedrukt, zo niet, stel in
-        if (!match.getStatusProfile1()) {
-            match.setStatusProfile1(true);
+        // Controleer of beide profielen nu "Yes" hebben gedrukt
+        if (match.getStatusProfile1()) {
+            match.setStatusProfile1(true); // Profile1 drukt "Yes"
             matchingRepository.save(match);
         }
 
-        // Controleer of beide profielen nu "Yes" hebben gedrukt
+        //Controleer of beide profielen nu "Yes" hebben gedrukt
         if (match.getStatusProfile1() && match.getStatusProfile2()) {
-            match.setMatchStatus(true); // Volledige match
+            match.setMatchStatus(true); //Volledige match
             match.setMatchDate(LocalDateTime.now());
             matchingRepository.save(match);
             return true; // Een volledige match is gemaakt
-        } else {
-            // Alleen status van Profile1 bijgewerkt, wacht op Profile2
-            return false;
-        }
 
-    } else {
-        // Geen bestaande match, maak een nieuwe
+        }
+        return false; //Wachten op andere gebruiker
+    }
+
+    //3. Verwerk "Next" actie voor een match
+    public void handleNoPress(Long profile2Id) {
+        Profile profile1 = getCurrentProfile();
+        Profile profile2 = getProfileById(profile2Id);
+
+        Matching match = findOrCreateMatching(profile1, profile2);
+        match.setStatusProfile1(false); //Profile 1 heeft "Next" gedrukt
+        match.setMatchStatus(false); // Geen Match
+        matchingRepository.save(match);
+    }
+
+    // 4. Helper-methode om ene profiel op te halen via ID
+    private Profile getProfileById(Long id) {
+        Profile profile = profileRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Profile not found for ID: " + id)); return profile;
+    }
+
+    //5. Methode om te zoeken naar een bestaande match of een nieuwe aan te maken als deze niet bestaat
+    private Matching findOrCreateMatching(Profile profile1, Profile profile2) {
+        return matchingRepository.findMatchBetweenProfiles(profile1.getId(), profile2.getId())
+                .orElseGet(() -> createNewMatching(profile1, profile2));
+    }
+
+    //6. Methode om een nieuwe match aan te maken
+    private Matching createNewMatching(Profile profile1, Profile profile2) {
         Matching newMatch = new Matching();
-        //newMatch.setProfile1(profileID1);
-        //newMatch.setProfile2(profileID2);
-        newMatch.setStatusProfile1(true); // Profile1 drukt "Yes"
-        newMatch.setStatusProfile2(false); // Wacht op Profile2
-        matchingRepository.save(newMatch);
-        return false;
+        newMatch.setProfile1(profile1);
+        newMatch.setProfile2(profile2);
+        newMatch.setStatusProfile1(false); // Standaard false, totdat profile1 kiest
+        newMatch.setStatusProfile2(false); //Standaard false, todat Profile 2 kiest
+        return newMatch;
     }
 }
 
-// 3B. Verwerk "No" actie voor een match
-public void handleNoPress(Long profileID1, Long profileID2) {
-    // Controleer of er een match bestaat
-    Optional<Matching> existingMatch = matchingRepository.findMatchBetweenProfiles(profileID1, profileID2);
-
-    if (existingMatch.isPresent()) {
-        Matching match = existingMatch.get();
-        match.setStatusProfile1(false); // Profile1 heeft "No" gedrukt
-        match.setMatchStatus(false); // Geen match
-        matchingRepository.save(match);
-    } else {
-        // Als er nog geen match is, maak een nieuwe met "No"
-        Matching newMatch = new Matching();
-       // newMatch.setProfile1(profileID1);
-       // newMatch.setProfile2(profileID2);
-        newMatch.setStatusProfile1(false); // Profile1 drukt "No"
-        newMatch.setStatusProfile2(false); // Wacht niet op Profile2
-        newMatch.setMatchStatus(false); // Geen match mogelijk
-        matchingRepository.save(newMatch);
-    }
-}}
 
 
 

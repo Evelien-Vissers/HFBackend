@@ -1,6 +1,5 @@
-package com.novi.config;
+package com.novi.security;
 
-import com.novi.security.JwtRequestFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,10 +12,25 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("*")
+                        .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS");
+            }
+        };
+    }
+
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
@@ -29,7 +43,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         //Openbare routes
                         .requestMatchers("/login").permitAll()
+                        .requestMatchers("/register").permitAll()
                         .requestMatchers("/public/**").permitAll()
+                        .requestMatchers("/users/**").permitAll()
                         //Alleen ingelogde gebruikers kunnen hun profiel zien
                         .requestMatchers("/profile/**").hasRole("USER")
                         //Alleen ingelogde gebruikers met aangemaakt profiel kunnen matchen
@@ -37,13 +53,15 @@ public class SecurityConfig {
                         .requestMatchers("matching/**").hasAuthority("PROFILE_CREATED")
                         //Alleen admins kunnen admin pagina's zien
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().denyAll()
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> {})
                 .sessionManagement( session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         ;
+
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return  http.build();
     }
 

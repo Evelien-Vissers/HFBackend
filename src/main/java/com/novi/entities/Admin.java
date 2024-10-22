@@ -1,8 +1,6 @@
 package com.novi.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
@@ -31,6 +29,7 @@ public class Admin extends BaseEntity {
     }
 
     // Getters and Setters
+
     public String getEmail() {
         return email;
     }

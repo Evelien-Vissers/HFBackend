@@ -2,9 +2,6 @@ package com.novi.dtos;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 public class UserOutputDTO {
 
     private String firstName;
@@ -13,9 +10,9 @@ public class UserOutputDTO {
     private String role;
     private LocalDate registrationDate;
     private LocalDateTime lastLogin;
-    private Boolean hasAcceptedPrivacyPolicyUserAgreement;
+    private Boolean AcceptedPrivacyStatementUserAgreement;
     private Boolean hasCompletedQuestionnaire;
-    private Boolean verifiedEmail;
+
 
     // Constructors
     public UserOutputDTO() {
@@ -29,8 +26,7 @@ public class UserOutputDTO {
         this.registrationDate = registrationDate;
         this.lastLogin = lastLogin;
         this.hasCompletedQuestionnaire = hasCompletedQuestionnaire;
-        this.verifiedEmail = verifiedEmail;
-        this.hasAcceptedPrivacyPolicyUserAgreement = false;
+        this.AcceptedPrivacyStatementUserAgreement = false;
     }
 
     // Getters and Setters
@@ -90,20 +86,12 @@ public class UserOutputDTO {
         this.hasCompletedQuestionnaire = hasCompletedQuestionnaire;
     }
 
-    public Boolean getVerifiedEmail() {
-        return verifiedEmail;
+    public Boolean getAcceptedPrivacyStatementUserAgreement() {
+        return AcceptedPrivacyStatementUserAgreement;
     }
 
-    public void setVerifiedEmail(Boolean verifiedEmail) {
-        this.verifiedEmail = verifiedEmail;
-    }
-
-    public Boolean getHasAcceptedPrivacyPolicyUserAgreement() {
-        return hasAcceptedPrivacyPolicyUserAgreement;
-    }
-
-    public void setHasAcceptedPrivacyPolicyUserAgreement(Boolean hasAcceptedPrivacyPolicyUserAgreement) {
-        this.hasAcceptedPrivacyPolicyUserAgreement = hasAcceptedPrivacyPolicyUserAgreement;
+    public void setAcceptedPrivacyStatementUserAgreement(Boolean AcceptedPrivacyStatementUserAgreement) {
+        this.AcceptedPrivacyStatementUserAgreement = AcceptedPrivacyStatementUserAgreement;
     }
 }
 

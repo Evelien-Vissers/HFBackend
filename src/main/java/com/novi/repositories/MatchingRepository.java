@@ -8,17 +8,16 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface MatchingRepository extends JpaRepository<Matching, Long> {
 
-    @Query("SELECT new com.novi.entities.PotentialMatches(p.healforceName, p.healthChallenge, p.profilePic, p.location) " +
-            "FROM Profile p " +
-            "WHERE (:connectionPreference = 'AllTypes' OR p.healingChoice = :connectionPreference)" +
-            "AND p.id != :profileID1")
-    List<PotentialMatches> potentialMatches(@Param("connectionPreference") String connectionPreference, @Param("profileID1") Long profileID1);
-
-    @Query("SELECT m FROM Matching m WHERE (m.profile1.id = :profileID1 AND m.profile2.id = :profileID2) OR (m.profile1.id = :profileID2 AND m.profile2.id = :profileID1)")
-    Optional<Matching> findMatchBetweenProfiles(@Param("profileID1") Long profileID1, @Param("profileID2") Long profileID2);
+    //Check of er al een match bestaat tussen 2 profielen
+    @Query("SELECT m FROM Matching m " +
+            "WHERE (m.profile1.id = :profile1Id AND m. profile2.id = :profile2Id) " +
+            "OR (m.profile1.id = :profile2Id AND m.profile2.id = :profile1Id)")
+    Optional<Matching> findMatchBetweenProfiles(@Param("profile1Id") Long profile1Id,
+                                                @Param("profile2Id") Long profile2Id);
 
 }

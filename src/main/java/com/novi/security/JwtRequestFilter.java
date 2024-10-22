@@ -8,6 +8,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -61,11 +62,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private void setAuthentication(String username, List<GrantedAuthority> roles,
                                    HttpServletRequest request, String jwt) {
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(username, null, roles);
+        //Haal het UserDetails-object op via de userDetailService
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-        ApiUserDetails userDetails = new ApiUserDetails(username, jwtService.extractRoles(jwt));
-        authenticationToken.setDetails(userDetails);
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
+        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
     }

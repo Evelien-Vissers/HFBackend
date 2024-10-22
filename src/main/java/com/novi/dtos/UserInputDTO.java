@@ -6,8 +6,8 @@ public class UserInputDTO {
     private String lastName;
     private String email;
     private String password;
-    private Boolean acceptedPrivacyPolicyUserAgreement;
-    private Boolean verifiedEmail;
+    private Boolean acceptedPrivacyStatementUserAgreement;
+
 
     // Constructors
     public UserInputDTO() {
@@ -18,8 +18,7 @@ public class UserInputDTO {
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.acceptedPrivacyPolicyUserAgreement = acceptedPrivacyPolicyUserAgreement;
-        this.verifiedEmail = verifiedEmail;
+        this.acceptedPrivacyStatementUserAgreement = acceptedPrivacyPolicyUserAgreement;
     }
 
     // Getters and Setters
@@ -55,21 +54,14 @@ public class UserInputDTO {
         this.password = password;
     }
 
-    public Boolean getAcceptedPrivacyPolicyUserAgreement() {
-        return acceptedPrivacyPolicyUserAgreement;
+    public Boolean getAcceptedPrivacyStatementUserAgreement() {
+        return acceptedPrivacyStatementUserAgreement;
     }
 
-    public void setAcceptedPrivacyPolicyUserAgreement(Boolean acceptedPrivacyPolicyUserAgreement) {
-        this.acceptedPrivacyPolicyUserAgreement = acceptedPrivacyPolicyUserAgreement;
+    public void setAcceptedPrivacyStatementUserAgreement(Boolean acceptedPrivacyStatementUserAgreement) {
+        this.acceptedPrivacyStatementUserAgreement = acceptedPrivacyStatementUserAgreement;
     }
 
-    public Boolean getVerifiedEmail() {
-        return verifiedEmail;
-    }
-
-    public void setVerifiedEmail(Boolean verifiedEmail) {
-        this.verifiedEmail = verifiedEmail;
-    }
 }
 
 

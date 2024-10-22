@@ -10,20 +10,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import java.util.Arrays;
+
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class ApiUserDetailService implements UserDetailsService {
+public class ApiUserDetailsService implements UserDetailsService {
 
-    private final UserMapper userMapper;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
 
-    public ApiUserDetailService(UserRepository userRepository, UserMapper userMapper, RoleRepository roleRepository) {
+    public ApiUserDetailsService(UserRepository userRepository, UserMapper userMapper, RoleRepository roleRepository) {
         this.userRepository = userRepository;
-        this.userMapper = userMapper;
         this.roleRepository = roleRepository;
 
     }
@@ -55,8 +52,8 @@ public class ApiUserDetailService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(username)
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Gebruiker niet gevonden"));
         return new ApiUserDetails(user);
     }

@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class Role extends BaseEntity {
 
-    @Column(nullable = false)
+    @Column(name = "role_name", nullable = false)
     private String roleName;
 
     @Column(nullable = false)

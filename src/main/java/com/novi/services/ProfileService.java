@@ -1,18 +1,25 @@
 package com.novi.services;
 
+import com.novi.dtos.PotentialMatchesOutputDTO;
 import com.novi.dtos.ProfileInputDTO;
 import com.novi.dtos.ProfileOutputDTO;
-import com.novi.dtos.UserInputDTO;
 import com.novi.entities.MiniProfile;
+import com.novi.entities.PotentialMatches;
 import com.novi.entities.Profile;
 import com.novi.entities.User;
+import com.novi.mappers.MatchingMapper;
 import com.novi.mappers.ProfileMapper;
 import com.novi.repositories.ProfileRepository;
 import com.novi.repositories.UserRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ProfileService {
@@ -27,47 +34,83 @@ public class ProfileService {
         this.profileMapper = new ProfileMapper();
     }
 
-    // 1a. Sla een nieuw profiel op met de bijbehorende ID
+    // 0.
+    public User getCurrentUser() {
+        //Haal het gebruikersaccount op van de ingleogde gebruiker via Spring Security
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = ((UserDetails) authentication.getPrincipal()).getUsername();
+        //Haal gebruiker op via het emailadres
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+
+    // 1. Sla een nieuw profiel op met de bijbehorende ID
     @Transactional
     public void saveProfile(ProfileInputDTO profileInputDTO) {
-        //Zoek de gebruiker obv ID
-        User user = userRepository.findById(profileInputDTO.getProfileID())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
+        //Gebruik de huidige ingelogde gebruiker
+        User currentUser = getCurrentUser();
+        //Maak een nieuw profiel aan vanuit de ProfileInputDTO
         Profile profile = profileMapper.toEntity(profileInputDTO);
-        profile.setUser(user);
-        profileRepository.save(profile);
+        //Koppel het profiel aan de huidige gebruiker
+        profile.setUser(currentUser);
+        profileRepository.save(profile); //UUID wordt autmoatisch gegenereerd in Profile entity
     }
 
-    //1b. Methode om ProfileID te genereren
-    public Long generateProfileID(ProfileInputDTO profileInputDTO) {
-        User user = userRepository.findById(profileInputDTO.getProfileID())
-                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        //Zoek het profiel dat aan de gebruiker is gekoppeld
-        Profile profile = profileRepository.findByUser(user)
-                .orElseThrow(() -> new RuntimeException("Profile not found for user"));
-
-        return profile.getId(); //De profileID is het ID van het profiel dat aan de gebruiker (ID) is gekoppeld.
-    }
     // 2. Haal een profiel op van een specifieke gebruiker adhv profileID
-    public ProfileOutputDTO getUserProfileByProfileID(Long profileID) {
-        return profileRepository.findById(profileID)
+    public ProfileOutputDTO getUserProfileByProfileID(Long id) {
+        return profileRepository.findById(id)
                 .map(profileMapper::toProfileOutputDTO)
-                .orElse(null);
+                .orElseThrow(() -> new RuntimeException("Profile not found"));
     }
 
-    //3. Haal een Mini Profile op via profileID (van gebruiker zelf)
+    //3. Methode om het profileID van de huidige ingelogde gebruiker op te halen
+    public Profile getCurrentProfile() {
+        //Haal gebruikersnaam of email op van de ingelogde gebruiker via Spring Security
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email;
+
+        if (principal instanceof UserDetails) {
+            email = ((UserDetails) principal).getUsername();
+        } else {
+            email = principal.toString();
+        }
+        //Haal de User entity op uit de database obv de email
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        // Haal het profiel van de ingelogde gebruiker op en retourneer dit
+        return profileRepository.findByUser(user)
+                .orElseThrow(() -> new IllegalArgumentException("Profile not found"));
+
+    }
+
+    //4. Haal een Mini Profile op via profileID (van gebruiker zelf)
     @Transactional(readOnly = true)
-    public Optional<MiniProfile> getMiniProfile(Long profileID) {
+    public Optional<MiniProfile> getMiniProfile(Long id) {
         //Gebruik van de @Query in de ProfileRepository om gegevens op te halen
-        return profileRepository.findMiniProfileById(profileID);
+        return profileRepository.findMiniProfileById(id);
+    }
+
+    // 4. Methode die de lijst met potentiële matches ophaalt voor currentProfile
+    public List<PotentialMatchesOutputDTO> findPotentialMatches() {
+        //Haal het profiel van de ingelogde gebruiker op
+        Profile currentProfile = getCurrentProfile();
+
+        // Haal de connectionPreference van het profiel op
+        String connectionPreference = currentProfile.getConnectionPreference();
+
+        // Haal de potentiële matches op uit de repository
+        List<PotentialMatches> potentialMatches = profileRepository.findPotentialMatches(connectionPreference, currentProfile.getId());
+
+        //Converteer de lijst van PointentialMatches naar PotentialMatchesOutputDTO's
+        return MatchingMapper.toDTOList(potentialMatches);
     }
 
     //5. Werk een profiel bij
     @Transactional
-    public ProfileOutputDTO updateProfile(Long profileID, ProfileInputDTO profileInputDTO) {
-        Profile profile = profileRepository.findById(profileID)
+    public ProfileOutputDTO updateProfile(Long id, ProfileInputDTO profileInputDTO) {
+        Profile profile = profileRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Profile not found"));
 
         profileMapper.toEntity(profileInputDTO);
@@ -78,43 +121,20 @@ public class ProfileService {
 
 
     //6. Verwijder een profiel
-    public void deleteProfile(Long profileID) {
-        Profile profile = profileRepository.findById(profileID)
+    public void deleteProfile(Long id) {
+        Profile profile = profileRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Profile not found"));
         profileRepository.delete(profile);
     }
 
-    //7. Sla de gegenereerde profileID op (placeholder functie)
-    public void saveProfileID(Long profileID) {
-    }
-
-    //8. Methode om het profiel-ID van de gebruiker op te halen via e-mail
+    //7. Methode om het profiel-ID van de gebruiker op te halen via e-mail
     public Long getProfileIdByEmail(String email) {
         //Zoek het profiel obv het emailadres van de gebruiker
         Profile profile = profileRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Profile not found"));
 
         //Retourneer het profiel-ID
-        return profile.getId();
+        return profile.getId(); //profileID teruggeven.
     }
-
-    //9. Methode om het profiel van de huidige ingelogde gebruiker op te halen
-    //public Long getCurrentUserProfileId() {
- /*       //Haal gebruikersnaam of email op van de ingelogde gebruiker via Spring Security
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String email;
-
-        if (principal instanceof UserDetails) {
-            email = ((UserDetails) principal).getUserName();
-        } else {
-            email = principal.toString();
-        }
-        //Haal de User entity op uit de database obv de email
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("User not found"));
-
-        // Haal het profiel-ID van de ingelogde gebruiker op
-        Profile profile = profileRepository.findByUser(user).orElseThrow(() -> new IllegalArgumentException("Profile not found"));
-        return profile.getId(); // Retourneer het profiel-ID van de huidige ingelogde gebruiker
-    }*/
 
 }

@@ -10,7 +10,8 @@ public class ProfileMapper {
     public ProfileOutputDTO toProfileOutputDTO(Profile profile) {
         ProfileOutputDTO dto = new ProfileOutputDTO();
         dto.setDateOfBirth(profile.getDateOfBirth());
-        dto.setLocation(profile.getLocation());
+        dto.setCity(profile.getCity());
+        dto.setCountry(profile.getCountry());
         dto.setGender(profile.getGender());
         dto.setHealthChallenge(profile.getHealthChallenge());
         dto.setDiagnosisDate(profile.getDiagnosisDate());
@@ -24,7 +25,8 @@ public class ProfileMapper {
     public Profile toEntity(ProfileInputDTO profileInputDTO) {
         Profile profile = new Profile();
         profile.setDateOfBirth(profileInputDTO.getDateOfBirth());
-        profile.setLocation(profileInputDTO.getLocation());
+        profile.setCity(profileInputDTO.getCity());
+        profile.setCountry(profileInputDTO.getCountry());
         profile.setGender(profileInputDTO.getGender());
         profile.setHealthChallenge(profileInputDTO.getHealthChallenge());
         profile.setDiagnosisDate(profileInputDTO.getDiagnosisDate());

@@ -3,7 +3,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.Set;
+
 
 @Entity
 @Table(name = "profiles")
@@ -13,7 +13,10 @@ public class Profile extends BaseEntity {
     private LocalDate dateOfBirth;
 
     @Column(nullable = false)
-    private String location;
+    private String city;
+
+    @Column(nullable = false)
+    private String country;
 
     @Column(nullable = false)
     private String gender;
@@ -30,28 +33,17 @@ public class Profile extends BaseEntity {
     @Column(name = "connection_preference", nullable = false)
     private String connectionPreference;
 
-    @Column(name = "profile_pic")
+    @Column(name = "profile_pic", nullable = false)
     private String profilePic;
 
-    @Column(name = "healforce_Name")
+    @Column(name = "healforce_name", nullable = false, unique = true)
     private String healforceName;
 
-    @Column(name = "profileID", unique = true)
-    private Long profileID;
 
     //Relaties
     //One-To-One met 'User'
     @OneToOne(mappedBy = "profile")
     private User user;
-
-    //Many-To-Many met 'Matching'
-    @ManyToMany
-    @JoinTable(
-            name = "profile_matches",
-            joinColumns = @JoinColumn(name = "profileID"),
-            inverseJoinColumns = @JoinColumn(name = "matchingID")
-    )
-    private Set<Matching> matching;
 
 
     // Default constructor
@@ -60,11 +52,12 @@ public class Profile extends BaseEntity {
     }
 
     // Constructor with all fields
-    public Profile(LocalDate dateOfBirth, String location, String gender, String healthChallenge,
-                   YearMonth diagnosisDate, String healingChoice, String connectionPreference, String profilePic, String healforceName, Long profileID) {
+    public Profile(LocalDate dateOfBirth, String city, String country, String gender, String healthChallenge,
+                   YearMonth diagnosisDate, String healingChoice, String connectionPreference, String profilePic, String healforceName) {
         super();
         this.dateOfBirth = dateOfBirth;
-        this.location = location;
+        this.city = city;
+        this.country = country;
         this.gender = gender;
         this.healthChallenge = healthChallenge;
         this.diagnosisDate = diagnosisDate;
@@ -72,10 +65,10 @@ public class Profile extends BaseEntity {
         this.connectionPreference = connectionPreference;
         this.profilePic = profilePic;
         this.healforceName = healforceName;
-        this.profileID = profileID;
     }
 
     // Getters and Setters
+
     public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
@@ -84,12 +77,18 @@ public class Profile extends BaseEntity {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public String getLocation() {
-        return location;
+    public String getCity() {
+        return city;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setCity(String city) {
+        this.city = city;
+    }
+    public String getCountry() {
+        return country;
+    }
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getGender() {
@@ -144,28 +143,12 @@ public class Profile extends BaseEntity {
 
     public void setHealforceName(String healforceName) {this.healforceName = healforceName; }
 
-    public Long getProfileID() {
-        return profileID;
-    }
-
-    public void setProfileID(Long profileID) {
-        this.profileID = profileID;
-    }
-
     public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public Set<Matching> getMatching() {
-        return matching;
-    }
-
-    public void setMatching(Set<Matching> matching) {
-        this.matching = matching;
     }
 
 }
