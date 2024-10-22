@@ -1,56 +1,72 @@
 package com.novi.dtos;
 
-import java.time.LocalDateTime;
-
 public class PotentialMatchesOutputDTO {
 
-    private Long matchingId;
-    private Boolean statusProfile1;
-    private Boolean statusProfile2;
-    private LocalDateTime matchDate;
+    private String healforceName;
+    private String healthChallenge;
+    private String profilePic;
+    private String city;
+    private String country;
 
     // Constructors
     public PotentialMatchesOutputDTO(String healforceName, String healthChallenge, String profilePic, String city, String country) {
-    }
-
-    public PotentialMatchesOutputDTO(Long matchingId, Boolean statusProfile1, Boolean statusProfile2, LocalDateTime matchDate) {
-        this.matchingId = matchingId;
-        this.statusProfile1 = statusProfile1;
-        this.statusProfile2 = statusProfile2;
-        this.matchDate = matchDate;
+        this.healforceName = healforceName;
+        this.healthChallenge = healthChallenge;
+        this.profilePic = profilePic;
+        this.city = city;
+        this.country = country;
     }
 
     // Getters and Setters
-    public Long getMatchingId() {
-        return matchingId;
+    public String getHealforceName() {
+        return healforceName;
     }
 
-    public void setMatchingId(Long matchingId) {
-        this.matchingId = matchingId;
+    public void setHealforceName(String healforceName) {
+        this.healforceName = healforceName;
     }
 
-    public Boolean getStatusProfile1() {
-        return statusProfile1;
+    public String getHealthChallenge() {
+        return healthChallenge;
     }
 
-    public void setStatusProfile1(Boolean statusProfile1) {
-        this.statusProfile1 = statusProfile1;
+    public void setHealthChallenge(String healthChallenge) {
+        this.healthChallenge = healthChallenge;
     }
 
-    public Boolean getStatusProfile2() {
-        return statusProfile2;
+    public String getProfilePic() {
+        return profilePic;
     }
 
-    public void setStatusProfile2(Boolean statusProfile2) {
-        this.statusProfile2 = statusProfile2;
+    public void setProfilePic(String profilePic) {
+        this.profilePic = profilePic;
     }
 
-    public LocalDateTime getMatchDate() {
-        return matchDate;
+    public String getCity() {
+        return city;
     }
 
-    public void setMatchDate(LocalDateTime matchDate) {
-        this.matchDate = matchDate;
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    // Optional: Override toString for better logging/debugging
+    @Override
+    public String toString() {
+        return "PotentialMatchesOutputDTO{" +
+                "healforceName='" + healforceName + '\'' +
+                ", healthChallenge='" + healthChallenge + '\'' +
+                ", profilePic='" + profilePic + '\'' +
+                ", city='" + city + '\'' +
+                ", country='" + country + '\'' +
+                '}';
     }
 }
-
