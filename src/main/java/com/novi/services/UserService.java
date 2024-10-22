@@ -11,6 +11,7 @@ import com.novi.repositories.UserRepository;
 import com.novi.repositories.ProfileRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -24,11 +25,13 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final ProfileRepository profileRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, ProfileRepository profileRepository) {
+    public UserService(UserRepository userRepository, ProfileRepository profileRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.profileRepository = profileRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // 1a. Registreer een nieuwe gebruiker
@@ -49,7 +52,7 @@ public class UserService {
     // 1b. Logica voor authenticatie
     public boolean authenticate(String email, String password) {
         Optional<User> user = userRepository.findByEmail(email);
-        return user.isPresent() && user.get().getPassword().equals(password);
+        return user.isPresent() && user.get().getPassword().equals(passwordEncoder.encode(password));
     }
 
     //2. Haal alle gebruikers op uit de database

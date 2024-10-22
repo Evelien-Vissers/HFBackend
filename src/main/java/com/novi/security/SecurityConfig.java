@@ -43,7 +43,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         //Openbare routes
                         .requestMatchers("/login").permitAll()
+                        .requestMatchers("/register").permitAll()
                         .requestMatchers("/public/**").permitAll()
+                        .requestMatchers("/users/**").permitAll()
                         //Alleen ingelogde gebruikers kunnen hun profiel zien
                         .requestMatchers("/profile/**").hasRole("USER")
                         //Alleen ingelogde gebruikers met aangemaakt profiel kunnen matchen
@@ -58,6 +60,8 @@ public class SecurityConfig {
                 .cors(cors -> {})
                 .sessionManagement( session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         ;
+
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return  http.build();
     }
 

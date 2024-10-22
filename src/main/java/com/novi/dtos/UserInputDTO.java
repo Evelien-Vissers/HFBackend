@@ -7,7 +7,7 @@ public class UserInputDTO {
     private String email;
     private String password;
     private Boolean acceptedPrivacyStatementUserAgreement;
-    private Boolean verifiedEmail;
+
 
     // Constructors
     public UserInputDTO() {
@@ -19,7 +19,6 @@ public class UserInputDTO {
         this.email = email;
         this.password = password;
         this.acceptedPrivacyStatementUserAgreement = acceptedPrivacyPolicyUserAgreement;
-        this.verifiedEmail = verifiedEmail;
     }
 
     // Getters and Setters

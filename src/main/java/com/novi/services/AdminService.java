@@ -22,7 +22,7 @@ public class AdminService {
     private final AdminMapper adminMapper;
 
     // Constructor injection
-    public AdminService(AdminRepository adminRepository, UserService userService) {
+    public AdminService(AdminRepository adminRepository, UserService userService, AdminMapper adminMapper) {
         this.adminRepository = adminRepository;
         this.userService = userService;
         this.adminMapper = new AdminMapper();

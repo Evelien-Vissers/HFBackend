@@ -46,18 +46,8 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully!");
     }
 
-    // 2. POST - /users/login | Gebruiker inloggen
-    @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody UserInputDTO userInputDTO) {
-        boolean isAuthenticated = userService.authenticate(userInputDTO.getEmail(), userInputDTO.getPassword());
-        if (isAuthenticated) {
-            return ResponseEntity.ok("Login successful");
-        } else {
-            throw new UnauthorizedException("Invalid credentials");
-        }
-    }
 
-    // 3. GET /users/{Id} - Haal user-informatie op van een specifieke gebruiker
+    // 2. GET /users/{Id} - Haal user-informatie op van een specifieke gebruiker
     @GetMapping("/{Id}")
     public ResponseEntity<UserOutputDTO> getUserById(@PathVariable Long Id) {
         UserOutputDTO userDTO = userService.getUserById(Id);
@@ -68,7 +58,7 @@ public class UserController {
         }
     }
 
-    // 4. PUT /users/{Id} - Werk informatie van een specifieke gebruiker bij
+    // 3. PUT /users/{Id} - Werk informatie van een specifieke gebruiker bij
     @PutMapping("/{Id}")
     public ResponseEntity<UserOutputDTO> updateUser(@PathVariable Long Id, @RequestBody UserInputDTO userDTO) {
         UserOutputDTO updatedUserDTO = userService.updateUser(Id, new UserInputDTO());
@@ -79,7 +69,7 @@ public class UserController {
         }
     }
 
-    // 5. DELETE /users/{Id} - Verwijder een specifieke gebruiker
+    // 4. DELETE /users/{Id} - Verwijder een specifieke gebruiker
     @DeleteMapping("/{Id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long Id) {
         boolean isDeleted = userService.deleteUser(Id);
@@ -90,7 +80,7 @@ public class UserController {
         }
     }
 
-    // 6. CONTACT /users/contact | Gebruiker verstuurt bericht via contactformulier
+    // 5. CONTACT /users/contact | Gebruiker verstuurt bericht via contactformulier
     @PostMapping("/contact")
     public ResponseEntity<String> submitContactForm(@RequestBody ContactFormDTO contactFormDTO) {
         userService.processContactForm(contactFormDTO);
@@ -99,7 +89,7 @@ public class UserController {
 
     // SECURITY USERCONTROLLERS
 
-    //7.
+    //6.
     @PostMapping("/create")
     public ResponseEntity<?> CreateUser(@RequestBody @Valid UserRequestDTO userDTO) {
         User user = userDTOMapper.mapToModel(userDTO);
