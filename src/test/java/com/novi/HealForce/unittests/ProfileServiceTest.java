@@ -7,7 +7,6 @@ import com.novi.entities.MiniProfile;
 import com.novi.entities.PotentialMatches;
 import com.novi.entities.Profile;
 import com.novi.entities.User;
-import com.novi.exceptions.ResourceNotFoundException;
 import com.novi.repositories.ProfileRepository;
 import com.novi.repositories.UserRepository;
 import com.novi.services.ProfileService;

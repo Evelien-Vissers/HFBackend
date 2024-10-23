@@ -40,7 +40,6 @@ public class UserService {
         User user = UserMapper.toUser(userInputDTO);
 
         //Standaardwaarden instellen
-        user.setRole("User");
         user.setAcceptedPrivacyStatementUserAgreement(false);
         user.setRegistrationDate(LocalDate.now());
         user.setHasCompletedQuestionnaire(false);
@@ -63,6 +62,7 @@ public class UserService {
         //Converteer de lijst van gebruikers naar een lijst van UserOutputDTO's
         return UserMapper.toUserOutputDTOList(users);
     }
+
 
     // 3. Get a specific user by ID
     public UserOutputDTO getUserById(Long id) {

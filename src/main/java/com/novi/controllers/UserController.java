@@ -69,7 +69,14 @@ public class UserController {
         }
     }
 
-    // 4. DELETE /users/{Id} - Verwijder een specifieke gebruiker
+    // 4. GET /admin/users - Haal een lijst op van alle gebruikers in de applicatie
+    @GetMapping("/admin/getallusers")
+    public ResponseEntity<List<UserOutputDTO>> getAllUsers() {
+        List<UserOutputDTO> users = userService.getAllUsers();
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+    // 5. DELETE /users/{Id} - Verwijder een specifieke gebruiker
     @DeleteMapping("/{Id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long Id) {
         boolean isDeleted = userService.deleteUser(Id);
@@ -80,7 +87,7 @@ public class UserController {
         }
     }
 
-    // 5. CONTACT /users/contact | Gebruiker verstuurt bericht via contactformulier
+    // 6. CONTACT /users/contact | Gebruiker verstuurt bericht via contactformulier
     @PostMapping("/contact")
     public ResponseEntity<String> submitContactForm(@RequestBody ContactFormDTO contactFormDTO) {
         userService.processContactForm(contactFormDTO);
@@ -89,7 +96,7 @@ public class UserController {
 
     // SECURITY USERCONTROLLERS
 
-    //6.
+    //7.
     @PostMapping("/create")
     public ResponseEntity<?> CreateUser(@RequestBody @Valid UserRequestDTO userDTO) {
         User user = userDTOMapper.mapToModel(userDTO);
