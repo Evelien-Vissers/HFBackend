@@ -9,9 +9,9 @@ VALUES
     ('Sarah', 'Davis', 'sarah.davis@example.com', '$2a$10$EBeaSAjHew4Nj0GQo6ZUbOLH.avY3TbMhidjngYxvu0PLyE6jJCPu', true, '2023-06-22', '2024-10-10 14:50:30', false, true, NULL),
     ('James', 'Miller', 'james.miller@example.com', '$2a$10$xXeOeTgctgW/mRQw/7OrLeY1PFPhMAR4PyRPSt9BelKkA5UZ2uvpS', true, '2023-07-14', '2024-10-11 13:05:15', true, true, 'What was your first car?'),
     ('Sophia', 'Wilson', 'sophia.wilson@example.com', '$2a$10$dqLXz/EqxnF6yT3wx5jbi.JCUPPZ2z5Pu924w12K.NF7L2t1c9EVi', true, '2023-08-01', '2024-10-12 15:20:45', true, true, 'What is your favorite movie?'),
-    (NULL, NULL, 'admin.johnson@example.com', 'adminpass123', NULL, NULL, '2024-10-12 09:00:00', NULL, NULL, NULL),
-    (NULL, NULL, 'admin.davis@example.com', 'adminpass456', NULL, NULL, '2024-10-11 16:30:45', NULL, NULL, NULL),
-    (NULL, NULL, 'admin.smith@example.com', 'adminpass789', NULL, NULL, '2024-10-10 14:15:30', NULL, NULL, NULL);
+    ('Max', 'Johnson', 'admin.johnson@example.com', '$2a$10$0Sk9Vv0R09cDM6MoXH81TecoVIW8RdNv6YnQjG.XeYjYGi.XwJseS', NULL, NULL, '2024-10-12 09:00:00', NULL, NULL, NULL),
+    ('Bella', 'Davis', 'admin.davis@example.com', '$2a$10$YthMKU7hYvNwCCZN6JErGu2SthgDfGyfIUSfhlfWTQ/28vmEtLCii', NULL, NULL, '2024-10-11 16:30:45', NULL, NULL, NULL),
+    ('Richard', 'Smith', 'admin.smith@example.com', '$2a$10$IuXDqN1RQhNFduPN1C0FQeJYRYgSBz/CyczoeEUQZ0qCqACabkLoS', NULL, NULL, '2024-10-10 14:15:30', NULL, NULL, NULL);
 
 -- Inserting test data for Profile
 INSERT INTO Profiles (date_of_birth, city, country, gender, health_challenge, diagnosis_date, healing_choice, connection_preference, profile_pic, healforce_name)
