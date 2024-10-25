@@ -39,6 +39,9 @@ public class Profile extends BaseEntity {
     @Column(name = "healforce_name", nullable = false, unique = true)
     private String healforceName;
 
+    @Column(name = "has_CompletedQuestionnaire", nullable = false)
+    private boolean hasCompletedQuestionnaire;
+
 
     //Relaties
     //One-To-One met 'User'
@@ -53,7 +56,7 @@ public class Profile extends BaseEntity {
 
     // Constructor with all fields
     public Profile(LocalDate dateOfBirth, String city, String country, String gender, String healthChallenge,
-                   YearMonth diagnosisDate, String healingChoice, String connectionPreference, String profilePicUrl, String healforceName) {
+                   YearMonth diagnosisDate, String healingChoice, String connectionPreference, String profilePicUrl, String healforceName, Boolean hasCompletedQuestionnaire) {
         super();
         this.dateOfBirth = dateOfBirth;
         this.city = city;
@@ -65,6 +68,7 @@ public class Profile extends BaseEntity {
         this.connectionPreference = connectionPreference;
         this.profilePicUrl = profilePicUrl;
         this.healforceName = healforceName;
+        this.hasCompletedQuestionnaire = false;
     }
 
     // Getters and Setters
@@ -142,6 +146,13 @@ public class Profile extends BaseEntity {
     public String getHealforceName() { return healforceName; }
 
     public void setHealforceName(String healforceName) {this.healforceName = healforceName; }
+
+    public Boolean getHasCompletedQuestionnaire() {
+        return hasCompletedQuestionnaire;
+    }
+    public void setHasCompletedQuestionnaire(Boolean hasCompletedQuestionnaire) {
+        this.hasCompletedQuestionnaire = hasCompletedQuestionnaire;
+    }
 
     public User getUser() {
         return user;

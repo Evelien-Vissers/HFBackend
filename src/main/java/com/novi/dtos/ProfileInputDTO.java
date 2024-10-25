@@ -2,7 +2,6 @@ package com.novi.dtos;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.UUID;
 
 public class ProfileInputDTO {
 

@@ -70,9 +70,8 @@ public class User extends BaseEntity {
         this.email = email;
         this.password = password;
         this.acceptedPrivacyStatementUserAgreement = acceptedPrivacyStatementUserAgreement;
-        this.registrationDate = LocalDate.now(); // set to currentDate
+        this.registrationDate = LocalDate.now();
         this.lastLogin = null;
-        this.hasCompletedQuestionnaire = false; // Default to false
         this.enabled = true;
         this.question = null;
     }
@@ -136,13 +135,6 @@ public class User extends BaseEntity {
         this.lastLogin = lastLogin;
     }
 
-    public Boolean getHasCompletedQuestionnaire() {
-        return hasCompletedQuestionnaire;
-    }
-
-    public void setHasCompletedQuestionnaire(Boolean hasCompletedQuestionnaire) {
-        this.hasCompletedQuestionnaire = hasCompletedQuestionnaire;
-    }
 
     public Profile getProfile() {
         return profile;

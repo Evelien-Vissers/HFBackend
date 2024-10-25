@@ -42,7 +42,6 @@ public class UserService {
         //Standaardwaarden instellen
         user.setAcceptedPrivacyStatementUserAgreement(false);
         user.setRegistrationDate(LocalDate.now());
-        user.setHasCompletedQuestionnaire(false);
 
         //Sla de gebruiker op
         userRepository.save(user);
@@ -94,7 +93,7 @@ public class UserService {
 
     //5. Delete de gebruiker en het profiel dat daaraan is gekoppeld:
     public boolean deleteUser(Long id) {
-        // Zoek de gebruiker obv het id (Long)
+        // Zoek de gebruiker o.b.v het id (Long)
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 

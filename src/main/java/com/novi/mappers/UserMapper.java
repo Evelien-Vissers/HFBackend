@@ -20,7 +20,6 @@ public class UserMapper {
         dto.setAcceptedPrivacyStatementUserAgreement(user.getAcceptedPrivacyStatementUserAgreement());
         dto.setRegistrationDate(user.getRegistrationDate());
         dto.setLastLogin(user.getLastLogin());
-        dto.setHasCompletedQuestionnaire(user.getHasCompletedQuestionnaire());
         return dto;
     }
 

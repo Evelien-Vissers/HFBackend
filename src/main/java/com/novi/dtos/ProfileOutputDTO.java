@@ -15,13 +15,13 @@ public class ProfileOutputDTO {
     private String connectionPreference;
     private String profilePic;
     private String healforceName;
-    private Long profileID;
+    private boolean hasCompletedQuestionnaire;
 
     // Constructors
     public ProfileOutputDTO() {
     }
 
-    public ProfileOutputDTO(LocalDate dateOfBirth, String city, String country, String gender, String healthChallenge, YearMonth diagnosisDate, String healingChoice, String connectionPreference, String profilePic, String healforceName, Long profileID) {
+    public ProfileOutputDTO(LocalDate dateOfBirth, String city, String country, String gender, String healthChallenge, YearMonth diagnosisDate, String healingChoice, String connectionPreference, String profilePic, String healforceName, Boolean hasCompletedQuestionnaire) {
         this.dateOfBirth = dateOfBirth;
         this.city = city;
         this.country = country;
@@ -32,7 +32,7 @@ public class ProfileOutputDTO {
         this.connectionPreference = connectionPreference;
         this.profilePic = profilePic;
         this.healforceName = healforceName;
-        this.profileID = profileID;
+        this.hasCompletedQuestionnaire = hasCompletedQuestionnaire;
     }
 
     // Getters and Setters
@@ -114,12 +114,11 @@ public class ProfileOutputDTO {
         this.healforceName = healforceName;
     }
 
-    public Long getProfileID() {
-        return profileID;
+    public Boolean getHasCompletedQuestionnaire() {
+        return hasCompletedQuestionnaire;
     }
-
-    public void setProfileID(Long profileID) {
-        this.profileID = profileID;
+    public void setHasCompletedQuestionnaire(Boolean hasCompletedQuestionnaire) {
+        this.hasCompletedQuestionnaire = hasCompletedQuestionnaire;
     }
 }
 
