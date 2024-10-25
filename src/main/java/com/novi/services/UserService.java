@@ -1,6 +1,7 @@
 package com.novi.services;
 
 import com.novi.dtos.ContactFormDTO;
+import com.novi.dtos.UserFirstNameOutputDTO;
 import com.novi.dtos.UserInputDTO;
 import com.novi.dtos.UserOutputDTO;
 import com.novi.entities.User;
@@ -11,6 +12,8 @@ import com.novi.repositories.UserRepository;
 import com.novi.repositories.ProfileRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -114,7 +117,7 @@ public class UserService {
         //Check of gebruiker al bestaat obv het emailadres
         Optional<User> optionalUser = userRepository.findByEmail(contactFormDTO.getEmail());
 
-            //Als gebruiker niet bestaat, maak dan een nieuwe User aan
+        //Als gebruiker niet bestaat, maak dan een nieuwe User aan
         User user = optionalUser.orElseGet(() -> {
             User newUser = new User();
             newUser.setEmail(contactFormDTO.getEmail());
@@ -130,5 +133,11 @@ public class UserService {
         userRepository.save(user);
     }
 
-}
+    public UserFirstNameOutputDTO getFirstNameOfCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
 
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        return new UserFirstNameOutputDTO(user.getFirstName());
+    }
+}

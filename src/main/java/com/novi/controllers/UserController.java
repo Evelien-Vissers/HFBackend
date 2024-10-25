@@ -1,11 +1,8 @@
 package com.novi.controllers;
 
-import com.novi.dtos.ContactFormDTO;
+import com.novi.dtos.*;
 import com.novi.helpers.UrlHelper;
 import com.novi.mappers.UserDTOMapper;
-import com.novi.dtos.UserInputDTO;
-import com.novi.dtos.UserOutputDTO;
-import com.novi.dtos.UserRequestDTO;
 import com.novi.entities.User;
 import com.novi.exceptions.ResourceNotFoundException;
 import com.novi.exceptions.UnauthorizedException;
@@ -107,6 +104,12 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.created(UrlHelper.getCurrentUrlWithId(request, user.getId())).build();
+    }
+
+    @GetMapping("/firstname")
+    public ResponseEntity<UserFirstNameOutputDTO> getCurrentUserFirstName() {
+        UserFirstNameOutputDTO firstNameDTO = userService.getFirstNameOfCurrentUser();
+        return ResponseEntity.ok(firstNameDTO);
     }
 }
 
