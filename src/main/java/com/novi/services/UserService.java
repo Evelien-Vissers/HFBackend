@@ -114,7 +114,7 @@ public class UserService {
 
     // 6. Verstuur contactformulier
     public void processContactForm(ContactFormDTO contactFormDTO) {
-        //Check of gebruiker al bestaat obv het emailadres
+        //Check of gebruiker al bestaat o.b.v het emailadres
         Optional<User> optionalUser = userRepository.findByEmail(contactFormDTO.getEmail());
 
         //Als gebruiker niet bestaat, maak dan een nieuwe User aan

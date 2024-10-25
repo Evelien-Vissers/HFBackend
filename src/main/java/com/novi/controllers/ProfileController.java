@@ -3,6 +3,7 @@ package com.novi.controllers;
 import com.novi.dtos.PotentialMatchesOutputDTO;
 import com.novi.dtos.ProfileInputDTO;
 import com.novi.dtos.ProfileOutputDTO;
+import com.novi.dtos.ProfileQuestionnaireOutputDTO;
 import com.novi.entities.MiniProfile;
 import com.novi.entities.PotentialMatches;
 import com.novi.exceptions.ResourceNotFoundException;
@@ -40,6 +41,12 @@ public class ProfileController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating profile.");
         }
+    }
+
+    @GetMapping("/current/hasCompletedQuestionnaire")
+    public ResponseEntity<ProfileQuestionnaireOutputDTO> hasCompletedQuestionnaire() {
+        ProfileQuestionnaireOutputDTO response = profileService.checkIfQuestionnaireCompleted();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     // 2. GET /profiles/{profileID} - Haal profiel op van een specifieke gebruiker

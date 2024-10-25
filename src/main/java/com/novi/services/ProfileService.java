@@ -3,6 +3,7 @@ package com.novi.services;
 import com.novi.dtos.PotentialMatchesOutputDTO;
 import com.novi.dtos.ProfileInputDTO;
 import com.novi.dtos.ProfileOutputDTO;
+import com.novi.dtos.ProfileQuestionnaireOutputDTO;
 import com.novi.entities.MiniProfile;
 import com.novi.entities.PotentialMatches;
 import com.novi.entities.Profile;
@@ -84,6 +85,10 @@ public class ProfileService {
         return "/uploads/profile-pics/" + fileName;
     }
 
+    public ProfileQuestionnaireOutputDTO checkIfQuestionnaireCompleted() {
+        Profile currentProfile = getCurrentProfile();
+        return new ProfileQuestionnaireOutputDTO(currentProfile.getHasCompletedQuestionnaire());
+    }
 
     // 2. Haal een profiel op van een specifieke gebruiker adhv profileID
     public ProfileOutputDTO getUserProfileByProfileID(Long id) {
