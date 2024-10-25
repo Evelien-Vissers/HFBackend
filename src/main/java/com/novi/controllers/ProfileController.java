@@ -7,9 +7,12 @@ import com.novi.entities.MiniProfile;
 import com.novi.entities.PotentialMatches;
 import com.novi.exceptions.ResourceNotFoundException;
 import com.novi.services.ProfileService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -18,6 +21,7 @@ import java.util.List;
 @RequestMapping("/profiles")
 public class ProfileController {
 
+    @Autowired
     private final ProfileService profileService;
 
     public ProfileController(ProfileService profileService) {
@@ -25,12 +29,17 @@ public class ProfileController {
     }
 
     // 1. POST - /profiles/new - Maak een nieuw profiel aan
-    @PostMapping("/new")
-    public ResponseEntity<String> createProfile(@RequestBody ProfileInputDTO profileInputDTO) {
-        // Sla profielgegevens op (de UUID wordt automatisch gegenereerd bij het opslaan)
-        profileService.saveProfile(profileInputDTO);
+    @PostMapping(value = "/new", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> createProfile(
+            @RequestPart("profileData") ProfileInputDTO profileInputDTO,
+            @RequestParam("profilePic") MultipartFile profilePic) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("Heal Force Profile Successfully Created!");
+        try {
+            profileService.saveProfile(profileInputDTO, profilePic);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Heal Force Profile Successfully Created!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating profile.");
+        }
     }
 
     // 2. GET /profiles/{profileID} - Haal profiel op van een specifieke gebruiker

@@ -14,15 +14,15 @@ public class ProfileInputDTO {
     private YearMonth diagnosisDate;
     private String healingChoice;
     private String connectionPreference;
-    private String profilePic;
+    private String profilePicUrl;
     private String healforceName;
-    private UUID profileID;
+    private Boolean hasCompletedQuestionnaire;
 
     // Constructors
     public ProfileInputDTO() {
     }
 
-    public ProfileInputDTO(LocalDate dateOfBirth, String city, String country, String gender, String healthChallenge, YearMonth diagnosisDate, String healingChoice, String connectionPreference, String profilePic, String healforceName, Long ProfileID) {
+    public ProfileInputDTO(LocalDate dateOfBirth, String city, String country, String gender, String healthChallenge, YearMonth diagnosisDate, String healingChoice, String connectionPreference, String profilePicUrl, String healforceName, Boolean hasCompletedQuestionnaire) {
         this.dateOfBirth = dateOfBirth;
         this.city = city;
         this.country = country;
@@ -31,9 +31,9 @@ public class ProfileInputDTO {
         this.diagnosisDate = diagnosisDate;
         this.healingChoice = healingChoice;
         this.connectionPreference = connectionPreference;
-        this.profilePic = profilePic;
+        this.profilePicUrl = profilePicUrl;
         this.healforceName = healforceName;
-        this.profileID = profileID;
+        this.hasCompletedQuestionnaire = hasCompletedQuestionnaire;
     }
 
     // Getters and Setters
@@ -98,12 +98,12 @@ public class ProfileInputDTO {
         this.connectionPreference = connectionPreference;
     }
 
-    public String getProfilePic() {
-        return profilePic;
+    public String getProfilePicUrl() {
+        return profilePicUrl;
     }
 
-    public void setProfilePic(String profilePic) {
-        this.profilePic = profilePic;
+    public void setProfilePicUrl(String profilePicUrl) {
+        this.profilePicUrl = profilePicUrl;
     }
 
     public String getHealforceName() {
@@ -114,13 +114,13 @@ public class ProfileInputDTO {
         this.healforceName = healforceName;
     }
 
-    public UUID getProfileID() {
-        return profileID;
+    public Boolean getHasCompletedQuestionnaire() {
+        return hasCompletedQuestionnaire;
+    }
+    public void setHasCompletedQuestionnaire(Boolean hasCompletedQuestionnaire) {
+        this.hasCompletedQuestionnaire = hasCompletedQuestionnaire;
     }
 
-    public void setProfileID(UUID profileID) {
-        this.profileID = profileID;
-    }
 }
 
 

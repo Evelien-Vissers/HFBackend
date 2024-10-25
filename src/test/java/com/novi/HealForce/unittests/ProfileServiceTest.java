@@ -16,10 +16,13 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.ArrayList;
@@ -54,12 +57,14 @@ class ProfileServiceTest {
 
     // 1. Test voor het opslaan van een profiel
     @Test
-    void testSaveProfile_Success() {
+    void testSaveProfile_Success() throws IOException {
         // Arrange
         ProfileInputDTO profileInputDTO = new ProfileInputDTO();
         profileInputDTO.setCity("Amsterdam");
 
         User currentUser = new User();
+        Profile profile = new Profile();
+
         when(profileMapper.toEntity(profileInputDTO)).thenReturn(new Profile());
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(currentUser));
 
@@ -68,8 +73,14 @@ class ProfileServiceTest {
         when(authentication.getPrincipal()).thenReturn(userDetails);
         when(userDetails.getUsername()).thenReturn("johndoe@example.com");
 
+        MockMultipartFile mockProfilePic = new MockMultipartFile(
+                "profilePic",
+                "profile-pic.jpg",
+                "image/jpeg",
+                "test image content".getBytes()
+        );
         // Act
-        profileService.saveProfile(profileInputDTO);
+        profileService.saveProfile(profileInputDTO, mockProfilePic);
 
         // Assert
         verify(profileRepository, times(1)).save(any(Profile.class));

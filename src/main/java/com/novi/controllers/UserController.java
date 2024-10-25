@@ -60,7 +60,8 @@ public class UserController {
 
     // 3. PUT /users/{Id} - Werk informatie van een specifieke gebruiker bij
     @PutMapping("/{Id}")
-    public ResponseEntity<UserOutputDTO> updateUser(@PathVariable Long Id, @RequestBody UserInputDTO userDTO) {
+    public ResponseEntity<UserOutputDTO> updateUser(@PathVariable Long Id,
+                                                    @RequestBody UserInputDTO userDTO) {
         UserOutputDTO updatedUserDTO = userService.updateUser(Id, new UserInputDTO());
         if (userDTO != null) {
             return ResponseEntity.ok(updatedUserDTO);
@@ -70,7 +71,7 @@ public class UserController {
     }
 
     // 4. GET /admin/users - Haal een lijst op van alle gebruikers in de applicatie
-    @GetMapping("/admin/getallusers")
+    @GetMapping("/getall")
     public ResponseEntity<List<UserOutputDTO>> getAllUsers() {
         List<UserOutputDTO> users = userService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
