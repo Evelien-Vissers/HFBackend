@@ -14,7 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
+
 
 import java.util.List;
 
@@ -49,7 +49,7 @@ public class ProfileController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    // 2. GET /profiles/{profileID} - Haal profiel op van een specifieke gebruiker
+    // 2. GET /profiles/{ID} - Haal profiel op van een specifieke gebruiker
     @GetMapping("{id}")
     public ResponseEntity<ProfileOutputDTO> getUserProfileByID(@PathVariable Long id) {
         ProfileOutputDTO profile = profileService.getUserProfileByProfileID(id);

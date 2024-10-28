@@ -14,16 +14,16 @@ VALUES
     ('Richard', 'Smith', 'admin.smith@example.com', '$2a$10$IuXDqN1RQhNFduPN1C0FQeJYRYgSBz/CyczoeEUQZ0qCqACabkLoS', NULL, NULL, '2024-10-10 14:15:30', NULL, NULL, NULL);
 
 -- Inserting test data for Profile
-INSERT INTO Profiles (date_of_birth, city, country, gender, health_challenge, diagnosis_date, healing_choice, connection_preference, profile_pic, healforce_name)
+INSERT INTO Profiles (date_of_birth, city, country, gender, health_challenge, diagnosis_date, healing_choice, connection_preference, profile_pic_url, healforce_name, has_completed_questionnaire)
 VALUES
-    ('1988-04-15', 'Amsterdam', 'Netherlands', 'Male', 'Cancer', '2018-05', 'Conventional', 'Mix', 'profilepic1.png', 'SkyWarrior88'),
-    ('1992-07-23', 'Berlin', 'Germany', 'Female', 'Heart Disease', '2017-10', 'Alternative', 'Conventional', 'profilepic2.png', 'HeartFighter92'),
-    ('1985-11-11', 'New York', 'USA', 'Male', 'Diabetes', '2020-01', 'Mix', 'Alternative', 'profilepic3.png', 'LionSurvivor85'),
-    ('1995-02-02', 'Paris', 'France', 'Female', 'Asthma', '2019-03', 'Conventional', 'All Types', 'profilepic4.png', 'PhoenixHealer95'),
-    ('1983-05-18', 'Madrid', 'Spain', 'Female', 'Cancer', '2015-07', 'Alternative', 'Mix', 'profilepic5.png', 'FireFighter83'),
-    ('1990-09-25', 'Sydney', 'Australia', 'Male', 'Heart Disease', '2021-06', 'Mix', 'Conventional', 'profilepic6.png', 'OceanWarrior90'),
-    ('1987-01-10', 'Tokyo', 'Japan', 'Female', 'Diabetes', '2016-12', 'Conventional', 'Alternative', 'profilepic7.png', 'LotusSurvivor87'),
-    ('1993-08-05', 'Cape Town', 'South Africa', 'Male', 'Asthma', '2020-11', 'Alternative', 'All Types', 'profilepic8.png', 'MountainHealer93');
+    ('1988-04-15', 'Amsterdam', 'Netherlands', 'Male', 'Cancer', '2018-05', 'Conventional', 'Mix', 'albert-dera-ILip77SbmOE-unsplash.jpg', 'SkyWarrior88', true),
+    ('1992-07-23', 'Berlin', 'Germany', 'Female', 'Heart Disease', '2017-10', 'Alternative', 'Conventional', 'ayo-ogunseinde-6W4F62sN_yI-unsplash.jpg', 'HeartFighter92', true),
+    ('1985-11-11', 'New York', 'USA', 'Male', 'Diabetes', '2020-01', 'Mix', 'Alternative', 'freestocks-_vJvLne0TwI-unsplash.jpg', 'LionSurvivor85', true),
+    ('1995-02-02', 'Paris', 'France', 'Female', 'Asthma', '2019-03', 'Conventional', 'All Types', 'houcine-ncib-B4TjXnI0Y2c-unsplash.jpg', 'PhoenixHealer95', true),
+    ('1983-05-18', 'Madrid', 'Spain', 'Female', 'Cancer', '2015-07', 'Alternative', 'Mix', 'ludvig-wiese-d-MfHM-jHwc-unsplash.jpg', 'FireFighter83', true),
+    ('1990-09-25', 'Sydney', 'Australia', 'Male', 'Heart Disease', '2021-06', 'Mix', 'Conventional', 'nicolas-ladino-silva-9QDpFd0j5o0-unsplash.jpg', 'OceanWarrior90', true),
+    ('1987-01-10', 'Tokyo', 'Japan', 'Female', 'Diabetes', '2016-12', 'Conventional', 'Alternative', 'rachel-mcdermott-0fN7Fxv1eWA-unsplash.jpg', 'LotusSurvivor87', true),
+    ('1993-08-05', 'Cape Town', 'South Africa', 'Male', 'Asthma', '2020-11', 'Alternative', 'All Types', 'swapnil-dwivedi-N2IJ31xZ_ks-unsplash.jpg', 'MountainHealer93', true);
 
 -- Inserting test data for Matching
 INSERT INTO Matching (profile1, profile2, status_profile1, status_profile2, match_status, match_date)
@@ -34,5 +34,13 @@ VALUES
 
 INSERT INTO roles (role_name, active, description, created_date, last_edited)
 VALUES
-    ('ADMIN', true, 'Administrator role with full access', '2024-10-01 09:00:00', '2024-10-01 09:00:00'),
-    ('USER', true, 'Standard user role with limited access', '2024-10-01 09:00:00', '2024-10-01 09:00:00');
+    ('ROLE_ADMIN', true, 'Administrator role with full access', '2024-10-01 09:00:00', '2024-10-01 09:00:00'),
+    ('ROLE_USER', true, 'Standard user role with limited access', '2024-10-01 09:00:00', '2024-10-01 09:00:00');
+
+INSERT INTO public.user_roles(role_id, user_id)
+VALUES
+    (1, 11),
+    (1, 10),
+    (1, 9),
+    (2, 8),
+    (2, 3);

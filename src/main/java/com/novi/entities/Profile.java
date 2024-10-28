@@ -12,13 +12,13 @@ public class Profile extends BaseEntity {
     @Column(name = "date_of_birth", nullable = false)
     private LocalDate dateOfBirth;
 
-    @Column(nullable = false)
+    @Column(name = "city", nullable = false)
     private String city;
 
-    @Column(nullable = false)
+    @Column(name = "country", nullable = false)
     private String country;
 
-    @Column(nullable = false)
+    @Column(name = "gender", nullable = false)
     private String gender;
 
     @Column(name = "health_challenge", nullable = false)
@@ -39,7 +39,7 @@ public class Profile extends BaseEntity {
     @Column(name = "healforce_name", nullable = false, unique = true)
     private String healforceName;
 
-    @Column(name = "has_CompletedQuestionnaire", nullable = false)
+    @Column(name = "has_completed_questionnaire", nullable = false)
     private boolean hasCompletedQuestionnaire;
 
 

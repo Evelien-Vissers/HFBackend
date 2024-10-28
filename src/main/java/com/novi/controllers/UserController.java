@@ -67,7 +67,7 @@ public class UserController {
         }
     }
 
-    // 4. GET /admin/users - Haal een lijst op van alle gebruikers in de applicatie
+    // 4. GET /getall - Haal een lijst op van alle gebruikers in de applicatie
     @GetMapping("/getall")
     public ResponseEntity<List<UserOutputDTO>> getAllUsers() {
         List<UserOutputDTO> users = userService.getAllUsers();
