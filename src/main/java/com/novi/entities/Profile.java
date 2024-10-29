@@ -25,7 +25,7 @@ public class Profile extends BaseEntity {
     private String healthChallenge;
 
     @Column(name = "diagnosis_date", nullable = false)
-    private YearMonth diagnosisDate;
+    private String diagnosisDate;
 
     @Column(name = "healing_choice", nullable = false)
     private String healingChoice;
@@ -56,7 +56,7 @@ public class Profile extends BaseEntity {
 
     // Constructor with all fields
     public Profile(LocalDate dateOfBirth, String city, String country, String gender, String healthChallenge,
-                   YearMonth diagnosisDate, String healingChoice, String connectionPreference, String profilePicUrl, String healforceName, Boolean hasCompletedQuestionnaire) {
+                   String diagnosisDate, String healingChoice, String connectionPreference, String profilePicUrl, String healforceName, Boolean hasCompletedQuestionnaire) {
         super();
         this.dateOfBirth = dateOfBirth;
         this.city = city;
@@ -68,7 +68,7 @@ public class Profile extends BaseEntity {
         this.connectionPreference = connectionPreference;
         this.profilePicUrl = profilePicUrl;
         this.healforceName = healforceName;
-        this.hasCompletedQuestionnaire = false;
+        this.hasCompletedQuestionnaire = true;
     }
 
     // Getters and Setters
@@ -111,11 +111,11 @@ public class Profile extends BaseEntity {
         this.healthChallenge = healthChallenge;
     }
 
-    public YearMonth getDiagnosisDate() {
+    public String getDiagnosisDate() {
         return diagnosisDate;
     }
 
-    public void setDiagnosisDate(YearMonth diagnosisDate) {
+    public void setDiagnosisDate(String diagnosisDate) {
         this.diagnosisDate = diagnosisDate;
     }
 

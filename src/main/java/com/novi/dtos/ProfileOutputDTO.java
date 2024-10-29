@@ -10,7 +10,7 @@ public class ProfileOutputDTO {
     private String country;
     private String gender;
     private String healthChallenge;
-    private YearMonth diagnosisDate;
+    private String diagnosisDate;
     private String healingChoice;
     private String connectionPreference;
     private String profilePic;
@@ -21,7 +21,7 @@ public class ProfileOutputDTO {
     public ProfileOutputDTO() {
     }
 
-    public ProfileOutputDTO(LocalDate dateOfBirth, String city, String country, String gender, String healthChallenge, YearMonth diagnosisDate, String healingChoice, String connectionPreference, String profilePic, String healforceName, Boolean hasCompletedQuestionnaire) {
+    public ProfileOutputDTO(LocalDate dateOfBirth, String city, String country, String gender, String healthChallenge, String diagnosisDate, String healingChoice, String connectionPreference, String profilePic, String healforceName, Boolean hasCompletedQuestionnaire) {
         this.dateOfBirth = dateOfBirth;
         this.city = city;
         this.country = country;
@@ -74,11 +74,11 @@ public class ProfileOutputDTO {
         this.healthChallenge = healthChallenge;
     }
 
-    public YearMonth getDiagnosisDate() {
+    public String getDiagnosisDate() {
         return diagnosisDate;
     }
 
-    public void setDiagnosisDate(YearMonth diagnosisDate) {
+    public void setDiagnosisDate(String diagnosisDate) {
         this.diagnosisDate = diagnosisDate;
     }
 

@@ -18,10 +18,10 @@ INSERT INTO Profiles (date_of_birth, city, country, gender, health_challenge, di
 VALUES
     ('1988-04-15', 'Amsterdam', 'Netherlands', 'Male', 'Cancer', '2018-05', 'Conventional', 'Mix', 'albert-dera-ILip77SbmOE-unsplash.jpg', 'SkyWarrior88', true),
     ('1992-07-23', 'Berlin', 'Germany', 'Female', 'Heart Disease', '2017-10', 'Alternative', 'Conventional', 'ayo-ogunseinde-6W4F62sN_yI-unsplash.jpg', 'HeartFighter92', true),
-    ('1985-11-11', 'New York', 'USA', 'Male', 'Diabetes', '2020-01', 'Mix', 'Alternative', 'freestocks-_vJvLne0TwI-unsplash.jpg', 'LionSurvivor85', true),
-    ('1995-02-02', 'Paris', 'France', 'Female', 'Asthma', '2019-03', 'Conventional', 'All Types', 'houcine-ncib-B4TjXnI0Y2c-unsplash.jpg', 'PhoenixHealer95', true),
-    ('1983-05-18', 'Madrid', 'Spain', 'Female', 'Cancer', '2015-07', 'Alternative', 'Mix', 'ludvig-wiese-d-MfHM-jHwc-unsplash.jpg', 'FireFighter83', true),
-    ('1990-09-25', 'Sydney', 'Australia', 'Male', 'Heart Disease', '2021-06', 'Mix', 'Conventional', 'nicolas-ladino-silva-9QDpFd0j5o0-unsplash.jpg', 'OceanWarrior90', true),
+    ('1985-11-11', 'New York', 'USA', 'Female', 'Diabetes', '2020-01', 'Mix', 'Alternative', 'freestocks-_vJvLne0TwI-unsplash.jpg', 'LionSurvivor85', true),
+    ('1995-02-02', 'Paris', 'France', 'Male', 'Asthma', '2019-03', 'Conventional', 'All Types', 'houcine-ncib-B4TjXnI0Y2c-unsplash.jpg', 'PhoenixHealer95', true),
+    ('1983-05-18', 'Madrid', 'Spain', 'Male', 'Cancer', '2015-07', 'Alternative', 'Mix', 'ludvig-wiese-d-MfHM-jHwc-unsplash.jpg', 'FireFighter83', true),
+    ('1990-09-25', 'Sydney', 'Australia', 'Female', 'Heart Disease', '2021-06', 'Mix', 'Conventional', 'nicolas-ladino-silva-9QDpFd0j5o0-unsplash.jpg', 'OceanWarrior90', true),
     ('1987-01-10', 'Tokyo', 'Japan', 'Female', 'Diabetes', '2016-12', 'Conventional', 'Alternative', 'rachel-mcdermott-0fN7Fxv1eWA-unsplash.jpg', 'LotusSurvivor87', true),
     ('1993-08-05', 'Cape Town', 'South Africa', 'Male', 'Asthma', '2020-11', 'Alternative', 'All Types', 'swapnil-dwivedi-N2IJ31xZ_ks-unsplash.jpg', 'MountainHealer93', true);
 
@@ -43,4 +43,10 @@ VALUES
     (1, 10),
     (1, 9),
     (2, 8),
-    (2, 3);
+    (2, 7),
+    (2, 6),
+    (2, 5),
+    (2, 4),
+    (2, 3),
+    (2, 2),
+    (2, 1);

@@ -10,10 +10,9 @@ public class ProfileInputDTO {
     private String country;
     private String gender;
     private String healthChallenge;
-    private YearMonth diagnosisDate;
+    private String diagnosisDate;
     private String healingChoice;
     private String connectionPreference;
-    private String profilePicUrl;
     private String healforceName;
     private Boolean hasCompletedQuestionnaire;
 
@@ -21,7 +20,7 @@ public class ProfileInputDTO {
     public ProfileInputDTO() {
     }
 
-    public ProfileInputDTO(LocalDate dateOfBirth, String city, String country, String gender, String healthChallenge, YearMonth diagnosisDate, String healingChoice, String connectionPreference, String profilePicUrl, String healforceName, Boolean hasCompletedQuestionnaire) {
+    public ProfileInputDTO(LocalDate dateOfBirth, String city, String country, String gender, String healthChallenge, String diagnosisDate, String healingChoice, String connectionPreference, String healforceName, Boolean hasCompletedQuestionnaire) {
         this.dateOfBirth = dateOfBirth;
         this.city = city;
         this.country = country;
@@ -30,7 +29,6 @@ public class ProfileInputDTO {
         this.diagnosisDate = diagnosisDate;
         this.healingChoice = healingChoice;
         this.connectionPreference = connectionPreference;
-        this.profilePicUrl = profilePicUrl;
         this.healforceName = healforceName;
         this.hasCompletedQuestionnaire = hasCompletedQuestionnaire;
     }
@@ -73,11 +71,11 @@ public class ProfileInputDTO {
         this.healthChallenge = healthChallenge;
     }
 
-    public YearMonth getDiagnosisDate() {
+    public String getDiagnosisDate() {
         return diagnosisDate;
     }
 
-    public void setDiagnosisDate(YearMonth diagnosisDate) {
+    public void setDiagnosisDate(String diagnosisDate) {
         this.diagnosisDate = diagnosisDate;
     }
 
@@ -97,13 +95,6 @@ public class ProfileInputDTO {
         this.connectionPreference = connectionPreference;
     }
 
-    public String getProfilePicUrl() {
-        return profilePicUrl;
-    }
-
-    public void setProfilePicUrl(String profilePicUrl) {
-        this.profilePicUrl = profilePicUrl;
-    }
 
     public String getHealforceName() {
         return healforceName;

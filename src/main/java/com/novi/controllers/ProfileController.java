@@ -33,7 +33,7 @@ public class ProfileController {
     @PostMapping(value = "/new", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> createProfile(
             @RequestPart("profileData") ProfileInputDTO profileInputDTO,
-            @RequestParam("profilePic") MultipartFile profilePic) {
+            @RequestPart("profilePic") MultipartFile profilePic) {
 
         try {
             profileService.saveProfile(profileInputDTO, profilePic);
@@ -59,14 +59,6 @@ public class ProfileController {
         return new ResponseEntity<>(profile, HttpStatus.OK);
     }
 
-    // 3. GET - Haal MiniProfile op van gebruiker ZELF via ProfileID op wanneer hij op 'Start Matching' drukt (als weergave van zijn eigen MatchingProfile op de MatchingPage)
-    @GetMapping("/{id}/mini-profile")
-    public ResponseEntity<MiniProfile> getMiniProfile(@PathVariable Long id) {
-        MiniProfile miniProfile = profileService.getMiniProfile(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Mini profile with ProfileID " + id + " not found"));
-
-        return ResponseEntity.ok(miniProfile);
-    }
 
     // 4. GET - profile/{id}/potential-matches - Vraag een lijst van potentiele matches aan
     @GetMapping("/{id}/potential-matches")
