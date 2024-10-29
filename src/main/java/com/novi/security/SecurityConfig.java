@@ -47,10 +47,9 @@ public class SecurityConfig {
                         .requestMatchers("/public/**").permitAll()
                         .requestMatchers("/users/**").permitAll()
                         //Alleen ingelogde gebruikers kunnen hun profiel zien
-                        .requestMatchers("/profile/**").hasRole("USER")
+                        .requestMatchers("/profiles/**").hasRole("USER")
                         //Alleen ingelogde gebruikers met aangemaakt profiel kunnen matchen
                         .requestMatchers("/matching/**").hasRole("USER")
-                        .requestMatchers("matching/**").hasAuthority("PROFILE_CREATED")
                         //Alleen admins kunnen admin pagina's zien
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
@@ -60,8 +59,6 @@ public class SecurityConfig {
                 .cors(cors -> {})
                 .sessionManagement( session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         ;
-
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return  http.build();
     }
 

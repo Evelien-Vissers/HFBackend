@@ -3,6 +3,7 @@ package com.novi.services;
 import com.novi.dtos.PotentialMatchesOutputDTO;
 import com.novi.dtos.ProfileInputDTO;
 import com.novi.dtos.ProfileOutputDTO;
+import com.novi.dtos.ProfileQuestionnaireOutputDTO;
 import com.novi.entities.MiniProfile;
 import com.novi.entities.PotentialMatches;
 import com.novi.entities.Profile;
@@ -11,12 +12,19 @@ import com.novi.mappers.MatchingMapper;
 import com.novi.mappers.ProfileMapper;
 import com.novi.repositories.ProfileRepository;
 import com.novi.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -27,7 +35,9 @@ public class ProfileService {
     private final ProfileRepository profileRepository;
     private final UserRepository userRepository;
     private final ProfileMapper profileMapper;
+    private final String uploadDir = "uploads/profile-pics";
 
+    @Autowired
     public ProfileService(ProfileRepository profileRepository, UserRepository userRepository) {
         this.profileRepository = profileRepository;
         this.userRepository = userRepository;
@@ -45,18 +55,40 @@ public class ProfileService {
     }
 
 
-    // 1. Sla een nieuw profiel op met de bijbehorende ID
+    // 1. Sla een nieuw profiel op met de bijbehorende ID en afbeelding
     @Transactional
-    public void saveProfile(ProfileInputDTO profileInputDTO) {
+    public void saveProfile(ProfileInputDTO profileInputDTO, MultipartFile profilePic) throws IOException {
         //Gebruik de huidige ingelogde gebruiker
         User currentUser = getCurrentUser();
         //Maak een nieuw profiel aan vanuit de ProfileInputDTO
         Profile profile = profileMapper.toEntity(profileInputDTO);
         //Koppel het profiel aan de huidige gebruiker
         profile.setUser(currentUser);
-        profileRepository.save(profile); //UUID wordt autmoatisch gegenereerd in Profile entity
+        if (profilePic != null && !profilePic.isEmpty()) {
+            String profilePicUrl = saveProfilePic(profilePic);
+            profile.setProfilePicUrl(profilePicUrl);
+        }
+        profileRepository.save(profile);
+    }
+    //Methode op profielfoto op te slaan en het pad te retourneren
+    private String saveProfilePic(MultipartFile profilePic) throws IOException {
+        Path uploadPath = Paths.get(uploadDir);
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectory(uploadPath);
+        }
+        String fileName = UUID.randomUUID().toString() + "_" + profilePic.getOriginalFilename();
+
+        //Sla bestand op in directory
+        Path filePath = uploadPath.resolve(fileName);
+        Files.copy(profilePic.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+        //Retourneer het pad van de afbeelding om op te slaan in de database
+        return "/uploads/profile-pics/" + fileName;
     }
 
+    public ProfileQuestionnaireOutputDTO checkIfQuestionnaireCompleted() {
+        Profile currentProfile = getCurrentProfile();
+        return new ProfileQuestionnaireOutputDTO(currentProfile.getHasCompletedQuestionnaire());
+    }
 
     // 2. Haal een profiel op van een specifieke gebruiker adhv profileID
     public ProfileOutputDTO getUserProfileByProfileID(Long id) {

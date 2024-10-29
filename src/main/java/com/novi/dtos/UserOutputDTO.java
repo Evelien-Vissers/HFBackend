@@ -11,21 +11,19 @@ public class UserOutputDTO {
     private LocalDate registrationDate;
     private LocalDateTime lastLogin;
     private Boolean AcceptedPrivacyStatementUserAgreement;
-    private Boolean hasCompletedQuestionnaire;
 
 
     // Constructors
     public UserOutputDTO() {
     }
 
-    public UserOutputDTO(String firstName, String lastName, String email, String role, LocalDate registrationDate, LocalDateTime lastLogin, Boolean hasCompletedQuestionnaire, Boolean verifiedEmail) {
+    public UserOutputDTO(String firstName, String lastName, String email, String role, LocalDate registrationDate, LocalDateTime lastLogin) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.role = role;
         this.registrationDate = registrationDate;
         this.lastLogin = lastLogin;
-        this.hasCompletedQuestionnaire = hasCompletedQuestionnaire;
         this.AcceptedPrivacyStatementUserAgreement = false;
     }
 
@@ -76,14 +74,6 @@ public class UserOutputDTO {
 
     public void setLastLogin(LocalDateTime lastLogin) {
         this.lastLogin = lastLogin;
-    }
-
-    public Boolean getHasCompletedQuestionnaire() {
-        return hasCompletedQuestionnaire;
-    }
-
-    public void setHasCompletedQuestionnaire(Boolean hasCompletedQuestionnaire) {
-        this.hasCompletedQuestionnaire = hasCompletedQuestionnaire;
     }
 
     public Boolean getAcceptedPrivacyStatementUserAgreement() {

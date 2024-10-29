@@ -17,7 +17,6 @@ public class ProfileMapper {
         dto.setDiagnosisDate(profile.getDiagnosisDate());
         dto.setHealingChoice(profile.getHealingChoice());
         dto.setConnectionPreference(profile.getConnectionPreference());
-        dto.setProfilePic(profile.getProfilePic());
         dto.setHealforceName(profile.getHealforceName());
         return dto;
     }
@@ -32,7 +31,6 @@ public class ProfileMapper {
         profile.setDiagnosisDate(profileInputDTO.getDiagnosisDate());
         profile.setHealingChoice(profileInputDTO.getHealingChoice());
         profile.setConnectionPreference(profileInputDTO.getConnectionPreference());
-        profile.setProfilePic(profileInputDTO.getProfilePic());
         profile.setHealforceName(profileInputDTO.getHealforceName());
         return profile;
     }

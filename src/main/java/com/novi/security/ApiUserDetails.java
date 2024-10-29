@@ -39,6 +39,10 @@ public String getUsername() {
     return user.getEmail();
 }
 
+public User getUser() {
+   return this.user;
+}
+
 @Override
 public boolean isAccountNonExpired() {
     return true;

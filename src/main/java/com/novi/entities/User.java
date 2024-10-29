@@ -13,34 +13,31 @@ import java.util.Set;
 
 public class User extends BaseEntity {
 
-    @Column(name = "first_name", nullable = false)
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "last_name", nullable = false)
+    @Column(name = "last_name")
     private String lastName;
 
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
+    @Column(name ="password")
     private String password;
 
-    @Column(nullable = false)
-    private String role = "User"; //Default value is "User"
-
-    @Column(name ="accepted_policies", nullable = false)
+    @Column(name ="accepted_policies")
     private Boolean acceptedPrivacyStatementUserAgreement;
 
-    @Column(name = "registration_date", nullable = false)
+    @Column(name = "registration_date")
     private LocalDate registrationDate = LocalDate.now();
 
     @Column(name = "last_login")
     private LocalDateTime lastLogin;
 
-    @Column(name = "has_completed_questionnaire", nullable = false)
+    @Column(name = "has_completed_questionnaire")
     private Boolean hasCompletedQuestionnaire = false; //Default value = false.
 
-    @Column(name = "enabled", nullable = false)
+    @Column(name = "enabled")
     private Boolean enabled = true; // Standaardwaarde voor nieuwe gebruikers
 
     @Column(nullable = true, length = 600)
@@ -55,7 +52,7 @@ public class User extends BaseEntity {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
-            joinColumns = @JoinColumn(name="id"),
+            joinColumns = @JoinColumn(name="user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles = new HashSet<>();
@@ -73,10 +70,8 @@ public class User extends BaseEntity {
         this.email = email;
         this.password = password;
         this.acceptedPrivacyStatementUserAgreement = acceptedPrivacyStatementUserAgreement;
-        this.role = "User"; // Default role
-        this.registrationDate = LocalDate.now(); // set to currentDate
+        this.registrationDate = LocalDate.now();
         this.lastLogin = null;
-        this.hasCompletedQuestionnaire = false; // Default to false
         this.enabled = true;
         this.question = null;
     }
@@ -115,13 +110,6 @@ public class User extends BaseEntity {
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
 
     public Boolean getAcceptedPrivacyStatementUserAgreement() {
         return acceptedPrivacyStatementUserAgreement;
@@ -147,13 +135,6 @@ public class User extends BaseEntity {
         this.lastLogin = lastLogin;
     }
 
-    public Boolean getHasCompletedQuestionnaire() {
-        return hasCompletedQuestionnaire;
-    }
-
-    public void setHasCompletedQuestionnaire(Boolean hasCompletedQuestionnaire) {
-        this.hasCompletedQuestionnaire = hasCompletedQuestionnaire;
-    }
 
     public Profile getProfile() {
         return profile;

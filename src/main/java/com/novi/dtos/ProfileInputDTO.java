@@ -2,7 +2,6 @@ package com.novi.dtos;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.UUID;
 
 public class ProfileInputDTO {
 
@@ -11,18 +10,17 @@ public class ProfileInputDTO {
     private String country;
     private String gender;
     private String healthChallenge;
-    private YearMonth diagnosisDate;
+    private String diagnosisDate;
     private String healingChoice;
     private String connectionPreference;
-    private String profilePic;
     private String healforceName;
-    private UUID profileID;
+    private Boolean hasCompletedQuestionnaire;
 
     // Constructors
     public ProfileInputDTO() {
     }
 
-    public ProfileInputDTO(LocalDate dateOfBirth, String city, String country, String gender, String healthChallenge, YearMonth diagnosisDate, String healingChoice, String connectionPreference, String profilePic, String healforceName, Long ProfileID) {
+    public ProfileInputDTO(LocalDate dateOfBirth, String city, String country, String gender, String healthChallenge, String diagnosisDate, String healingChoice, String connectionPreference, String healforceName, Boolean hasCompletedQuestionnaire) {
         this.dateOfBirth = dateOfBirth;
         this.city = city;
         this.country = country;
@@ -31,9 +29,8 @@ public class ProfileInputDTO {
         this.diagnosisDate = diagnosisDate;
         this.healingChoice = healingChoice;
         this.connectionPreference = connectionPreference;
-        this.profilePic = profilePic;
         this.healforceName = healforceName;
-        this.profileID = profileID;
+        this.hasCompletedQuestionnaire = hasCompletedQuestionnaire;
     }
 
     // Getters and Setters
@@ -74,11 +71,11 @@ public class ProfileInputDTO {
         this.healthChallenge = healthChallenge;
     }
 
-    public YearMonth getDiagnosisDate() {
+    public String getDiagnosisDate() {
         return diagnosisDate;
     }
 
-    public void setDiagnosisDate(YearMonth diagnosisDate) {
+    public void setDiagnosisDate(String diagnosisDate) {
         this.diagnosisDate = diagnosisDate;
     }
 
@@ -98,13 +95,6 @@ public class ProfileInputDTO {
         this.connectionPreference = connectionPreference;
     }
 
-    public String getProfilePic() {
-        return profilePic;
-    }
-
-    public void setProfilePic(String profilePic) {
-        this.profilePic = profilePic;
-    }
 
     public String getHealforceName() {
         return healforceName;
@@ -114,13 +104,13 @@ public class ProfileInputDTO {
         this.healforceName = healforceName;
     }
 
-    public UUID getProfileID() {
-        return profileID;
+    public Boolean getHasCompletedQuestionnaire() {
+        return hasCompletedQuestionnaire;
+    }
+    public void setHasCompletedQuestionnaire(Boolean hasCompletedQuestionnaire) {
+        this.hasCompletedQuestionnaire = hasCompletedQuestionnaire;
     }
 
-    public void setProfileID(UUID profileID) {
-        this.profileID = profileID;
-    }
 }
 
 

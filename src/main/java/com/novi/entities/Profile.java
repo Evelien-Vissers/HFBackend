@@ -12,20 +12,20 @@ public class Profile extends BaseEntity {
     @Column(name = "date_of_birth", nullable = false)
     private LocalDate dateOfBirth;
 
-    @Column(nullable = false)
+    @Column(name = "city", nullable = false)
     private String city;
 
-    @Column(nullable = false)
+    @Column(name = "country", nullable = false)
     private String country;
 
-    @Column(nullable = false)
+    @Column(name = "gender", nullable = false)
     private String gender;
 
     @Column(name = "health_challenge", nullable = false)
     private String healthChallenge;
 
     @Column(name = "diagnosis_date", nullable = false)
-    private YearMonth diagnosisDate;
+    private String diagnosisDate;
 
     @Column(name = "healing_choice", nullable = false)
     private String healingChoice;
@@ -33,11 +33,14 @@ public class Profile extends BaseEntity {
     @Column(name = "connection_preference", nullable = false)
     private String connectionPreference;
 
-    @Column(name = "profile_pic", nullable = false)
-    private String profilePic;
+    @Column(name = "profile_pic_url", nullable = false)
+    private String profilePicUrl;
 
     @Column(name = "healforce_name", nullable = false, unique = true)
     private String healforceName;
+
+    @Column(name = "has_completed_questionnaire", nullable = false)
+    private boolean hasCompletedQuestionnaire;
 
 
     //Relaties
@@ -53,7 +56,7 @@ public class Profile extends BaseEntity {
 
     // Constructor with all fields
     public Profile(LocalDate dateOfBirth, String city, String country, String gender, String healthChallenge,
-                   YearMonth diagnosisDate, String healingChoice, String connectionPreference, String profilePic, String healforceName) {
+                   String diagnosisDate, String healingChoice, String connectionPreference, String profilePicUrl, String healforceName, Boolean hasCompletedQuestionnaire) {
         super();
         this.dateOfBirth = dateOfBirth;
         this.city = city;
@@ -63,8 +66,9 @@ public class Profile extends BaseEntity {
         this.diagnosisDate = diagnosisDate;
         this.healingChoice = healingChoice;
         this.connectionPreference = connectionPreference;
-        this.profilePic = profilePic;
+        this.profilePicUrl = profilePicUrl;
         this.healforceName = healforceName;
+        this.hasCompletedQuestionnaire = true;
     }
 
     // Getters and Setters
@@ -107,11 +111,11 @@ public class Profile extends BaseEntity {
         this.healthChallenge = healthChallenge;
     }
 
-    public YearMonth getDiagnosisDate() {
+    public String getDiagnosisDate() {
         return diagnosisDate;
     }
 
-    public void setDiagnosisDate(YearMonth diagnosisDate) {
+    public void setDiagnosisDate(String diagnosisDate) {
         this.diagnosisDate = diagnosisDate;
     }
 
@@ -131,17 +135,24 @@ public class Profile extends BaseEntity {
         this.connectionPreference = connectionPreference;
     }
 
-    public String getProfilePic() {
-        return profilePic;
+    public String getProfilePicUrl() {
+        return profilePicUrl;
     }
 
-    public void setProfilePic(String profilePic) {
-        this.profilePic = profilePic;
+    public void setProfilePicUrl(String profilePicUrl) {
+        this.profilePicUrl = profilePicUrl;
     }
 
     public String getHealforceName() { return healforceName; }
 
     public void setHealforceName(String healforceName) {this.healforceName = healforceName; }
+
+    public Boolean getHasCompletedQuestionnaire() {
+        return hasCompletedQuestionnaire;
+    }
+    public void setHasCompletedQuestionnaire(Boolean hasCompletedQuestionnaire) {
+        this.hasCompletedQuestionnaire = hasCompletedQuestionnaire;
+    }
 
     public User getUser() {
         return user;

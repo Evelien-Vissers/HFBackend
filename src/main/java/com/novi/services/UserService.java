@@ -1,6 +1,7 @@
 package com.novi.services;
 
 import com.novi.dtos.ContactFormDTO;
+import com.novi.dtos.UserFirstNameOutputDTO;
 import com.novi.dtos.UserInputDTO;
 import com.novi.dtos.UserOutputDTO;
 import com.novi.entities.User;
@@ -11,6 +12,8 @@ import com.novi.repositories.UserRepository;
 import com.novi.repositories.ProfileRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -40,10 +43,8 @@ public class UserService {
         User user = UserMapper.toUser(userInputDTO);
 
         //Standaardwaarden instellen
-        user.setRole("User");
         user.setAcceptedPrivacyStatementUserAgreement(false);
         user.setRegistrationDate(LocalDate.now());
-        user.setHasCompletedQuestionnaire(false);
 
         //Sla de gebruiker op
         userRepository.save(user);
@@ -63,6 +64,7 @@ public class UserService {
         //Converteer de lijst van gebruikers naar een lijst van UserOutputDTO's
         return UserMapper.toUserOutputDTOList(users);
     }
+
 
     // 3. Get a specific user by ID
     public UserOutputDTO getUserById(Long id) {
@@ -94,7 +96,7 @@ public class UserService {
 
     //5. Delete de gebruiker en het profiel dat daaraan is gekoppeld:
     public boolean deleteUser(Long id) {
-        // Zoek de gebruiker obv het id (Long)
+        // Zoek de gebruiker o.b.v het id (Long)
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -112,10 +114,10 @@ public class UserService {
 
     // 6. Verstuur contactformulier
     public void processContactForm(ContactFormDTO contactFormDTO) {
-        //Check of gebruiker al bestaat obv het emailadres
+        //Check of gebruiker al bestaat o.b.v het emailadres
         Optional<User> optionalUser = userRepository.findByEmail(contactFormDTO.getEmail());
 
-            //Als gebruiker niet bestaat, maak dan een nieuwe User aan
+        //Als gebruiker niet bestaat, maak dan een nieuwe User aan
         User user = optionalUser.orElseGet(() -> {
             User newUser = new User();
             newUser.setEmail(contactFormDTO.getEmail());
@@ -131,5 +133,11 @@ public class UserService {
         userRepository.save(user);
     }
 
-}
+    public UserFirstNameOutputDTO getFirstNameOfCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
 
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        return new UserFirstNameOutputDTO(user.getFirstName());
+    }
+}

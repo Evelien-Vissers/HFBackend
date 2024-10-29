@@ -91,6 +91,7 @@ public class JwtService {
                 .collect(Collectors.toList());
         claims.put(ROLES_CLAIMS_NAME, roles);
         claims.put(ORGANISATION, ORGANISATION_NAME );
+        claims.put("username", userDetails.getUsername());
         return createToken(claims, userDetails.getUsername(), milliSeconds); //time in milliseconds
     }
 

@@ -1,11 +1,8 @@
 package com.novi.controllers;
 
-import com.novi.dtos.ContactFormDTO;
+import com.novi.dtos.*;
 import com.novi.helpers.UrlHelper;
 import com.novi.mappers.UserDTOMapper;
-import com.novi.dtos.UserInputDTO;
-import com.novi.dtos.UserOutputDTO;
-import com.novi.dtos.UserRequestDTO;
 import com.novi.entities.User;
 import com.novi.exceptions.ResourceNotFoundException;
 import com.novi.exceptions.UnauthorizedException;
@@ -60,7 +57,8 @@ public class UserController {
 
     // 3. PUT /users/{Id} - Werk informatie van een specifieke gebruiker bij
     @PutMapping("/{Id}")
-    public ResponseEntity<UserOutputDTO> updateUser(@PathVariable Long Id, @RequestBody UserInputDTO userDTO) {
+    public ResponseEntity<UserOutputDTO> updateUser(@PathVariable Long Id,
+                                                    @RequestBody UserInputDTO userDTO) {
         UserOutputDTO updatedUserDTO = userService.updateUser(Id, new UserInputDTO());
         if (userDTO != null) {
             return ResponseEntity.ok(updatedUserDTO);
@@ -69,7 +67,14 @@ public class UserController {
         }
     }
 
-    // 4. DELETE /users/{Id} - Verwijder een specifieke gebruiker
+    // 4. GET /getall - Haal een lijst op van alle gebruikers in de applicatie
+    @GetMapping("/getall")
+    public ResponseEntity<List<UserOutputDTO>> getAllUsers() {
+        List<UserOutputDTO> users = userService.getAllUsers();
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+    // 5. DELETE /users/{Id} - Verwijder een specifieke gebruiker
     @DeleteMapping("/{Id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long Id) {
         boolean isDeleted = userService.deleteUser(Id);
@@ -80,7 +85,7 @@ public class UserController {
         }
     }
 
-    // 5. CONTACT /users/contact | Gebruiker verstuurt bericht via contactformulier
+    // 6. CONTACT /users/contact | Gebruiker verstuurt bericht via contactformulier
     @PostMapping("/contact")
     public ResponseEntity<String> submitContactForm(@RequestBody ContactFormDTO contactFormDTO) {
         userService.processContactForm(contactFormDTO);
@@ -89,7 +94,7 @@ public class UserController {
 
     // SECURITY USERCONTROLLERS
 
-    //6.
+    //7.
     @PostMapping("/create")
     public ResponseEntity<?> CreateUser(@RequestBody @Valid UserRequestDTO userDTO) {
         User user = userDTOMapper.mapToModel(userDTO);
@@ -99,6 +104,12 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.created(UrlHelper.getCurrentUrlWithId(request, user.getId())).build();
+    }
+
+    @GetMapping("/firstname")
+    public ResponseEntity<UserFirstNameOutputDTO> getCurrentUserFirstName() {
+        UserFirstNameOutputDTO firstNameDTO = userService.getFirstNameOfCurrentUser();
+        return ResponseEntity.ok(firstNameDTO);
     }
 }
 

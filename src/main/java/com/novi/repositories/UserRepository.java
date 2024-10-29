@@ -13,7 +13,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     //Zoek een gebruiker op basis van e-mailadres
     Optional<User> findByEmail(String email);
 
-    // Query om alleen de 'firstName' van de gebruiker op te halen obv ID
-    @Query("SELECT u.firstName FROM User u WHERE u.id = :ID")
-    Optional<String> findFirstNameById(@Param("ID") Long ID);
 }
