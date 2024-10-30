@@ -2,10 +2,12 @@ package com.novi.entities;
 
 import jakarta.persistence.*;
 import org.springframework.cglib.core.Local;
+import org.springframework.data.jpa.repository.EntityGraph;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Entity
@@ -55,6 +57,7 @@ public class User extends BaseEntity {
             joinColumns = @JoinColumn(name="user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
+
     private Set<Role> roles = new HashSet<>();
 
     //Constructors

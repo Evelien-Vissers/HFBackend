@@ -15,7 +15,7 @@ public class MatchingMapper {
         return new PotentialMatchesOutputDTO(
                 potentialMatch.getHealforceName(),
                 potentialMatch.getHealthChallenge(),
-                potentialMatch.getProfilePic(),
+                potentialMatch.getProfilePicUrl(),
                 potentialMatch.getCity(),
                 potentialMatch.getCountry()
         );

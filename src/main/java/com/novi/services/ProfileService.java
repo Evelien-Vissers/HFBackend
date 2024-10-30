@@ -111,38 +111,25 @@ public class ProfileService {
     }
 
     //3. Methode om het profileID van de huidige ingelogde gebruiker op te halen
-    public Profile getCurrentProfile() {
+    public Profile getCurrentProfileOrNull() {
         //Haal gebruikersnaam of email op van de ingelogde gebruiker via Spring Security
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String email;
-
-        if (principal instanceof UserDetails) {
-            email = ((UserDetails) principal).getUsername();
-        } else {
-            email = principal.toString();
-        }
-        //Haal de User entity op uit de database obv de email
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = ((UserDetails) authentication.getPrincipal()).getUsername();
 
         // Haal het profiel van de ingelogde gebruiker op en retourneer dit
-        return profileRepository.findByUser(user)
-                .orElseThrow(() -> new IllegalArgumentException("Profile not found"));
+        return profileRepository.findByEmail(email).orElse(null);
 
-    }
-
-    //4. Haal een Mini Profile op via profileID (van gebruiker zelf)
-    @Transactional(readOnly = true)
-    public Optional<MiniProfile> getMiniProfile(Long id) {
-        //Gebruik van de @Query in de ProfileRepository om gegevens op te halen
-        return profileRepository.findMiniProfileById(id);
     }
 
     // 4. Methode die de lijst met potentiële matches ophaalt voor currentProfile
     public List<PotentialMatchesOutputDTO> findPotentialMatches() {
-        //Haal het profiel van de ingelogde gebruiker op
-        Profile currentProfile = getCurrentProfile();
+        Optional<Profile> currentProfileOpt = Optional.ofNullable(getCurrentProfileOrNull());
 
-        // Haal de connectionPreference van het profiel op
+        if (currentProfileOpt.isEmpty()) {
+            throw new IllegalStateException("User has no profile. Please complete the questionnaire first.");
+        }
+
+        Profile currentProfile = getCurrentProfileOpt.get();
         String connectionPreference = currentProfile.getConnectionPreference();
 
         // Haal de potentiële matches op uit de repository

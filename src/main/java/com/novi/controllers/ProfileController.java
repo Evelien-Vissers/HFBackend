@@ -62,10 +62,8 @@ public class ProfileController {
 
     // 4. GET - profile/{id}/potential-matches - Vraag een lijst van potentiele matches aan
     @GetMapping("/{id}/potential-matches")
-    public ResponseEntity<List<PotentialMatchesOutputDTO>> findPotentialMatches(@PathVariable Long id) {
+    public ResponseEntity<List<PotentialMatchesOutputDTO>> findPotentialMatches() {
         List<PotentialMatchesOutputDTO> matches = profileService.findPotentialMatches();
-
-        //Controleer of er potential matches zijn gevonden
         if (!matches.isEmpty()) {
             return ResponseEntity.ok(matches);
         } else {
