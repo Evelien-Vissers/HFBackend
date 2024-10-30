@@ -43,12 +43,6 @@ public class ProfileController {
         }
     }
 
-    @GetMapping("/current/hasCompletedQuestionnaire")
-    public ResponseEntity<ProfileQuestionnaireOutputDTO> hasCompletedQuestionnaire() {
-        ProfileQuestionnaireOutputDTO response = profileService.checkIfQuestionnaireCompleted();
-        return ResponseEntity.status(HttpStatus.OK).body(response);
-    }
-
     // 2. GET /profiles/{ID} - Haal profiel op van een specifieke gebruiker
     @GetMapping("{id}")
     public ResponseEntity<ProfileOutputDTO> getUserProfileByID(@PathVariable Long id) {

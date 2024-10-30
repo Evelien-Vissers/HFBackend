@@ -36,9 +36,6 @@ public class User extends BaseEntity {
     @Column(name = "last_login")
     private LocalDateTime lastLogin;
 
-    @Column(name = "has_completed_questionnaire")
-    private Boolean hasCompletedQuestionnaire = false; //Default value = false.
-
     @Column(name = "enabled")
     private Boolean enabled = true; // Standaardwaarde voor nieuwe gebruikers
 
