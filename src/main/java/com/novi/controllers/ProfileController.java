@@ -30,7 +30,7 @@ public class ProfileController {
     }
 
     // 1. POST - /profiles/new - Maak een nieuw profiel aan
-    @PostMapping(value = "/new", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> createProfile(
             @RequestPart("profileData") ProfileInputDTO profileInputDTO,
             @RequestPart("profilePic") MultipartFile profilePic) {
@@ -74,8 +74,8 @@ public class ProfileController {
     }
 
 
-    // 5. PUT /profiles/{id}/update - Werk profiel van een specifieke gebruiker bij
-    @PutMapping("/{id}/update")
+    // 5. PUT - Werk profiel van een specifieke gebruiker bij
+    @PutMapping("/{id}")
     public ResponseEntity<ProfileOutputDTO> updateProfile(@PathVariable Long id,
                                                           @RequestBody ProfileInputDTO profileInputDTO) {
         ProfileOutputDTO updatedProfile = profileService.updateProfile(id, profileInputDTO);
@@ -86,7 +86,7 @@ public class ProfileController {
     }
 
     // 6. DELETE - Verwijder een profiel (zonder dat 'User' wordt verwijderd)
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProfile(@PathVariable Long id) {
         try {
         profileService.deleteProfile(id);

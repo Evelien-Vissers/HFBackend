@@ -10,6 +10,8 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    @Query("SELECT u FROM User u WHERE u.email = :email")
+            Optional<User> findUserWithoutRolesByEmail(@Param("email") String email);
     //Zoek een gebruiker op basis van e-mailadres
     Optional<User> findByEmail(String email);
 

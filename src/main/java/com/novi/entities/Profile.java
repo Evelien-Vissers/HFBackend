@@ -1,8 +1,7 @@
 package com.novi.entities;
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
-import java.time.YearMonth;
+
 
 
 @Entity
@@ -33,7 +32,7 @@ public class Profile extends BaseEntity {
     @Column(name = "connection_preference", nullable = false)
     private String connectionPreference;
 
-    @Column(name = "profile_pic_url", nullable = false)
+    @Column(name = "profile_pic_url")
     private String profilePicUrl;
 
     @Column(name = "healforce_name", nullable = false, unique = true)
