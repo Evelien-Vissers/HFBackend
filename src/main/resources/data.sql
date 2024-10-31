@@ -51,11 +51,11 @@ VALUES
     (2, 2),
     (2, 1);
 
-UPDATE profiles SET profile_user = (SELECT id FROM users WHERE email = 'john.doe@example.com') WHERE healforce_name = 'SkyWarrior88';
-UPDATE profiles SET profile_user = (SELECT id FROM users WHERE email = 'jane.smith@example.com') WHERE healforce_name = 'HeartFighter92';
-UPDATE profiles SET profile_user = (SELECT id FROM users WHERE email = 'emily.johnson@example.com') WHERE healforce_name = 'LionSurvivor85';
-UPDATE profiles SET profile_user = (SELECT id FROM users WHERE email = 'michael.williams@example.com') WHERE healforce_name = 'PhoenixHealer95';
-UPDATE profiles SET profile_user = (SELECT id FROM users WHERE email = 'david.brown@example.com') WHERE healforce_name = 'FireFighter83';
-UPDATE profiles SET profile_user = (SELECT id FROM users WHERE email = 'sarah.davis@example.com') WHERE healforce_name = 'OceanWarrior90';
-UPDATE profiles SET profile_user = (SELECT id FROM users WHERE email = 'james.miller@example.com') WHERE healforce_name = 'LotusSurvivor87';
-UPDATE profiles SET profile_user = (SELECT id FROM users WHERE email = 'sophia.wilson@example.com') WHERE healforce_name = 'MountainHealer93';
+UPDATE users SET profile_user = 1 WHERE email = 'john.doe@example.com';
+UPDATE users SET profile_user = 2 WHERE email = 'jane.smith@example.com';
+UPDATE users SET profile_user = 3 WHERE email = 'emily.johnson@example.com';
+UPDATE users SET profile_user = 4 WHERE email = 'michael.williams@example.com';
+UPDATE users SET profile_user = 5 WHERE email = 'david.brown@example.com';
+UPDATE users SET profile_user = 6 WHERE email = 'sarah.davis@example.com';
+UPDATE users SET profile_user = 7 WHERE email = 'james.miller@example.com';
+UPDATE users SET profile_user = 8 WHERE email = 'sophia.wilson@example.com';
