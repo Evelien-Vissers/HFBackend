@@ -4,15 +4,15 @@ public class PotentialMatches {
 
     private String healforceName;
     private String healthChallenge;
-    private String profilePic;
+    private String profilePicUrl;
     private String city;
     private String country;
 
     // Constructor
-    public PotentialMatches(String healforceName, String healthChallenge, String profilePic, String city, String country) {
+    public PotentialMatches(String healforceName, String healthChallenge, String profilePicUrl, String city, String country) {
         this.healforceName = healforceName;
         this.healthChallenge = healthChallenge;
-        this.profilePic = profilePic;
+        this.profilePicUrl = profilePicUrl;
         this.city = city;
         this.country = country;
     }
@@ -34,12 +34,12 @@ public class PotentialMatches {
         this.healthChallenge = healthChallenge;
     }
 
-    public String getProfilePic() {
-        return profilePic;
+    public String getProfilePicUrl() {
+        return profilePicUrl;
     }
 
-    public void setProfilePic(String profilePic) {
-        this.profilePic = profilePic;
+    public void setProfilePicUrl(String profilePicUrl) {
+        this.profilePicUrl = profilePicUrl;
     }
 
     public String getCity() {
@@ -62,7 +62,7 @@ public class PotentialMatches {
         return "PotentialMatchList{" +
                 "healforceName='" + healforceName + '\'' +
                 ", healthChallenge='" + healthChallenge + '\'' +
-                ", profilePic='" + profilePic + '\'' +
+                ", profilePicUrl='" + profilePicUrl + '\'' +
                 ", city='" + city + '\'' +
                 ", country='" + country + '\'' +
                 '}';

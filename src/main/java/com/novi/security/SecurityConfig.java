@@ -25,8 +25,10 @@ public class SecurityConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("*")
-                        .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS");
+                        .allowedOrigins("http://localhost:5173")
+                        .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
             }
         };
     }
@@ -47,6 +49,7 @@ public class SecurityConfig {
                         .requestMatchers("/public/**").permitAll()
                         .requestMatchers("/users/**").permitAll()
                         //Alleen ingelogde gebruikers kunnen hun profiel zien
+                        .requestMatchers("/questionnaire/**").hasRole("USER")
                         .requestMatchers("/profiles/**").hasRole("USER")
                         //Alleen ingelogde gebruikers met aangemaakt profiel kunnen matchen
                         .requestMatchers("/matching/**").hasRole("USER")

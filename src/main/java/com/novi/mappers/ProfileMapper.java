@@ -1,9 +1,15 @@
 package com.novi.mappers;
 
+import com.novi.dtos.PotentialMatchesOutputDTO;
 import com.novi.dtos.ProfileInputDTO;
 import com.novi.dtos.ProfileOutputDTO;
+import com.novi.entities.PotentialMatches;
 import com.novi.entities.Profile;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class ProfileMapper {
@@ -34,4 +40,5 @@ public class ProfileMapper {
         profile.setHealforceName(profileInputDTO.getHealforceName());
         return profile;
     }
+
 }

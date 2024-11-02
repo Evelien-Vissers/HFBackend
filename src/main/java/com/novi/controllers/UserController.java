@@ -75,7 +75,7 @@ public class UserController {
     }
 
     // 5. DELETE /users/{Id} - Verwijder een specifieke gebruiker
-    @DeleteMapping("/{Id}")
+    @DeleteMapping("/delete/{Id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long Id) {
         boolean isDeleted = userService.deleteUser(Id);
         if (isDeleted) {
