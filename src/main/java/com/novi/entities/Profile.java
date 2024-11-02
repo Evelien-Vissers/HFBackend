@@ -42,7 +42,6 @@ public class Profile extends BaseEntity {
 
 
     //Relaties
-    //One-To-One met 'User'
     @OneToOne(mappedBy = "profile")
     private User user;
 

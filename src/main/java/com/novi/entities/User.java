@@ -1,13 +1,11 @@
 package com.novi.entities;
 
 import jakarta.persistence.*;
-import org.springframework.cglib.core.Local;
-import org.springframework.data.jpa.repository.EntityGraph;
+
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 @Entity
@@ -44,7 +42,7 @@ public class User extends BaseEntity {
 
 
     // Dit is de owner van de relatie. De "mappedBy" geeft aan dat de Profile-entiteit niet de eigenaar van de relatie is en dat de kolom die de relatie beheert (de foreign key) in de User-entiteit zit
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name="profile_user", referencedColumnName = "id")
     private Profile profile;
 

@@ -40,7 +40,7 @@ public String getUsername() {
 }
 
 public User getUser() {
-   return this.user;
+        return user;
 }
 
 @Override
