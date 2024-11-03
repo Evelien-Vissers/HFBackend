@@ -27,12 +27,10 @@ public class Matching extends BaseEntity {
     @Column(name = "status_profile2")
     private Boolean statusProfile2;
 
-    //Geeft aan of er een volledige match is gemaakt
     @Column(name = "match_status")
     private Boolean matchStatus;
 
-    //Datum en tijd wanneer de match werd aangemaakt
-    @Column(name = "match_date", nullable = false)
+    @Column(name = "match_date", nullable = true)
     private LocalDateTime matchDate;
 
 

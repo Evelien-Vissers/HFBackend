@@ -1,6 +1,5 @@
 package com.novi.repositories;
 
-import com.novi.entities.MiniProfile;
 import com.novi.entities.PotentialMatches;
 import com.novi.entities.Profile;
 import com.novi.entities.User;

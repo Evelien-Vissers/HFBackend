@@ -1,5 +1,7 @@
 package com.novi.services;
 
+import com.novi.dtos.CurrentMatchesOutputDTO;
+import com.novi.entities.CurrentMatches;
 import com.novi.entities.Matching;
 import com.novi.entities.Profile;
 import com.novi.exceptions.ResourceNotFoundException;
@@ -10,9 +12,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
+
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -97,6 +101,16 @@ public class MatchingService {
         newMatch.setStatusProfile1(false); // Standaard false, totdat profile1 kiest
         newMatch.setStatusProfile2(false); //Standaard false, todat Profile 2 kiest
         return newMatch;
+    }
+
+    //7. Methode om lijst met huidige matches op te halen
+    public List<CurrentMatchesOutputDTO> getMyMatches() {
+        Profile currentProfile = getCurrentProfile();
+        List<CurrentMatches> currentMatches = matchingRepository.findMatchesByCurrentProfile(currentProfile.getId());
+
+        return currentMatches.stream()
+                .map(match -> new CurrentMatchesOutputDTO(match.getHealforceName(), match.getProfileId(), match.getEmail()))
+                .collect(Collectors.toList());
     }
 }
 

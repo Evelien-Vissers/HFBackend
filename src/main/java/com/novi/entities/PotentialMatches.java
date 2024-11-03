@@ -8,7 +8,6 @@ public class PotentialMatches {
     private String city;
     private String country;
 
-    // Constructor
     public PotentialMatches(String healforceName, String healthChallenge, String profilePicUrl, String city, String country) {
         this.healforceName = healforceName;
         this.healthChallenge = healthChallenge;
@@ -17,7 +16,6 @@ public class PotentialMatches {
         this.country = country;
     }
 
-    // Getters and Setters
     public String getHealforceName() {
         return healforceName;
     }
