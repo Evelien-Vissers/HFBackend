@@ -19,8 +19,8 @@ public class MatchingController {
         this.matchingService = matchingService;
     }
 
-    @PostMapping("/yes")
-        public ResponseEntity<String> handleYesPress(@RequestParam Long profile2Id) {
+    @PostMapping("/yes/{profile2Id}")
+        public ResponseEntity<String> handleYesPress(@PathVariable Long profile2Id) {
         boolean isMatched = matchingService.handleYesPress(profile2Id);
         if (isMatched) {
             return ResponseEntity.ok("Match created!");
@@ -29,9 +29,9 @@ public class MatchingController {
         }
     }
 
-    @PostMapping("/next")
-        public ResponseEntity<String> handleNextPress(@RequestParam Long profile2Id) {
-        matchingService.handleNoPress(profile2Id);
+    @PostMapping("/next/{profile2Id}")
+        public ResponseEntity<String> handleNextPress(@PathVariable Long profile2Id) {
+        matchingService.handleNextPress(profile2Id);
         return ResponseEntity.ok("Skipped to the next profile");
     }
 
