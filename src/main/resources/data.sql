@@ -14,16 +14,16 @@ VALUES
     ('Richard', 'Smith', 'admin.smith@example.com', '$2a$10$IuXDqN1RQhNFduPN1C0FQeJYRYgSBz/CyczoeEUQZ0qCqACabkLoS', NULL, NULL, '2024-10-10 14:15:30', NULL, NULL);
 
 -- Inserting test data for Profile
-INSERT INTO Profiles (date_of_birth, city, country, gender, health_challenge, diagnosis_date, healing_choice, connection_preference, profile_pic_url, healforce_name, has_completed_questionnaire)
+INSERT INTO Profiles (date_of_birth, city, country, gender, health_challenge, diagnosis_date, hospital, healing_choice, connection_preference, profile_pic_url, healforce_name, has_completed_questionnaire)
 VALUES
-    ('1988-04-15', 'Amsterdam', 'Netherlands', 'Male', 'Cancer', '2018-05', 'Conventional', 'Mix', 'albert-dera-ILip77SbmOE-unsplash.jpg', 'SkyWarrior88', true),
-    ('1992-07-23', 'Berlin', 'Germany', 'Female', 'Heart Disease', '2017-10', 'Alternative', 'Conventional', 'ayo-ogunseinde-6W4F62sN_yI-unsplash.jpg', 'HeartFighter92', true),
-    ('1985-11-11', 'New York', 'USA', 'Female', 'Diabetes', '2020-01', 'Mix', 'Alternative', 'freestocks-_vJvLne0TwI-unsplash.jpg', 'LionSurvivor85', true),
-    ('1995-02-02', 'Paris', 'France', 'Male', 'Asthma', '2019-03', 'Conventional', 'All Types', 'houcine-ncib-B4TjXnI0Y2c-unsplash.jpg', 'PhoenixHealer95', true),
-    ('1983-05-18', 'Madrid', 'Spain', 'Male', 'Cancer', '2015-07', 'Alternative', 'Mix', 'ludvig-wiese-d-MfHM-jHwc-unsplash.jpg', 'FireFighter83', true),
-    ('1990-09-25', 'Sydney', 'Australia', 'Female', 'Heart Disease', '2021-06', 'Mix', 'Conventional', 'nicolas-ladino-silva-9QDpFd0j5o0-unsplash.jpg', 'OceanWarrior90', true),
-    ('1987-01-10', 'Tokyo', 'Japan', 'Male', 'Diabetes', '2016-12', 'Conventional', 'Alternative', 'rachel-mcdermott-0fN7Fxv1eWA-unsplash.jpg', 'LotusSurvivor87', true),
-    ('1993-08-05', 'Cape Town', 'South Africa', 'Female', 'Asthma', '2020-11', 'Alternative', 'All Types', 'swapnil-dwivedi-N2IJ31xZ_ks-unsplash.jpg', 'MountainHealer93', true);
+    ('1988-04-15', 'Amsterdam', 'Netherlands', 'Male', 'Cancer', '2018-05', 'Amsterdam UMC', 'Conventional', 'Mix', 'http://localhost:8080/images/Male1.jpg', 'SkyWarrior88', true),
+    ('1992-07-23', 'Berlin', 'Germany', 'Female', 'Heart Disease', '2017-10', 'Vivantes Klinikum', 'Alternative', 'Conventional', 'http://localhost:8080/images/Female1.jpg', 'HeartFighter92', true),
+    ('1985-11-11', 'New York', 'USA', 'Female', 'Diabetes', '2020-01', 'NYU Langone Health', 'Mix', 'Alternative', 'http://localhost:8080/images/Female2.jpg', 'LionSurvivor85', true),
+    ('1995-02-02', 'Paris', 'France', 'Male', 'Asthma', '2019-03', 'Hôpital Saint-Louis', 'Conventional', 'All Types', 'http://localhost:8080/images/Male2.jpg', 'PhoenixHealer95', true),
+    ('1983-05-18', 'Madrid', 'Spain', 'Male', 'Cancer', '2015-07', 'Hospital Clínico San Carlos', 'Alternative', 'Mix', 'http://localhost:8080/images/Male3.jpg', 'FireFighter83', true),
+    ('1990-09-25', 'Sydney', 'Australia', 'Female', 'Heart Disease', '2021-06', 'Westmead Hospital', 'Mix', 'Conventional', 'http://localhost:8080/images/Female3.jpg', 'OceanWarrior90', true),
+    ('1987-01-10', 'Tokyo', 'Japan', 'Male', 'Diabetes', '2016-12', 'Tokyo Medical University Hospital', 'Conventional', 'Alternative', 'http://localhost:8080/images/Male4.jpg', 'LotusSurvivor87', true),
+    ('1993-08-05', 'Cape Town', 'South Africa', 'Female', 'Asthma', '2020-11', 'Tygerberg Hospital', 'Alternative', 'All Types', 'http://localhost:8080/images/Female4.jpg', 'MountainHealer93', true);
 
 -- Inserting test data for Matching
 INSERT INTO Matching (profile1, profile2, status_profile1, status_profile2, match_status, match_date)

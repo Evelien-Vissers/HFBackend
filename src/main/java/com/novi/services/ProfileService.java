@@ -62,8 +62,7 @@ public class ProfileService {
         profile.setUser(currentUser);
         currentUser.setProfile(profile);
         //Sla het profiel eerst op in de database zodat een ID gegenereerd wordt
-        profileRepository.save(profile);
-        userRepository.save(currentUser);
+        profile = profileRepository.save(profile);
         //Sla de profielfoto op met het gegenereerde profileID
         if (profilePic != null && !profilePic.isEmpty()) {
             String profilePicUrl = saveProfilePic(profilePic, profile.getId());
@@ -82,6 +81,9 @@ public class ProfileService {
         String fileName = profileId + fileExtension;
         Path filePath = uploadPath.resolve(fileName);
         Files.copy(profilePic.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+        String profilePicUrl = "/uploads/profile-pics/" + fileName;
+        System.out.println("Profile picture URL save as: " + profilePicUrl);
         return "/uploads/profile-pics/" + fileName;
     }
 

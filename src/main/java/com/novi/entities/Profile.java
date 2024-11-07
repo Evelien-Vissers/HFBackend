@@ -25,6 +25,9 @@ public class Profile extends BaseEntity {
     @Column(name = "diagnosis_date", nullable = false)
     private String diagnosisDate;
 
+    @Column(name = "hospital")
+    private String hospital;
+
     @Column(name = "healing_choice", nullable = false)
     private String healingChoice;
 
@@ -53,7 +56,7 @@ public class Profile extends BaseEntity {
 
     // Constructor with all fields
     public Profile(LocalDate dateOfBirth, String city, String country, String gender, String healthChallenge,
-                   String diagnosisDate, String healingChoice, String connectionPreference, String profilePicUrl, String healforceName, Boolean hasCompletedQuestionnaire) {
+                   String diagnosisDate, String hospital, String healingChoice, String connectionPreference, String profilePicUrl, String healforceName, Boolean hasCompletedQuestionnaire) {
         super();
         this.dateOfBirth = dateOfBirth;
         this.city = city;
@@ -61,6 +64,7 @@ public class Profile extends BaseEntity {
         this.gender = gender;
         this.healthChallenge = healthChallenge;
         this.diagnosisDate = diagnosisDate;
+        this.hospital = hospital;
         this.healingChoice = healingChoice;
         this.connectionPreference = connectionPreference;
         this.profilePicUrl = profilePicUrl;
@@ -114,6 +118,11 @@ public class Profile extends BaseEntity {
 
     public void setDiagnosisDate(String diagnosisDate) {
         this.diagnosisDate = diagnosisDate;
+    }
+
+    public String getHospital() {return hospital;}
+    public void setHospital(String hospital) {
+        this.hospital = hospital;
     }
 
     public String getHealingChoice() {

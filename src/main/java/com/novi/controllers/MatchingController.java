@@ -19,7 +19,7 @@ public class MatchingController {
         this.matchingService = matchingService;
     }
 
-    @PostMapping("/yes/{profile2Id}")
+    @PostMapping("/yes-press/{profile2Id}")
         public ResponseEntity<String> handleYesPress(@PathVariable Long profile2Id) {
         boolean isMatched = matchingService.handleYesPress(profile2Id);
         if (isMatched) {
@@ -29,7 +29,7 @@ public class MatchingController {
         }
     }
 
-    @PostMapping("/next/{profile2Id}")
+    @PostMapping("/next-press/{profile2Id}")
         public ResponseEntity<String> handleNextPress(@PathVariable Long profile2Id) {
         matchingService.handleNextPress(profile2Id);
         return ResponseEntity.ok("Skipped to the next profile");

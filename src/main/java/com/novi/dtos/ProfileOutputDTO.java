@@ -1,7 +1,6 @@
 package com.novi.dtos;
 
 import java.time.LocalDate;
-import java.time.YearMonth;
 
 public class ProfileOutputDTO {
 
@@ -11,9 +10,10 @@ public class ProfileOutputDTO {
     private String gender;
     private String healthChallenge;
     private String diagnosisDate;
+    private String hospital;
     private String healingChoice;
     private String connectionPreference;
-    private String profilePic;
+    private String profilePicUrl;
     private String healforceName;
     private boolean hasCompletedQuestionnaire;
 
@@ -21,16 +21,17 @@ public class ProfileOutputDTO {
     public ProfileOutputDTO() {
     }
 
-    public ProfileOutputDTO(LocalDate dateOfBirth, String city, String country, String gender, String healthChallenge, String diagnosisDate, String healingChoice, String connectionPreference, String profilePic, String healforceName, Boolean hasCompletedQuestionnaire) {
+    public ProfileOutputDTO(LocalDate dateOfBirth, String city, String country, String gender, String healthChallenge, String diagnosisDate, String hospital, String healingChoice, String connectionPreference, String profilePicUrl, String healforceName, Boolean hasCompletedQuestionnaire) {
         this.dateOfBirth = dateOfBirth;
         this.city = city;
         this.country = country;
         this.gender = gender;
         this.healthChallenge = healthChallenge;
         this.diagnosisDate = diagnosisDate;
+        this.hospital = hospital;
         this.healingChoice = healingChoice;
         this.connectionPreference = connectionPreference;
-        this.profilePic = profilePic;
+        this.profilePicUrl = profilePicUrl;
         this.healforceName = healforceName;
         this.hasCompletedQuestionnaire = hasCompletedQuestionnaire;
     }
@@ -81,6 +82,12 @@ public class ProfileOutputDTO {
     public void setDiagnosisDate(String diagnosisDate) {
         this.diagnosisDate = diagnosisDate;
     }
+    public String getHospital() {
+        return hospital;
+    }
+    public void setHospital(String hospital) {
+        this.hospital = hospital;
+    }
 
     public String getHealingChoice() {
         return healingChoice;
@@ -98,12 +105,12 @@ public class ProfileOutputDTO {
         this.connectionPreference = connectionPreference;
     }
 
-    public String getProfilePic() {
-        return profilePic;
+    public String getProfilePicUrl() {
+        return profilePicUrl;
     }
 
-    public void setProfilePic(String profilePic) {
-        this.profilePic = profilePic;
+    public void setProfilePicUrl(String profilePic) {
+        this.profilePicUrl = profilePic;
     }
 
     public String getHealforceName() {

@@ -14,6 +14,8 @@ public class UserMapper {
     // Map een User naar een UserOutputDTO
     public static UserOutputDTO toUserOutputDTO(User user) {
         UserOutputDTO dto = new UserOutputDTO();
+        dto.setUserId(user.getId());
+        dto.setProfileId(user.getProfile() != null ? user.getProfile().getId() : null);
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
         dto.setEmail(user.getEmail());

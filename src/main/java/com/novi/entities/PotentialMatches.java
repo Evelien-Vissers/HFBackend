@@ -4,13 +4,15 @@ public class PotentialMatches {
 
     private String healforceName;
     private String healthChallenge;
+    private String healingChoice;
     private String profilePicUrl;
     private String city;
     private String country;
 
-    public PotentialMatches(String healforceName, String healthChallenge, String profilePicUrl, String city, String country) {
+    public PotentialMatches(String healforceName, String healthChallenge, String healingChoice, String profilePicUrl, String city, String country) {
         this.healforceName = healforceName;
         this.healthChallenge = healthChallenge;
+        this.healingChoice = healingChoice;
         this.profilePicUrl = profilePicUrl;
         this.city = city;
         this.country = country;
@@ -30,6 +32,12 @@ public class PotentialMatches {
 
     public void setHealthChallenge(String healthChallenge) {
         this.healthChallenge = healthChallenge;
+    }
+    public String getHealingChoice() {
+        return healingChoice;
+    }
+    public void setHealingChoice(String healingChoice) {
+        this.healingChoice = healingChoice;
     }
 
     public String getProfilePicUrl() {

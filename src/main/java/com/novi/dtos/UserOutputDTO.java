@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 public class UserOutputDTO {
 
+    private Long userId;
+    private Long profileId;
     private String firstName;
     private String lastName;
     private String email;
@@ -17,7 +19,9 @@ public class UserOutputDTO {
     public UserOutputDTO() {
     }
 
-    public UserOutputDTO(String firstName, String lastName, String email, String role, LocalDate registrationDate, LocalDateTime lastLogin) {
+    public UserOutputDTO(Long userId, Long profileId, String firstName, String lastName, String email, String role, LocalDate registrationDate, LocalDateTime lastLogin) {
+        this.userId = userId;
+        this.profileId = profileId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -27,7 +31,22 @@ public class UserOutputDTO {
         this.AcceptedPrivacyStatementUserAgreement = false;
     }
 
-    // Getters and Setters
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getProfileId() {
+        return profileId;
+    }
+
+    public void setProfileId(Long profileId) {
+        this.profileId = profileId;
+    }
+
     public String getFirstName() {
         return firstName;
     }

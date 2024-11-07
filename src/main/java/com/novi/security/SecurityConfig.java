@@ -48,7 +48,7 @@ public class SecurityConfig {
                         .requestMatchers("/register").permitAll()
                         .requestMatchers("/public/**").permitAll()
                         .requestMatchers("/users/**").permitAll()
-                        //Alleen ingelogde gebruikers kunnen hun profiel zien
+                        .requestMatchers("./images/**").permitAll()
                         .requestMatchers("/questionnaire/**").hasRole("USER")
                         .requestMatchers("/profiles/**").hasRole("USER")
                         //Alleen ingelogde gebruikers met aangemaakt profiel kunnen matchen

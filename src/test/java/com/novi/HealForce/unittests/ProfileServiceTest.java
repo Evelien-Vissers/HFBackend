@@ -3,7 +3,6 @@ package com.novi.HealForce.unittests;
 import com.novi.dtos.PotentialMatchesOutputDTO;
 import com.novi.dtos.ProfileInputDTO;
 import com.novi.dtos.ProfileOutputDTO;
-import com.novi.entities.MiniProfile;
 import com.novi.entities.PotentialMatches;
 import com.novi.entities.Profile;
 import com.novi.entities.User;
@@ -147,34 +146,7 @@ class ProfileServiceTest {
         assertThrows(RuntimeException.class, () -> profileService.getCurrentUser());
     }
 
-    // 6. Test voor het ophalen van het MiniProfile - succes
-    @Test
-    void testGetMiniProfile_Success() {
-        // Arrange
-        MiniProfile miniProfile = new MiniProfile("TestName", "TestChallenge", null, "Amsterdam", "Netherlands");
 
-        when(profileRepository.findMiniProfileById(1L)).thenReturn(Optional.of(miniProfile));
-
-        // Act
-        Optional<MiniProfile> result = profileService.getMiniProfile(1L);
-
-        // Assert
-        assertTrue(result.isPresent());
-        assertEquals("TestName", result.get().getHealforceName());
-    }
-
-    // 7. Test voor het ophalen van het MiniProfile - niet gevonden
-    @Test
-    void testGetMiniProfile_NotFound() {
-        // Arrange
-        when(profileRepository.findMiniProfileById(1L)).thenReturn(Optional.empty());
-
-        // Act
-        Optional<MiniProfile> result = profileService.getMiniProfile(1L);
-
-        // Assert
-        assertFalse(result.isPresent());
-    }
 
     // 8. Test voor het vinden van potentiële matches
     @Test
@@ -184,7 +156,7 @@ class ProfileServiceTest {
         currentProfile.setConnectionPreference("AllTypes");
 
         List<PotentialMatches> matches = new ArrayList<>();
-        matches.add(new PotentialMatches("John", "Cancer", null, "Amsterdam", "Netherlands"));
+        matches.add(new PotentialMatches("John", "Cancer", "Conventional", "Amsterdam", "Netherlands"));
 
         when(profileRepository.findPotentialMatches(anyString(), anyLong())).thenReturn(matches);
         when(profileRepository.findByUser(any(User.class))).thenReturn(Optional.of(currentProfile));
