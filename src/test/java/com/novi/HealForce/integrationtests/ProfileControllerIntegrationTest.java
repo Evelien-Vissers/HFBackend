@@ -1,61 +1,64 @@
 package com.novi.HealForce.integrationtests;
 
 import com.novi.dtos.ProfileInputDTO;
+import com.novi.dtos.ProfileOutputDTO;
 import com.novi.entities.Profile;
 import com.novi.repositories.ProfileRepository;
+import com.novi.repositories.UserRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import java.time.LocalDate;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Transactional
-
-class ProfileControllerIntegrationTest {
+@SpringBootTest
+@ActiveProfiles("test")
+@AutoConfigureMockMvc
+@Sql(scripts = "/data.sql")
+public class ProfileControllerIntegrationTest {
 
     @Autowired
-    private WebTestClient webTestClient;
+    private MockMvc mockMvc;
 
     @Autowired
     private ProfileRepository profileRepository;
-    private ProfileInputDTO profileInputDTO;
+
+    private Profile testProfile;
 
     @BeforeEach
-    void setup() {
-        // Arrange: Stel de inputgegevens voor het profiel in
-        profileInputDTO = new ProfileInputDTO();
-        profileInputDTO.setHealforceName("TestUser");
-        profileInputDTO.setHealthChallenge("Cancer");
-        profileInputDTO.setCity("Amsterdam");
-        profileInputDTO.setCountry("Netherlands");
+    void setUp() {
+        testProfile = profileRepository.findById(1L).orElseThrow(() ->
+                new RuntimeException("Test profile not found in setup"));
+    }
+
+    @AfterEach
+    void tearDown() {
+        profileRepository.deleteAll();
     }
 
     @Test
-    void testCreateProfile() {
-        // Act: Voer een POST-aanroep uit om een nieuw profiel aan te maken
-        webTestClient.post()
-                .uri("/profiles/new")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(profileInputDTO)
-                .exchange()
-                .expectStatus().isCreated()  // Controleer of de status 201 Created is
-                .expectBody(String.class)
-                .value(response -> assertThat(response).isEqualTo("Heal Force Profile Successfully Created!"));
-
-        // Assert: Controleer of het profiel correct is opgeslagen in de database
-        Profile createdProfile = profileRepository.findAll().get(0);
-        assertThat(createdProfile.getHealforceName()).isEqualTo("TestUser");
-        assertThat(createdProfile.getHealthChallenge()).isEqualTo("Cancer");
-        assertThat(createdProfile.getCity()).isEqualTo("Amsterdam");
-        assertThat(createdProfile.getCountry()).isEqualTo("Netherlands");
+    void testGetUserProfileByID() throws Exception {
+        // Perform a GET request to retrieve the profile by ID
+        mockMvc.perform(get("/profiles/" + testProfile.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.healforceName").value("TestHealer1"))
+                .andExpect(jsonPath("$.city").value("TestCity"))
+                .andExpect(jsonPath("$.country").value("TestCountry"))
+                .andExpect(jsonPath("$.healthChallenge").value("TestDisease"))
+                .andExpect(jsonPath("$.diagnosisDate").value("2020-01"));
     }
 }
-
-
-

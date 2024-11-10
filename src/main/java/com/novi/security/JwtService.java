@@ -123,8 +123,4 @@ public class JwtService {
         }
     }
 
-    public String extractOrganisation(String token) {
-        final Claims claims = extractAllClaims(token);
-        return claims.get(ORGANISATION, String.class);
-    }
 }

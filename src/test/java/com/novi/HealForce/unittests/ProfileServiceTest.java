@@ -3,14 +3,12 @@ package com.novi.HealForce.unittests;
 import com.novi.dtos.PotentialMatchesOutputDTO;
 import com.novi.dtos.ProfileInputDTO;
 import com.novi.dtos.ProfileOutputDTO;
-import com.novi.entities.MiniProfile;
 import com.novi.entities.PotentialMatches;
 import com.novi.entities.Profile;
 import com.novi.entities.User;
 import com.novi.repositories.ProfileRepository;
 import com.novi.repositories.UserRepository;
 import com.novi.services.ProfileService;
-import com.novi.mappers.ProfileMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -18,83 +16,101 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class ProfileServiceTest {
 
+    @Mock
+    private ProfileRepository profileRepository;
+    @Mock
+    private UserRepository userRepository;
+    @Mock
+    private Authentication authentication;
+    @Mock
+    private SecurityContext securityContext;
+    @Mock
+    private UserDetails userDetails;
+
     @InjectMocks
     private ProfileService profileService;
 
-    @Mock
-    private ProfileRepository profileRepository;
-
-    @Mock
-    private UserRepository userRepository;
-
-    @Mock
-    private ProfileMapper profileMapper;
-
-    @Mock
-    private Authentication authentication;
-
-    @Mock
-    private UserDetails userDetails;
+    private User user;
+    private Profile profile;
+    private ProfileInputDTO profileInputDTO;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        profileService = new ProfileService(profileRepository, userRepository);
+
+        user = new User();
+        user.setEmail("test@example.com");
+
+        profile = new Profile();
+        profile.setId(1L);
+        profile.setUser(user);
+
+        profileInputDTO = new ProfileInputDTO();
+
+        // Mock security context for getting the current user
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getPrincipal()).thenReturn(userDetails);
+        when(userDetails.getUsername()).thenReturn("test@example.com");
+        SecurityContextHolder.setContext(securityContext);
+
+        when(userRepository.findByEmail("test@example.com")).thenReturn(Optional.of(user));
     }
 
-    // 1. Test voor het opslaan van een profiel
     @Test
-    void testSaveProfile_Success() throws IOException {
-        // Arrange
-        ProfileInputDTO profileInputDTO = new ProfileInputDTO();
-        profileInputDTO.setCity("Amsterdam");
-
-        User currentUser = new User();
-        Profile profile = new Profile();
-
-        when(profileMapper.toEntity(profileInputDTO)).thenReturn(new Profile());
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(currentUser));
-
-        // Simuleer de ingelogde gebruiker
-        when(SecurityContextHolder.getContext().getAuthentication()).thenReturn(authentication);
-        when(authentication.getPrincipal()).thenReturn(userDetails);
-        when(userDetails.getUsername()).thenReturn("johndoe@example.com");
-
-        MockMultipartFile mockProfilePic = new MockMultipartFile(
-                "profilePic",
-                "profile-pic.jpg",
-                "image/jpeg",
-                "test image content".getBytes()
-        );
+    void getCurrentUser_ShouldReturnCurrentUser() {
         // Act
-        profileService.saveProfile(profileInputDTO, mockProfilePic);
+        User currentUser = profileService.getCurrentUser();
 
         // Assert
-        verify(profileRepository, times(1)).save(any(Profile.class));
+        assertEquals("test@example.com", currentUser.getEmail());
     }
 
-    // 2. Test voor het ophalen van een profiel op ID - succes
     @Test
-    void testGetUserProfileByProfileID_Success() {
+    void saveProfile_ShouldSaveProfile() throws IOException {
         // Arrange
-        Profile profile = new Profile();
-        profile.setCity("Amsterdam");
+        MockMultipartFile profilePic = new MockMultipartFile("profilePic", "test.jpg", "image/jpeg", "Test Image Content".getBytes());
+        when(profileRepository.save(any(Profile.class))).thenReturn(profile);
 
+        // Act
+        profileService.saveProfile(profileInputDTO, profilePic);
+
+        // Assert
+        verify(profileRepository, times(2)).save(any(Profile.class)); // Saved twice: once for profile, once for profilePic URL
+    }
+
+    @Test
+    void saveProfile_ShouldNotSaveProfilePicWhenFileIsEmpty() throws IOException {
+        // Arrange
+        MockMultipartFile profilePic = new MockMultipartFile("profilePic", "", "image/jpeg", new byte[0]);
+        when(profileRepository.save(any(Profile.class))).thenReturn(profile);
+
+        // Act
+        profileService.saveProfile(profileInputDTO, profilePic);
+
+        // Assert
+        verify(profileRepository, times(1)).save(any(Profile.class)); // Saved once without profilePic
+    }
+
+    @Test
+    void getUserProfileByProfileID_ShouldReturnProfileOutputDTO() {
+        // Arrange
         when(profileRepository.findById(1L)).thenReturn(Optional.of(profile));
-        when(profileMapper.toProfileOutputDTO(profile)).thenReturn(new ProfileOutputDTO());
 
         // Act
         ProfileOutputDTO result = profileService.getUserProfileByProfileID(1L);
@@ -104,142 +120,47 @@ class ProfileServiceTest {
         verify(profileRepository, times(1)).findById(1L);
     }
 
-    // 3. Test voor het ophalen van een profiel op ID - niet gevonden
     @Test
-    void testGetUserProfileByProfileID_NotFound() {
+    void getUserProfileByProfileID_ShouldThrowExceptionWhenProfileNotFound() {
         // Arrange
         when(profileRepository.findById(1L)).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(RuntimeException.class, () -> profileService.getUserProfileByProfileID(1L));
+        Exception exception = assertThrows(RuntimeException.class, () -> profileService.getUserProfileByProfileID(1L));
+        assertEquals("Profile not found", exception.getMessage());
     }
 
-    // 4. Test voor het ophalen van de huidige ingelogde gebruiker - succes
     @Test
-    void testGetCurrentUser_Success() {
+    void findPotentialMatches_ShouldReturnPotentialMatches() {
         // Arrange
-        User user = new User();
-        user.setEmail("johndoe@example.com");
+        profile.setConnectionPreference("Mix");
+        when(profileRepository.findByUser(user)).thenReturn(Optional.of(profile));
 
-        when(userRepository.findByEmail("johndoe@example.com")).thenReturn(Optional.of(user));
-        when(SecurityContextHolder.getContext().getAuthentication()).thenReturn(authentication);
-        when(authentication.getPrincipal()).thenReturn(userDetails);
-        when(userDetails.getUsername()).thenReturn("johndoe@example.com");
-
-        // Act
-        User currentUser = profileService.getCurrentUser();
-
-        // Assert
-        assertNotNull(currentUser);
-        assertEquals("johndoe@example.com", currentUser.getEmail());
-    }
-
-    // 5. Test voor het ophalen van de huidige ingelogde gebruiker - niet gevonden
-    @Test
-    void testGetCurrentUser_NotFound() {
-        // Arrange
-        when(SecurityContextHolder.getContext().getAuthentication()).thenReturn(authentication);
-        when(authentication.getPrincipal()).thenReturn(userDetails);
-        when(userDetails.getUsername()).thenReturn("johndoe@example.com");
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
-
-        // Act & Assert
-        assertThrows(RuntimeException.class, () -> profileService.getCurrentUser());
-    }
-
-    // 6. Test voor het ophalen van het MiniProfile - succes
-    @Test
-    void testGetMiniProfile_Success() {
-        // Arrange
-        MiniProfile miniProfile = new MiniProfile("TestName", "TestChallenge", null, "Amsterdam", "Netherlands");
-
-        when(profileRepository.findMiniProfileById(1L)).thenReturn(Optional.of(miniProfile));
-
-        // Act
-        Optional<MiniProfile> result = profileService.getMiniProfile(1L);
-
-        // Assert
-        assertTrue(result.isPresent());
-        assertEquals("TestName", result.get().getHealforceName());
-    }
-
-    // 7. Test voor het ophalen van het MiniProfile - niet gevonden
-    @Test
-    void testGetMiniProfile_NotFound() {
-        // Arrange
-        when(profileRepository.findMiniProfileById(1L)).thenReturn(Optional.empty());
-
-        // Act
-        Optional<MiniProfile> result = profileService.getMiniProfile(1L);
-
-        // Assert
-        assertFalse(result.isPresent());
-    }
-
-    // 8. Test voor het vinden van potentiële matches
-    @Test
-    void testFindPotentialMatches_Success() {
-        // Arrange
-        Profile currentProfile = new Profile();
-        currentProfile.setConnectionPreference("AllTypes");
-
-        List<PotentialMatches> matches = new ArrayList<>();
-        matches.add(new PotentialMatches("John", "Cancer", null, "Amsterdam", "Netherlands"));
-
-        when(profileRepository.findPotentialMatches(anyString(), anyLong())).thenReturn(matches);
-        when(profileRepository.findByUser(any(User.class))).thenReturn(Optional.of(currentProfile));
-
-        // Simuleer de ingelogde gebruiker
-        when(SecurityContextHolder.getContext().getAuthentication()).thenReturn(authentication);
-        when(authentication.getPrincipal()).thenReturn(userDetails);
-        when(userDetails.getUsername()).thenReturn("johndoe@example.com");
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(new User()));
+        PotentialMatches match = new PotentialMatches(2L, "MatchName", "HealthChallenge", "Mix", "/images/test.jpg", "City", "Country");
+        when(profileRepository.findPotentialMatches("Mix", 1L)).thenReturn(Arrays.asList(match));
 
         // Act
         List<PotentialMatchesOutputDTO> result = profileService.findPotentialMatches();
 
         // Assert
+        assertFalse(result.isEmpty());
         assertEquals(1, result.size());
-        assertEquals("John", result.get(0).getHealforceName());
+        assertEquals("MatchName", result.get(0).getHealforceName());
     }
 
-    // 9. Test voor het updaten van een profiel - succes
     @Test
-    void testUpdateProfile_Success() {
+    void findPotentialMatches_ShouldThrowExceptionWhenUserHasNoProfile() {
         // Arrange
-        Profile profile = new Profile();
-        profile.setId(1L);
-
-        ProfileInputDTO inputDTO = new ProfileInputDTO();
-        inputDTO.setCity("Amsterdam");
-
-        when(profileRepository.findById(1L)).thenReturn(Optional.of(profile));
-
-        // Act
-        profileService.updateProfile(1L, inputDTO);
-
-        // Assert
-        verify(profileRepository, times(1)).save(profile);
-    }
-
-    // 10. Test voor het updaten van een profiel - niet gevonden
-    @Test
-    void testUpdateProfile_NotFound() {
-        // Arrange
-        ProfileInputDTO inputDTO = new ProfileInputDTO();
-        when(profileRepository.findById(1L)).thenReturn(Optional.empty());
+        when(profileRepository.findByUser(user)).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(RuntimeException.class, () -> profileService.updateProfile(1L, inputDTO));
+        Exception exception = assertThrows(IllegalStateException.class, () -> profileService.findPotentialMatches());
+        assertEquals("User has no profile. Please complete the questionnaire first.", exception.getMessage());
     }
 
-    // 11. Test voor het verwijderen van een profiel - succes
     @Test
-    void testDeleteProfile_Success() {
+    void deleteProfile_ShouldDeleteProfile() {
         // Arrange
-        Profile profile = new Profile();
-        profile.setId(1L);
-
         when(profileRepository.findById(1L)).thenReturn(Optional.of(profile));
 
         // Act
@@ -249,40 +170,25 @@ class ProfileServiceTest {
         verify(profileRepository, times(1)).delete(profile);
     }
 
-    // 12. Test voor het verwijderen van een profiel - niet gevonden
     @Test
-    void testDeleteProfile_NotFound() {
+    void deleteProfile_ShouldThrowExceptionWhenProfileNotFound() {
         // Arrange
         when(profileRepository.findById(1L)).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(RuntimeException.class, () -> profileService.deleteProfile(1L));
+        Exception exception = assertThrows(RuntimeException.class, () -> profileService.deleteProfile(1L));
+        assertEquals("Profile not found", exception.getMessage());
     }
 
-    // 13. Test voor het ophalen van profileID via email
     @Test
-    void testGetProfileIdByEmail_Success() {
+    void saveProfilePic_ShouldReturnProfilePicUrl() throws IOException {
         // Arrange
-        Profile profile = new Profile();
-        profile.setId(1L);
-
-        when(profileRepository.findByEmail("johndoe@example.com")).thenReturn(Optional.of(profile));
+        MockMultipartFile profilePic = new MockMultipartFile("profilePic", "test.jpg", "image/jpeg", "Test Image Content".getBytes());
 
         // Act
-        Long profileId = profileService.getProfileIdByEmail("johndoe@example.com");
+        String result = profileService.saveProfilePic(profilePic, 1L);
 
         // Assert
-        assertEquals(1L, profileId);
-    }
-
-    // 14. Test voor het ophalen van profileID via email - niet gevonden
-    @Test
-    void testGetProfileIdByEmail_NotFound() {
-        // Arrange
-        when(profileRepository.findByEmail("johndoe@example.com")).thenReturn(Optional.empty());
-
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> profileService.getProfileIdByEmail("johndoe@example.com"));
+        assertEquals("/images/1.jpg", result);
     }
 }
-

@@ -1,7 +1,6 @@
 package com.novi.dtos;
 
 import java.time.LocalDate;
-import java.time.YearMonth;
 
 public class ProfileInputDTO {
 
@@ -11,29 +10,31 @@ public class ProfileInputDTO {
     private String gender;
     private String healthChallenge;
     private String diagnosisDate;
+    private String hospital;
     private String healingChoice;
     private String connectionPreference;
     private String healforceName;
     private Boolean hasCompletedQuestionnaire;
 
-    // Constructors
+
     public ProfileInputDTO() {
     }
 
-    public ProfileInputDTO(LocalDate dateOfBirth, String city, String country, String gender, String healthChallenge, String diagnosisDate, String healingChoice, String connectionPreference, String healforceName, Boolean hasCompletedQuestionnaire) {
+    public ProfileInputDTO(LocalDate dateOfBirth, String city, String country, String gender, String healthChallenge, String diagnosisDate, String hospital, String healingChoice, String connectionPreference, String healforceName, Boolean hasCompletedQuestionnaire) {
         this.dateOfBirth = dateOfBirth;
         this.city = city;
         this.country = country;
         this.gender = gender;
         this.healthChallenge = healthChallenge;
         this.diagnosisDate = diagnosisDate;
+        this.hospital = hospital;
         this.healingChoice = healingChoice;
         this.connectionPreference = connectionPreference;
         this.healforceName = healforceName;
         this.hasCompletedQuestionnaire = hasCompletedQuestionnaire;
     }
 
-    // Getters and Setters
+
     public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
@@ -77,6 +78,13 @@ public class ProfileInputDTO {
 
     public void setDiagnosisDate(String diagnosisDate) {
         this.diagnosisDate = diagnosisDate;
+    }
+
+    public String getHospital() {
+        return hospital;
+    }
+    public void setHospital(String hospital) {
+        this.hospital = hospital;
     }
 
     public String getHealingChoice() {

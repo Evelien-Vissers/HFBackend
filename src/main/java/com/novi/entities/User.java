@@ -35,13 +35,11 @@ public class User extends BaseEntity {
     private LocalDateTime lastLogin;
 
     @Column(name = "enabled")
-    private Boolean enabled = true; // Standaardwaarde voor nieuwe gebruikers
+    private Boolean enabled = true;
 
     @Column(nullable = true, length = 600)
     private String question;
 
-
-    // Dit is de owner van de relatie. De "mappedBy" geeft aan dat de Profile-entiteit niet de eigenaar van de relatie is en dat de kolom die de relatie beheert (de foreign key) in de User-entiteit zit
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name="profile_user", referencedColumnName = "id")
     private Profile profile;
@@ -55,14 +53,13 @@ public class User extends BaseEntity {
 
     private Set<Role> roles = new HashSet<>();
 
-    //Constructors
-    //No-arg constructor (verplicht voor JPA)
+
     public User() {
         super();
     }
 
     public User(String firstName, String lastName, String email, String password, Boolean acceptedPrivacyStatementUserAgreement) {
-        super(); // Roept de BaseEntity constructor
+        super();
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -74,7 +71,7 @@ public class User extends BaseEntity {
         this.question = null;
     }
 
-    // Getters and Setters
+
 
     public String getFirstName() {
         return firstName;

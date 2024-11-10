@@ -1,17 +1,15 @@
 package com.novi.controllers;
 
+import com.novi.dtos.CurrentMatchesOutputDTO;
 import com.novi.services.MatchingService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+
 
 @RestController
-@RequestMapping("/matching")
+@RequestMapping("/match")
 
 public class MatchingController {
 
@@ -21,39 +19,28 @@ public class MatchingController {
         this.matchingService = matchingService;
     }
 
-    // 1. POST - Endpoint om een "Yes" of "Next" van een gebruiker vast te leggen voor een ander profiel
-    @PostMapping("/choose")
-        public ResponseEntity<Map<String, Object>> handleMatchAction(@RequestParam Long profile2Id,
-                                                                     @RequestParam String action) {
-        Map<String, Object> response = new HashMap<>();
+    @PostMapping("/yes-press/{profile2Id}")
+        public ResponseEntity<String> handleYesPress(@PathVariable Long profile2Id) {
+        boolean isMatched = matchingService.handleYesPress(profile2Id);
+        if (isMatched) {
+            return ResponseEntity.ok("Match created!");
+        } else {
+            return ResponseEntity.ok("Waiting for the other user to respond with 'Yes'.");
+        }
+    }
 
-                // Controleer of de gebruiker "Yes" of "No" heeft gekozen
-                if ("yes".equalsIgnoreCase(action)) {
-                    // Behandel de "Yes" keuze
-                    boolean isMatchCreated = matchingService.handleYesPress(profile2Id);
-                    if (isMatchCreated) {
-                        // Er is een match gemaakt tussen beide gebruikers
-                        response.put("message", "A match is created!");
-                        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    @PostMapping("/next-press/{profile2Id}")
+        public ResponseEntity<String> handleNextPress(@PathVariable Long profile2Id) {
+        matchingService.handleNextPress(profile2Id);
+        return ResponseEntity.ok("Skipped to the next profile");
+    }
 
-                    } else {
-                        // Alleen de status is bijgewerkt, maar nog geen match
-                        response.put("message", "Your interest has been recorded. Waiting for the other user to accept.");
-                        return ResponseEntity.status(HttpStatus.OK).body(response);
-                    }
-                } else if ("Next".equalsIgnoreCase(action)) {
-                    // Behandel de "Next" keuze
-                   matchingService.handleNoPress(profile2Id);
-                    // Geef een reactie terug dat de "Next" is geregistreerd
-                    response.put("message", "You have chosen 'Next' for this match. This match will not be pursued further.");
-                    return ResponseEntity.status(HttpStatus.OK).body(response);
-                } else {
-                    // Ongeldige actie
-                    response.put("message", "Invalid action. Please choose either 'yes' or 'no'.");
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-                }
-
-}}
+    @GetMapping("/my-matches")
+    public ResponseEntity<List<CurrentMatchesOutputDTO>> showMyMatches() {
+        List<CurrentMatchesOutputDTO> matches = matchingService.getMyMatches();
+        return ResponseEntity.ok(matches);
+    }
+}
 
 
 

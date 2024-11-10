@@ -43,17 +43,15 @@ public class SecurityConfig {
         http
                 .httpBasic(hp -> hp.disable())
                 .authorizeHttpRequests(auth -> auth
-                        //Openbare routes
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/register").permitAll()
                         .requestMatchers("/public/**").permitAll()
                         .requestMatchers("/users/**").permitAll()
-                        //Alleen ingelogde gebruikers kunnen hun profiel zien
+                        .requestMatchers("/images/**").permitAll()
+                        .requestMatchers("/uploads/profile-pics/**").permitAll()
                         .requestMatchers("/questionnaire/**").hasRole("USER")
                         .requestMatchers("/profiles/**").hasRole("USER")
-                        //Alleen ingelogde gebruikers met aangemaakt profiel kunnen matchen
-                        .requestMatchers("/matching/**").hasRole("USER")
-                        //Alleen admins kunnen admin pagina's zien
+                        .requestMatchers("/match/**").hasRole("USER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

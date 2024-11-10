@@ -20,7 +20,6 @@ public class Role extends BaseEntity {
     @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
     private Set<User> users = new HashSet<>();
 
-    //Constructors
     public Role() {
         super();
     }
@@ -61,7 +60,7 @@ public class Role extends BaseEntity {
         this.users = users;
     }
 
-    //Voeg een gebruiker toe aan deze rol
+
     public void addUser(User user) {
         this.users.add(user);
         user.getRoles().add(this);

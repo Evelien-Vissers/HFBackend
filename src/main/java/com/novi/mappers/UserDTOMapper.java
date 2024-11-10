@@ -1,15 +1,11 @@
 package com.novi.mappers;
 
-//Deze mapper dient voor User Security
-
-
 import com.novi.dtos.UserRequestDTO;
 import com.novi.entities.User;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserDTOMapper {
-
 
 
     public User mapToModel(UserRequestDTO userDTO) {
