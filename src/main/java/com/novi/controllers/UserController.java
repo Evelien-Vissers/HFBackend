@@ -5,14 +5,12 @@ import com.novi.helpers.UrlHelper;
 import com.novi.mappers.UserDTOMapper;
 import com.novi.entities.User;
 import com.novi.exceptions.ResourceNotFoundException;
-import com.novi.exceptions.UnauthorizedException;
 import com.novi.security.ApiUserDetailsService;
 import com.novi.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +19,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 
-//UserController richt zich alleen op het beheren van gebruikersinformatie
 public class UserController {
 
     private final UserService userService;
@@ -37,7 +34,6 @@ public class UserController {
         this.request = request;
     }
 
-    // 1. POST - /users/register | Registreer een nieuwe gebruiker
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody UserInputDTO userInputDTO) {
         userService.registerUser(userInputDTO);
@@ -45,7 +41,6 @@ public class UserController {
     }
 
 
-    // 2. GET /users/{Id} - Haal user-informatie op van een specifieke gebruiker
     @GetMapping("/{Id}")
     public ResponseEntity<UserOutputDTO> getUserById(@PathVariable Long Id) {
         UserOutputDTO userDTO = userService.getUserById(Id);
@@ -56,7 +51,7 @@ public class UserController {
         }
     }
 
-    // 3. PUT /users/{Id} - Werk informatie van een specifieke gebruiker bij
+
     @PutMapping("/{Id}")
     public ResponseEntity<UserOutputDTO> updateUser(@PathVariable Long Id,
                                                     @RequestBody UserInputDTO userDTO) {
@@ -68,14 +63,12 @@ public class UserController {
         }
     }
 
-    // 4. GET /getall - Haal een lijst op van alle gebruikers in de applicatie
     @GetMapping("/getall")
     public ResponseEntity<List<UserOutputDTO>> getAllUsers() {
         List<UserOutputDTO> users = userService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    // 5. DELETE /users/{Id} - Verwijder een specifieke gebruiker
     @DeleteMapping("/delete/{Id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long Id) {
         boolean isDeleted = userService.deleteUser(Id);
@@ -87,21 +80,17 @@ public class UserController {
         }
     }
 
-    // 6. CONTACT /users/contact | Gebruiker verstuurt bericht via contactformulier
     @PostMapping("/contact")
     public ResponseEntity<String> submitContactForm(@RequestBody ContactFormDTO contactFormDTO) {
         userService.processContactForm(contactFormDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body("Contact form submitted");
     }
 
-    // SECURITY USERCONTROLLERS
-
-    //7.
     @PostMapping("/create")
     public ResponseEntity<?> CreateUser(@RequestBody @Valid UserRequestDTO userDTO) {
         User user = userDTOMapper.mapToModel(userDTO);
         user.setEnabled(true);
-        //Creeer gebruiker met standaardrollen
+
         if(!apiUserDetailService.createUserWithRoles(user, defaultRoles)) {
             return ResponseEntity.badRequest().build();
         }

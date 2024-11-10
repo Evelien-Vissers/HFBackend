@@ -1,7 +1,6 @@
 package com.novi.dtos;
 
 import java.time.LocalDate;
-import java.time.YearMonth;
 
 public class ProfileInputDTO {
 
@@ -17,7 +16,7 @@ public class ProfileInputDTO {
     private String healforceName;
     private Boolean hasCompletedQuestionnaire;
 
-    // Constructors
+
     public ProfileInputDTO() {
     }
 
@@ -35,7 +34,7 @@ public class ProfileInputDTO {
         this.hasCompletedQuestionnaire = hasCompletedQuestionnaire;
     }
 
-    // Getters and Setters
+
     public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }

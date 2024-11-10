@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -62,7 +61,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private void setAuthentication(String username, List<GrantedAuthority> roles,
                                    HttpServletRequest request, String jwt) {
-        //Haal het UserDetails-object op via de userDetailService
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
         UsernamePasswordAuthenticationToken authenticationToken =

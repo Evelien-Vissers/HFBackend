@@ -40,7 +40,6 @@ public class MatchingController {
         List<CurrentMatchesOutputDTO> matches = matchingService.getMyMatches();
         return ResponseEntity.ok(matches);
     }
-
 }
 
 

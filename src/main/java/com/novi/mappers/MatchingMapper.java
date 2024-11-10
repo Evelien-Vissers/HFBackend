@@ -10,9 +10,9 @@ import java.util.stream.Collectors;
 @Component
 public class MatchingMapper {
 
-    // Map een PotentialMatchList naar PotentialMatchOutputDTO
     public static PotentialMatchesOutputDTO toDTO(PotentialMatches potentialMatch) {
         return new PotentialMatchesOutputDTO(
+                potentialMatch.getId(),
                 potentialMatch.getHealforceName(),
                 potentialMatch.getHealthChallenge(),
                 potentialMatch.getHealingChoice(),
@@ -22,10 +22,9 @@ public class MatchingMapper {
         );
     }
 
-    // Map een lijst van PotentialMatches naar een lijst DTO's
     public static List<PotentialMatchesOutputDTO> toDTOList(List<PotentialMatches> potentialMatchesList) {
         return potentialMatchesList.stream()
-                .map(MatchingMapper::toDTO)  // Voor elk item in de lijst, gebruik de toDTO-methode
+                .map(MatchingMapper::toDTO)
                 .collect(Collectors.toList());
     }
 }

@@ -4,10 +4,12 @@ import com.novi.dtos.ContactFormDTO;
 import com.novi.dtos.UserFirstNameOutputDTO;
 import com.novi.dtos.UserInputDTO;
 import com.novi.dtos.UserOutputDTO;
+import com.novi.entities.Role;
 import com.novi.entities.User;
 import com.novi.entities.Profile;
 import com.novi.exceptions.ResourceNotFoundException;
 import com.novi.mappers.UserMapper;
+import com.novi.repositories.RoleRepository;
 import com.novi.repositories.UserRepository;
 import com.novi.repositories.ProfileRepository;
 import jakarta.transaction.Transactional;
@@ -19,9 +21,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -29,51 +31,49 @@ public class UserService {
     private final UserRepository userRepository;
     private final ProfileRepository profileRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, ProfileRepository profileRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, ProfileRepository profileRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.profileRepository = profileRepository;
         this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
     }
 
-    // 1a. Registreer een nieuwe gebruiker
     @Transactional
     public void registerUser(UserInputDTO userInputDTO) {
         User user = UserMapper.toUser(userInputDTO);
-
-        //Standaardwaarden instellen
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setAcceptedPrivacyStatementUserAgreement(false);
         user.setRegistrationDate(LocalDate.now());
 
-        //Sla de gebruiker op
+        List<Role> roles = roleRepository.findByRoleNameIn(Collections.singletonList("ROLE_USER"));
+        if (roles.isEmpty()) {
+            throw new RuntimeException("Error: Role 'ROLE_USER' not found");
+        }
+
+        Role userRole = roles.get(0);
+        user.setRoles(Collections.singleton(userRole));
         userRepository.save(user);
     }
 
-    // 1b. Logica voor authenticatie
     public boolean authenticate(String email, String password) {
         Optional<User> user = userRepository.findByEmail(email);
         return user.isPresent() && user.get().getPassword().equals(passwordEncoder.encode(password));
     }
 
-    //2. Haal alle gebruikers op uit de database
     public List<UserOutputDTO> getAllUsers() {
-        //Haal alle gebruiker op uit de repository
         List<User> users = userRepository.findAll();
-
-        //Converteer de lijst van gebruikers naar een lijst van UserOutputDTO's
         return UserMapper.toUserOutputDTOList(users);
     }
 
-
-    // 3. Get a specific user by ID
     public UserOutputDTO getUserById(Long id) {
         return userRepository.findById(id)
                 .map(UserMapper::toUserOutputDTO)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
-    // 4. Werk een specifieke gebruiker bij
     @Transactional
     public UserOutputDTO updateUser(Long id, UserInputDTO userInputDTO) {
         User user = userRepository.findById(id)
@@ -87,37 +87,27 @@ public class UserService {
             user.setPassword(userInputDTO.getPassword());
         }
 
-        //Update laatste inlogtijd
         user.setLastLogin(LocalDateTime.now());
         userRepository.save(user);
 
         return UserMapper.toUserOutputDTO(user);
     }
 
-    //5. Delete de gebruiker en het profiel dat daaraan is gekoppeld:
     public boolean deleteUser(Long id) {
-        // Zoek de gebruiker o.b.v het id (Long)
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Haal het profiel op dat aan gebruiker is gekoppeld
         Profile profile = profileRepository.findByUser(user)
                 .orElseThrow(() -> new ResourceNotFoundException("Profile for user not found"));
 
-        //Verwijder het profiel dat aan de gebruiker is gekoppeld
         profileRepository.delete(profile);
-
-        // Verwijder de gebruiker
         userRepository.deleteById(id);
         return true;
     }
 
-    // 6. Verstuur contactformulier
     public void processContactForm(ContactFormDTO contactFormDTO) {
-        //Check of gebruiker al bestaat o.b.v het emailadres
         Optional<User> optionalUser = userRepository.findByEmail(contactFormDTO.getEmail());
 
-        //Als gebruiker niet bestaat, maak dan een nieuwe User aan
         User user = optionalUser.orElseGet(() -> {
             User newUser = new User();
             newUser.setEmail(contactFormDTO.getEmail());
@@ -126,10 +116,7 @@ public class UserService {
             return newUser;
         });
 
-        //Zet vraag van het contactformulier in de User entity
         user.setQuestion(contactFormDTO.getQuestion());
-
-        //Sla gebruiker op in de database
         userRepository.save(user);
     }
 

@@ -22,7 +22,6 @@ public class ApiUserDetailsService implements UserDetailsService {
     public ApiUserDetailsService(UserRepository userRepository, UserMapper userMapper, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-
     }
 
     @Transactional
@@ -37,10 +36,8 @@ public class ApiUserDetailsService implements UserDetailsService {
             user.getRoles().add(role);
         }
 
-        // Koppel gebruiker aan de rollen
         linkUserToRoles(user);
 
-        //Sla gebruiker op
         User savedUser = userRepository.save(user);
         return savedUser != null;
     }

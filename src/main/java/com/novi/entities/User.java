@@ -53,14 +53,13 @@ public class User extends BaseEntity {
 
     private Set<Role> roles = new HashSet<>();
 
-    //Constructors
-    //No-arg constructor (verplicht voor JPA)
+
     public User() {
         super();
     }
 
     public User(String firstName, String lastName, String email, String password, Boolean acceptedPrivacyStatementUserAgreement) {
-        super(); // Roept de BaseEntity constructor
+        super();
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -72,7 +71,7 @@ public class User extends BaseEntity {
         this.question = null;
     }
 
-    // Getters and Setters
+
 
     public String getFirstName() {
         return firstName;

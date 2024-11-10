@@ -44,17 +44,15 @@ public class Profile extends BaseEntity {
     private boolean hasCompletedQuestionnaire;
 
 
-    //Relaties
     @OneToOne(mappedBy = "profile")
     private User user;
 
 
-    // Default constructor
     public Profile() {
-        super(); //Aanroepen van de constructor van BaseEntity
+        super();
     }
 
-    // Constructor with all fields
+
     public Profile(LocalDate dateOfBirth, String city, String country, String gender, String healthChallenge,
                    String diagnosisDate, String hospital, String healingChoice, String connectionPreference, String profilePicUrl, String healforceName, Boolean hasCompletedQuestionnaire) {
         super();
@@ -72,7 +70,7 @@ public class Profile extends BaseEntity {
         this.hasCompletedQuestionnaire = true;
     }
 
-    // Getters and Setters
+
 
     public LocalDate getDateOfBirth() {
         return dateOfBirth;

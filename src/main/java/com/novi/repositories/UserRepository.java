@@ -8,7 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    //Zoek een gebruiker op basis van e-mailadres
+
     @EntityGraph(attributePaths = {"roles"})
     Optional<User> findByEmail(String email);
 

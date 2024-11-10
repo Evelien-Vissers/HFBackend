@@ -2,6 +2,7 @@ package com.novi.dtos;
 
 public class PotentialMatchesOutputDTO {
 
+    private Long id;
     private String healforceName;
     private String healthChallenge;
     private String healingChoice;
@@ -9,8 +10,9 @@ public class PotentialMatchesOutputDTO {
     private String city;
     private String country;
 
-    // Constructors
-    public PotentialMatchesOutputDTO(String healforceName, String healthChallenge, String healingChoice, String profilePicUrl, String city, String country) {
+
+    public PotentialMatchesOutputDTO(Long id, String healforceName, String healthChallenge, String healingChoice, String profilePicUrl, String city, String country) {
+        this.id = id;
         this.healforceName = healforceName;
         this.healthChallenge = healthChallenge;
         this.healingChoice = healingChoice;
@@ -19,7 +21,13 @@ public class PotentialMatchesOutputDTO {
         this.country = country;
     }
 
-    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getHealforceName() {
         return healforceName;
     }
@@ -66,7 +74,6 @@ public class PotentialMatchesOutputDTO {
         this.country = country;
     }
 
-    // Optional: Override toString for better logging/debugging
     @Override
     public String toString() {
         return "PotentialMatchesOutputDTO{" +

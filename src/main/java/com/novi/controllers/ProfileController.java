@@ -26,11 +26,10 @@ public class ProfileController {
         this.profileService = profileService;
     }
 
-    // 1. POST - /profiles/new - Maak een nieuw profiel aan
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> createProfile(
-            @RequestPart("profileData") ProfileInputDTO profileInputDTO,
-            @RequestPart("profilePic") MultipartFile profilePic) {
+            @RequestPart(value = "profileData", required = true) ProfileInputDTO profileInputDTO,
+            @RequestPart(value = "profilePic", required = false) MultipartFile profilePic) {
 
         try {
             profileService.saveProfile(profileInputDTO, profilePic);
@@ -40,7 +39,6 @@ public class ProfileController {
         }
     }
 
-    // 2. GET /profiles/{ID} - Haal profiel op van een specifieke gebruiker
     @GetMapping("{id}")
     public ResponseEntity<ProfileOutputDTO> getUserProfileByID(@PathVariable Long id) {
         ProfileOutputDTO profile = profileService.getUserProfileByProfileID(id);
@@ -50,8 +48,6 @@ public class ProfileController {
         return new ResponseEntity<>(profile, HttpStatus.OK);
     }
 
-
-    // 4. GET - profile/{id}/potential-matches - Vraag een lijst van potentiele matches aan
     @GetMapping("/{id}/potential-matches")
     public ResponseEntity<List<PotentialMatchesOutputDTO>> findPotentialMatches() {
         List<PotentialMatchesOutputDTO> matches = profileService.findPotentialMatches();
@@ -62,19 +58,6 @@ public class ProfileController {
         }
     }
 
-
-    // 5. PUT - Werk profiel van een specifieke gebruiker bij
-    @PutMapping("/{id}")
-    public ResponseEntity<ProfileOutputDTO> updateProfile(@PathVariable Long id,
-                                                          @RequestBody ProfileInputDTO profileInputDTO) {
-        ProfileOutputDTO updatedProfile = profileService.updateProfile(id, profileInputDTO);
-        if (updatedProfile == null) {
-            throw new ResourceNotFoundException("Profile with ProfileID " + id + " not found");
-        }
-        return new ResponseEntity<>(updatedProfile, HttpStatus.OK);
-    }
-
-    // 6. DELETE - Verwijder een profiel (zonder dat 'User' wordt verwijderd)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProfile(@PathVariable Long id) {
         try {

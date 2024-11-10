@@ -1,49 +1,47 @@
 package com.novi.HealForce.integrationtests;
-import com.novi.dtos.UserOutputDTO;
-import com.novi.entities.User;
-import com.novi.repositories.UserRepository;
+
+import com.novi.dtos.UserInputDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.web.servlet.MockMvc;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Transactional
-class UserControllerIntegrationTest {
+@SpringBootTest
+@AutoConfigureMockMvc
+@Sql({"/data.sql"}) // This annotation ensures your test data is loaded before the test runs
+public class UserControllerIntegrationTest {
 
     @Autowired
-    private WebTestClient webTestClient;
+    private MockMvc mockMvc;
 
     @Autowired
-    private UserRepository userRepository;
+    private ObjectMapper objectMapper;
 
     @Test
-    void testGetUserById() {
-        // Arrange: Creëer en sla een gebruiker op in de in-memory database
-        User newUser = new User();
-        newUser.setFirstName("John");
-        newUser.setLastName("Doe");
-        newUser.setEmail("johndoe@example.com");
-        userRepository.save(newUser);
+    public void testRegisterUserWithUniqueData() throws Exception {
+        // Create a UserInputDTO with unique data
+        UserInputDTO userInputDTO = new UserInputDTO();
+        userInputDTO.setFirstName("Unique");
+        userInputDTO.setLastName("User");
+        userInputDTO.setEmail("uniqueuser@example.com"); // Unique email to avoid conflicts
+        userInputDTO.setPassword("uniquePassword123");
 
-        // Act: Voer een GET-aanroep uit om de gebruiker op te halen via de controller
-        webTestClient.get()
-                .uri("/users/" + newUser.getId())  // Op basis van het gegenereerde ID
-                .accept(MediaType.APPLICATION_JSON)
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody(UserOutputDTO.class)  // Controleer of de juiste UserOutputDTO wordt teruggegeven
-                .value(userOutputDTO -> {
-                    // Assert: Controleer of de gegevens correct zijn
-                    assertThat(userOutputDTO.getFirstName()).isEqualTo("John");
-                    assertThat(userOutputDTO.getLastName()).isEqualTo("Doe");
-                    assertThat(userOutputDTO.getEmail()).isEqualTo("johndoe@example.com");
-                });
+        // Convert the UserInputDTO to JSON
+        String requestBody = objectMapper.writeValueAsString(userInputDTO);
+
+        // Perform a POST request to the /users/register endpoint
+        mockMvc.perform(post("/users/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isCreated())
+                .andExpect(content().string("User registered successfully!"));
     }
 }
-
-

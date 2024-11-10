@@ -17,7 +17,7 @@ public class ProfileOutputDTO {
     private String healforceName;
     private boolean hasCompletedQuestionnaire;
 
-    // Constructors
+
     public ProfileOutputDTO() {
     }
 
@@ -36,7 +36,7 @@ public class ProfileOutputDTO {
         this.hasCompletedQuestionnaire = hasCompletedQuestionnaire;
     }
 
-    // Getters and Setters
+
     public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }

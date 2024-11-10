@@ -2,6 +2,7 @@ package com.novi.entities;
 
 public class PotentialMatches {
 
+    private Long id;
     private String healforceName;
     private String healthChallenge;
     private String healingChoice;
@@ -9,13 +10,24 @@ public class PotentialMatches {
     private String city;
     private String country;
 
-    public PotentialMatches(String healforceName, String healthChallenge, String healingChoice, String profilePicUrl, String city, String country) {
+    public PotentialMatches(Long id, String healforceName, String healthChallenge, String healingChoice, String profilePicUrl, String city, String country) {
+        this.id = id;
         this.healforceName = healforceName;
         this.healthChallenge = healthChallenge;
         this.healingChoice = healingChoice;
         this.profilePicUrl = profilePicUrl;
         this.city = city;
         this.country = country;
+    }
+
+    public PotentialMatches() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getHealforceName() {
@@ -62,10 +74,10 @@ public class PotentialMatches {
         this.country = country;
     }
 
-    // Optional: Override toString for better logging/debugging
     @Override
     public String toString() {
         return "PotentialMatchList{" +
+                "id=" + id +
                 "healforceName='" + healforceName + '\'' +
                 ", healthChallenge='" + healthChallenge + '\'' +
                 ", profilePicUrl='" + profilePicUrl + '\'' +

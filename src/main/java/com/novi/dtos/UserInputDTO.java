@@ -9,7 +9,6 @@ public class UserInputDTO {
     private Boolean acceptedPrivacyStatementUserAgreement;
 
 
-    // Constructors
     public UserInputDTO() {
     }
 
@@ -21,7 +20,7 @@ public class UserInputDTO {
         this.acceptedPrivacyStatementUserAgreement = acceptedPrivacyStatementUserAgreement;
     }
 
-    // Getters and Setters
+
     public String getFirstName() {
         return firstName;
     }

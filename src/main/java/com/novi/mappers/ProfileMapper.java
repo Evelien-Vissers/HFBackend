@@ -6,7 +6,6 @@ import com.novi.entities.Profile;
 import org.springframework.stereotype.Component;
 
 
-
 @Component
 public class ProfileMapper {
     public ProfileOutputDTO toProfileOutputDTO(Profile profile) {

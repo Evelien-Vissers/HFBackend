@@ -11,7 +11,6 @@ public class CurrentMatchesOutputDTO {
         this.email = email;
     }
 
-    // Getters en setters
     public String getHealforceName() {
         return healforceName;
     }

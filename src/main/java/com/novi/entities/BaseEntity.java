@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import jakarta.persistence.GenerationType;
 
 
-// @MappedSuperclass geeft aan dat 'BaseEntity' geen directe database vertegenwoordigt, maar dat de velden ervan worden geerfd door andere entiteiten die deze class extenden.
 @MappedSuperclass
 public abstract class BaseEntity {
 
@@ -18,13 +17,12 @@ public abstract class BaseEntity {
     @Column(name = "last_edited")
     private LocalDateTime lastEdited;
 
-    // Constructors
+
     public BaseEntity() {
         this.createdDate = LocalDateTime.now();
         this.lastEdited = LocalDateTime.now();
     }
 
-    //PrePersist en PreUpdate hooks om timestamps automatisch te beheren. Deze velden worden automatisch ingesteld wanneer een nieuwe entiteit wordt aangemaakt en opgeslagen.
     @PrePersist
     protected void onCreate() {
         this.createdDate = LocalDateTime.now();
@@ -36,7 +34,7 @@ public abstract class BaseEntity {
         this.lastEdited = LocalDateTime.now();
     }
 
-    // Getters and Setters
+
     public Long getId() {
         return id;
     }
