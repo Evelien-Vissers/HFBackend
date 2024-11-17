@@ -20,6 +20,7 @@ public class PotentialMatchesOutputDTO {
         this.city = city;
         this.country = country;
     }
+    public PotentialMatchesOutputDTO() {}
 
     public Long getId() {
         return id;

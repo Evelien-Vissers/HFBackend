@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
-@Sql(scripts = "/data.sql")
+@Sql(scripts = "/data-test.sql")
 public class ProfileControllerIntegrationTest {
 
     @Autowired
@@ -49,6 +50,7 @@ public class ProfileControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(username = "test@example.com", roles = "USER")
     void testGetUserProfileByID() throws Exception {
         // Perform a GET request to retrieve the profile by ID
         mockMvc.perform(get("/profiles/" + testProfile.getId())
