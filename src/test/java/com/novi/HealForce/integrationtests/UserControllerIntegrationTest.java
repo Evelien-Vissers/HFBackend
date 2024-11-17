@@ -7,16 +7,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
+@ActiveProfiles("test")
 @AutoConfigureMockMvc
-@Sql({"/data.sql"}) // This annotation ensures your test data is loaded before the test runs
+@Sql(scripts = "/data-test.sql")
 public class UserControllerIntegrationTest {
 
     @Autowired
@@ -27,21 +28,21 @@ public class UserControllerIntegrationTest {
 
     @Test
     public void testRegisterUserWithUniqueData() throws Exception {
-        // Create a UserInputDTO with unique data
+
         UserInputDTO userInputDTO = new UserInputDTO();
         userInputDTO.setFirstName("Unique");
         userInputDTO.setLastName("User");
-        userInputDTO.setEmail("uniqueuser@example.com"); // Unique email to avoid conflicts
+        userInputDTO.setEmail("uniqueuser@example.com");
         userInputDTO.setPassword("uniquePassword123");
 
-        // Convert the UserInputDTO to JSON
         String requestBody = objectMapper.writeValueAsString(userInputDTO);
 
-        // Perform a POST request to the /users/register endpoint
         mockMvc.perform(post("/users/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
+                //Assert: validate the response
                 .andExpect(status().isCreated())
-                .andExpect(content().string("User registered successfully!"));
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").value("User registered successfully!"));
     }
 }

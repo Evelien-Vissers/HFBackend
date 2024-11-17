@@ -19,8 +19,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -183,12 +186,23 @@ class ProfileServiceTest {
     @Test
     void saveProfilePic_ShouldReturnProfilePicUrl() throws IOException {
         // Arrange
-        MockMultipartFile profilePic = new MockMultipartFile("profilePic", "test.jpg", "image/jpeg", "Test Image Content".getBytes());
+        Path tempFile = Files.createTempFile("test", ".jpg");
+        Files.write(tempFile, "test image content".getBytes());
+
+        MultipartFile mockFile = mock(MultipartFile.class);
+        when(mockFile.getOriginalFilename()).thenReturn("example.jpg");
+        when(mockFile.getInputStream()).thenReturn(Files.newInputStream(tempFile));
+
+        Long profileId = 1L;
+        String expectedUrl = "http://localhost:8080/images/example.jpg";
 
         // Act
-        String result = profileService.saveProfilePic(profilePic, 1L);
+        String result = profileService.saveProfilePic(mockFile, profileId);
 
         // Assert
-        assertEquals("/images/1.jpg", result);
+        assertEquals(expectedUrl, result);
+
+        // Cleanup
+        Files.delete(tempFile);
     }
 }

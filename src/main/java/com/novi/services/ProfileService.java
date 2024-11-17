@@ -32,7 +32,7 @@ public class ProfileService {
     private final ProfileRepository profileRepository;
     private final UserRepository userRepository;
     private final ProfileMapper profileMapper;
-    private final String uploadDir = "src/main/resources/static/images";
+    private final String uploadDir = "uploads";
 
     @Autowired
     public ProfileService(ProfileRepository profileRepository, UserRepository userRepository) {
@@ -70,13 +70,15 @@ public class ProfileService {
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
-        String fileExtension = profilePic.getOriginalFilename().substring(profilePic.getOriginalFilename().lastIndexOf("."));
-        String fileName = profileId + fileExtension;
-        Path filePath = uploadPath.resolve(fileName);
+        String originalFileName = profilePic.getOriginalFilename();
+        if (originalFileName == null || originalFileName.isBlank()) {
+            throw new IOException("Invalid file name");
+        }
+
+        Path filePath = uploadPath.resolve(originalFileName);
         Files.copy(profilePic.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-        String profilePicUrl = "http://localhost:8080/images/" + fileName;
-        System.out.println("Profile picture URL save as: " + profilePicUrl);
+        String profilePicUrl = "http://localhost:8080/images/" + originalFileName;
         return profilePicUrl;
     }
 
